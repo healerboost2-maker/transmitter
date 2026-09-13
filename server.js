@@ -56,16 +56,24 @@ wss.on("connection", (socket, request) => {
   socket.on("message", (data, isBinary) => {
     // Binary data is raw PCM audio
     if (isBinary || Buffer.isBuffer(data)) {
-      if (clientRole === "transmitter") {
-        for (const receiver of receivers) {
-          if (receiver.readyState === 1) {
-            receiver.send(data, { binary: true });
-          }
-        }
-      }
+    if (clientRole === "transmitter") {
+        console.log(
+            `Audio packet received: ${data.length} bytes`
+        );
 
-      return;
+        for (const receiver of receivers) {
+            if (receiver.readyState === 1) {
+                receiver.send(data, { binary: true });
+
+                console.log(
+                    `Audio packet forwarded to receiver`
+                );
+            }
+        }
     }
+
+    return;
+}
 
     let message;
 
