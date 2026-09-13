@@ -112,7 +112,7 @@
 
         function getDefaultServerUrl() {
             if (!window.location.host) {
-                return "wss://transmitter-zctz.onrender.com/audio";
+                return "wss://transmitter-zctz.onrender.com/rx";
             }
             const isSecure = window.location.protocol === "https:";
             const wsProtocol = isSecure ? "wss:" : "ws:";
