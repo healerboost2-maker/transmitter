@@ -3,168 +3,245 @@ const { WebSocketServer } = require("ws");
 
 const PORT = process.env.PORT || 8080;
 
-// Create HTTP server
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  });
+const server = http.createServer((request, response) => {
+    response.writeHead(200, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+    });
 
-  res.end(
-    JSON.stringify({
-      status: "online",
-      service: "AudioBridge Server",
-      websocket: "/audio"
-    })
-  );
+    response.end(JSON.stringify({
+        status: "online",
+        service: "AudioBridge Server",
+        websocket: "/audio"
+    }));
 });
 
-// WebSocket server
 const wss = new WebSocketServer({
-  server,
-  path: "/audio"
+    server,
+    path: "/audio"
 });
 
 let transmitter = null;
 const receivers = new Set();
 
+let packetCounter = 0;
+
 function sendJSON(socket, data) {
-  if (socket && socket.readyState === 1) {
-    socket.send(JSON.stringify(data));
-  }
+    if (
+        socket &&
+        socket.readyState === 1
+    ) {
+        socket.send(JSON.stringify(data));
+    }
 }
 
 function broadcastStatus(message) {
-  for (const receiver of receivers) {
-    sendJSON(receiver, {
-      type: "status",
-      message
-    });
-  }
+    for (const receiver of receivers) {
+        sendJSON(receiver, {
+            type: "status",
+            message: message
+        });
+    }
 }
 
-wss.on("connection", (socket, request) => {
-  console.log("WebSocket client connected:", request.socket.remoteAddress);
+wss.on("connection", (socket) => {
+    let clientRole = null;
 
-  let clientRole = null;
+    console.log("WebSocket client connected.");
 
-  sendJSON(socket, {
-    type: "connected",
-    message: "Connected to AudioBridge server"
-  });
+    sendJSON(socket, {
+        type: "connected",
+        message: "Connected to AudioBridge server"
+    });
 
-  socket.on("message", (data, isBinary) => {
-    // Binary data is raw PCM audio
-    if (isBinary || Buffer.isBuffer(data)) {
-    if (clientRole === "transmitter") {
-        console.log(
-            `Audio packet received: ${data.length} bytes`
-        );
+    socket.on("message", (data, isBinary) => {
+        /*
+         * IMPORTANT:
+         *
+         * Use only isBinary here.
+         * Text WebSocket messages may arrive as Buffers,
+         * but they are still text when isBinary is false.
+         */
 
-        for (const receiver of receivers) {
-            if (receiver.readyState === 1) {
-                receiver.send(data, { binary: true });
+        if (isBinary) {
+            if (clientRole !== "transmitter") {
+                return;
+            }
 
+            packetCounter++;
+
+            for (const receiver of receivers) {
+                if (receiver.readyState === 1) {
+                    receiver.send(data, {
+                        binary: true
+                    });
+                }
+            }
+
+            if (
+                packetCounter === 1 ||
+                packetCounter % 100 === 0
+            ) {
                 console.log(
-                    `Audio packet forwarded to receiver`
+                    `Audio packet ${packetCounter}: ` +
+                    `${data.length} bytes forwarded to ` +
+                    `${receivers.size} receiver(s)`
                 );
             }
+
+            return;
         }
-    }
 
-    return;
-}
+        let message;
 
-    let message;
+        try {
+            message = JSON.parse(
+                data.toString()
+            );
+        } catch (error) {
+            console.log(
+                "Invalid text message:",
+                data.toString()
+            );
 
-    try {
-      message = JSON.parse(data.toString());
-    } catch (error) {
-      console.log("Invalid JSON message received");
-      return;
-    }
+            return;
+        }
 
-    // Register transmitter
-    if (message.type === "register-transmitter") {
-      if (transmitter && transmitter !== socket) {
-        sendJSON(transmitter, {
-          type: "error",
-          message: "Another transmitter is already connected"
-        });
+        /*
+         * TRANSMITTER REGISTRATION
+         */
 
-        transmitter.close();
-      }
+        if (
+            message.type ===
+            "register-transmitter"
+        ) {
+            if (
+                transmitter &&
+                transmitter !== socket
+            ) {
+                sendJSON(transmitter, {
+                    type: "error",
+                    message:
+                        "Another transmitter is already connected"
+                });
 
-      transmitter = socket;
-      clientRole = "transmitter";
+                transmitter.close();
+            }
 
-      console.log(
-        "Transmitter connected:",
-        message.name || "Unnamed transmitter"
-      );
+            transmitter = socket;
+            clientRole = "transmitter";
 
-      sendJSON(socket, {
-        type: "registered",
-        role: "transmitter",
-        message: "Transmitter registered successfully"
-      });
+            console.log(
+                "Transmitter registered successfully."
+            );
 
-      broadcastStatus("Transmitter is online");
-      return;
-    }
+            sendJSON(socket, {
+                type: "registered",
+                role: "transmitter",
+                message:
+                    "Transmitter registered successfully"
+            });
 
-    // Register receiver
-    if (message.type === "register-receiver") {
-      receivers.add(socket);
-      clientRole = "receiver";
+            broadcastStatus(
+                "Transmitter is online"
+            );
 
-      console.log("Receiver connected");
+            return;
+        }
 
-      sendJSON(socket, {
-        type: "registered",
-        role: "receiver",
-        message: "Receiver registered successfully"
-      });
+        /*
+         * RECEIVER REGISTRATION
+         */
 
-      if (transmitter && transmitter.readyState === 1) {
-        sendJSON(socket, {
-          type: "status",
-          message: "Transmitter is online"
-        });
-      } else {
-        sendJSON(socket, {
-          type: "status",
-          message: "Waiting for transmitter"
-        });
-      }
+        if (
+            message.type ===
+            "register-receiver"
+        ) {
+            receivers.add(socket);
+            clientRole = "receiver";
 
-      return;
-    }
-  });
+            console.log(
+                `Receiver registered successfully. ` +
+                `Total receivers: ${receivers.size}`
+            );
 
-  socket.on("close", () => {
-    console.log("WebSocket client disconnected");
+            sendJSON(socket, {
+                type: "registered",
+                role: "receiver",
+                message:
+                    "Receiver registered successfully"
+            });
 
-    if (socket === transmitter) {
-      transmitter = null;
-      console.log("Transmitter disconnected");
-      broadcastStatus("Transmitter is offline");
-    }
+            const transmitterOnline =
+                transmitter &&
+                transmitter.readyState === 1;
 
-    if (receivers.has(socket)) {
-      receivers.delete(socket);
-      console.log("Receiver disconnected");
-    }
-  });
+            sendJSON(socket, {
+                type: "status",
+                message: transmitterOnline
+                    ? "Transmitter is online"
+                    : "Waiting for transmitter"
+            });
 
-  socket.on("error", (error) => {
-    console.log("WebSocket error:", error.message);
-  });
+            return;
+        }
+
+        /*
+         * OPTIONAL PING
+         */
+
+        if (message.type === "ping") {
+            sendJSON(socket, {
+                type: "pong",
+                message: "AudioBridge server is active"
+            });
+
+            return;
+        }
+
+        console.log(
+            "Unknown message type:",
+            message.type
+        );
+    });
+
+    socket.on("close", () => {
+        console.log(
+            `${clientRole || "Unknown"} client disconnected.`
+        );
+
+        if (socket === transmitter) {
+            transmitter = null;
+
+            broadcastStatus(
+                "Transmitter is offline"
+            );
+        }
+
+        if (receivers.has(socket)) {
+            receivers.delete(socket);
+
+            console.log(
+                `Receiver removed. ` +
+                `Remaining receivers: ${receivers.size}`
+            );
+        }
+    });
+
+    socket.on("error", (error) => {
+        console.log(
+            "WebSocket error:",
+            error.message
+        );
+    });
 });
 
-// Start server
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`AudioBridge server running on port ${PORT}`);
-  console.log("HTTP server: http://0.0.0.0:" + PORT);
-  console.log("WebSocket path: /audio");
-});
+server.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+        console.log(
+            `AudioBridge Server listening on port ${PORT}`
+        );
+    }
+);
