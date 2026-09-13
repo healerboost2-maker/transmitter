@@ -3,137 +3,330 @@ const WebSocket = require("ws");
 
 const PORT = process.env.PORT || 10000;
 
-// Create standard HTTP server
 const server = http.createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.writeHead(200, {
+        "Content-Type": "text/plain"
+    });
+
     res.end("AudioBridge Multi-Stream Server Running");
 });
 
-// Initialize WebSocket server attached to the HTTP server instance
-const wss = new WebSocket.Server({ noServer: true });
-
-const rooms = {
-    am: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } },
-    fm: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } }
-};
-
-// Handle explicit HTTP upgrade requests for WebSockets to support Render's proxy routing
-server.on("upgrade", (request, socket, head) => {
-    let urlPath = "/";
-    try {
-        const parsedUrl = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
-        urlPath = parsedUrl.pathname;
-    } catch (e) {
-        urlPath = request.url || "/";
-    }
-
-    // Accept connections on /am, /fm, or root
-    if (urlPath.startsWith("/am") || urlPath.startsWith("/fm") || urlPath === "/") {
-        wss.handleUpgrade(request, socket, head, (ws) => {
-            wss.emit("connection", ws, request);
-        });
-    } else {
-        socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
-        socket.destroy();
-    }
+const wss = new WebSocket.Server({
+    noServer: true
 });
 
-wss.on("connection", (ws, req) => {
-    const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    
-    let urlPath = "/";
+const rooms = {
+    am: {
+        transmitters: new Set(),
+        receivers: new Set(),
+        config: {
+            sampleRate: 44100,
+            channels: 2
+        }
+    },
+
+    fm: {
+        transmitters: new Set(),
+        receivers: new Set(),
+        config: {
+            sampleRate: 44100,
+            channels: 2
+        }
+    }
+};
+
+
+// ================================
+// WEBSOCKET UPGRADE
+// ================================
+
+server.on("upgrade", (request, socket, head) => {
+
+    let pathname;
+
     try {
-        const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-        urlPath = parsedUrl.pathname;
-    } catch (e) {
-        urlPath = req.url || "/";
+        const url = new URL(
+            request.url,
+            `http://${request.headers.host || "localhost"}`
+        );
+
+        pathname = url.pathname.toLowerCase();
+
+    } catch (err) {
+
+        socket.write(
+            "HTTP/1.1 400 Bad Request\r\n" +
+            "Connection: close\r\n" +
+            "\r\n"
+        );
+
+        socket.destroy();
+
+        return;
     }
 
-    console.log(`[+] Connection from ${clientIp} on path: ${urlPath}`);
 
-    let station = "am";
-    if (urlPath.includes("fm")) {
+    // Only allow these WebSocket endpoints
+    const validPath =
+        pathname === "/am/tx" ||
+        pathname === "/am/rx" ||
+        pathname === "/fm/tx" ||
+        pathname === "/fm/rx";
+
+    if (!validPath) {
+
+        socket.write(
+            "HTTP/1.1 404 Not Found\r\n" +
+            "Connection: close\r\n" +
+            "\r\n"
+        );
+
+        socket.destroy();
+
+        return;
+    }
+
+
+    wss.handleUpgrade(
+        request,
+        socket,
+        head,
+        (ws) => {
+
+            wss.emit(
+                "connection",
+                ws,
+                request
+            );
+
+        }
+    );
+});
+
+
+// ================================
+// CONNECTION
+// ================================
+
+wss.on("connection", (ws, req) => {
+
+    const clientIp =
+        req.headers["x-forwarded-for"] ||
+        req.socket.remoteAddress;
+
+
+    const url = new URL(
+        req.url,
+        `http://${req.headers.host || "localhost"}`
+    );
+
+    const pathname =
+        url.pathname.toLowerCase();
+
+
+    let station;
+
+    if (pathname.startsWith("/am/")) {
+        station = "am";
+    }
+
+    if (pathname.startsWith("/fm/")) {
         station = "fm";
     }
 
-    const isTx = urlPath.includes("tx") || urlPath === "/" || urlPath === "";
 
-    if (isTx) {
-        ws.isTransmitter = true;
-        ws.isReceiver = false;
-        ws.stationRoom = station;
-        rooms[station].transmitters.add(ws);
-        console.log(`[Transmitter Connected -> ${station.toUpperCase()}] Active Tx: ${rooms[station].transmitters.size}`);
-        
-        ws.send(JSON.stringify({ type: "status", message: `Transmitter bound to ${station.toUpperCase()}` }));
-    } else {
-        ws.isReceiver = true;
-        ws.isTransmitter = false;
-        ws.stationRoom = station;
-        rooms[station].receivers.add(ws);
-        console.log(`[Receiver Connected -> ${station.toUpperCase()}] Active Rx: ${rooms[station].receivers.size}`);
+    const isTransmitter =
+        pathname.endsWith("/tx");
 
-        ws.send(JSON.stringify({
-            type: "status",
-            message: `Connected to ${station.toUpperCase()} stream`,
-            sampleRate: rooms[station].config.sampleRate,
-            channels: rooms[station].config.channels
-        }));
+    const isReceiver =
+        pathname.endsWith("/rx");
+
+
+    if (!station || (!isTransmitter && !isReceiver)) {
+
+        ws.close(
+            1008,
+            "Invalid WebSocket endpoint"
+        );
+
+        return;
     }
 
+
+    ws.stationRoom = station;
+    ws.isTransmitter = isTransmitter;
+    ws.isReceiver = isReceiver;
+
+
+    const room = rooms[station];
+
+
+    console.log(
+        `[+] ${isTransmitter ? "TRANSMITTER" : "RECEIVER"} ` +
+        `${station.toUpperCase()} connected from ${clientIp}`
+    );
+
+
+    // ================================
+    // TRANSMITTER
+    // ================================
+
+    if (isTransmitter) {
+
+        room.transmitters.add(ws);
+
+        console.log(
+            `[TX ${station.toUpperCase()}] ` +
+            `Active transmitters: ${room.transmitters.size}`
+        );
+
+
+        ws.send(
+            JSON.stringify({
+                type: "status",
+                role: "transmitter",
+                station: station.toUpperCase(),
+                sampleRate: room.config.sampleRate,
+                channels: room.config.channels
+            })
+        );
+    }
+
+
+    // ================================
+    // RECEIVER
+    // ================================
+
+    if (isReceiver) {
+
+        room.receivers.add(ws);
+
+        console.log(
+            `[RX ${station.toUpperCase()}] ` +
+            `Active receivers: ${room.receivers.size}`
+        );
+
+
+        ws.send(
+            JSON.stringify({
+                type: "status",
+                role: "receiver",
+                station: station.toUpperCase(),
+                sampleRate: room.config.sampleRate,
+                channels: room.config.channels
+            })
+        );
+    }
+
+
+    // ================================
+    // MESSAGE
+    // ================================
+
     ws.on("message", (message, isBinary) => {
-        const isBinaryData = isBinary || Buffer.isBuffer(message) || message instanceof ArrayBuffer;
 
-        if (!isBinaryData) {
-            try {
-                const data = JSON.parse(message.toString());
-                if (data.type === "register-transmitter" && data.station) {
-                    const oldStation = ws.stationRoom;
-                    if (oldStation && rooms[oldStation]) {
-                        rooms[oldStation].transmitters.delete(ws);
-                    }
-                    ws.stationRoom = data.station;
-                    if (rooms[data.station]) {
-                        rooms[data.station].transmitters.add(ws);
-                        console.log(`[Transmitter Re-registered to ${data.station.toUpperCase()}]`);
-                    }
-                    return;
-                }
-            } catch (e) {}
+        if (!ws.isTransmitter) {
+            return;
         }
 
-        if (ws.isTransmitter) {
-            const currentRoom = rooms[ws.stationRoom || station];
-            if (currentRoom && currentRoom.receivers.size > 0) {
-                currentRoom.receivers.forEach((receiver) => {
-                    if (receiver.readyState === WebSocket.OPEN) {
-                        receiver.send(message, { binary: isBinaryData });
+
+        const room =
+            rooms[ws.stationRoom];
+
+
+        if (!room) {
+            return;
+        }
+
+
+        // Broadcast audio/data to receivers
+        room.receivers.forEach((receiver) => {
+
+            if (
+                receiver.readyState === WebSocket.OPEN
+            ) {
+
+                receiver.send(
+                    message,
+                    {
+                        binary: isBinary
                     }
-                });
+                );
+
             }
-        }
+
+        });
+
     });
+
+
+    // ================================
+    // CLOSE
+    // ================================
 
     ws.on("close", () => {
-        const currentRoom = rooms[ws.stationRoom || station];
-        if (currentRoom) {
-            if (ws.isTransmitter) {
-                currentRoom.transmitters.delete(ws);
-                console.log(`[-] Transmitter disconnected from ${ws.stationRoom?.toUpperCase() || station.toUpperCase()}`);
-            }
-            if (ws.isReceiver) {
-                currentRoom.receivers.delete(ws);
-                console.log(`[-] Receiver disconnected from ${ws.stationRoom?.toUpperCase() || station.toUpperCase()}`);
-            }
+
+        const room =
+            rooms[ws.stationRoom];
+
+
+        if (!room) {
+            return;
         }
+
+
+        if (ws.isTransmitter) {
+
+            room.transmitters.delete(ws);
+
+            console.log(
+                `[-] TX ${ws.stationRoom.toUpperCase()} disconnected`
+            );
+
+        }
+
+
+        if (ws.isReceiver) {
+
+            room.receivers.delete(ws);
+
+            console.log(
+                `[-] RX ${ws.stationRoom.toUpperCase()} disconnected`
+            );
+
+        }
+
     });
+
+
+    // ================================
+    // ERROR
+    // ================================
 
     ws.on("error", (err) => {
-        console.error(`[-] Error (${clientIp}):`, err.message);
+
+        console.error(
+            `[WS ERROR ${clientIp}]`,
+            err.message
+        );
+
     });
+
 });
 
-// Explicitly bind to 0.0.0.0 for cloud hosting compatibility
-server.listen(PORT, "0.0.0.0", () => {
-    console.log(`AudioBridge Server running on port ${PORT}`);
-});
+
+// ================================
+// SERVER
+// ================================
+
+server.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log(
+            `AudioBridge Server running on port ${PORT}`
+        );
+
+    }
+);
