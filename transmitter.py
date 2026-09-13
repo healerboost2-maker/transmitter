@@ -1,39 +1,31 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
-import sounddevice as sd
-import websocket
-import threading
-import queue
+import os
+import sys
 import json
 import time
 import math
 import struct
+import queue
+import threading
+import tkinter as tk
+from tkinter import ttk, messagebox
 
-# =========================================================
-# AUDIOBRIDGE TRANSMITTER
-# Fixed version
-# =========================================================
+import sounddevice as sd
+import websocket
 
-DEFAULT_SERVER_URL = "wss://transmitter-zctz.onrender.com/audio"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(SCRIPT_DIR, "config.json")
 
-SAMPLE_RATE = 48000
-CHANNELS = 2
-BLOCK_SIZE = 960                 # 20 ms at 48 kHz
+DEFAULT_CONFIG = {
+    "input_device_index": 0,
+    "server_url": "ws://localhost:10000/audio",
+    "station_name": "Main Radio Feed",
+    "listen_enabled": False
+}
+
+BLOCK_SIZE = 960
 BYTES_PER_SAMPLE = 2
-
-TRANSMIT_QUEUE_SIZE = 40
-MONITOR_QUEUE_SIZE = 40
-
 MIN_DB = -60.0
 MAX_DB = 0.0
-
-CONNECT_TIMEOUT = 60
-STATUS_TIMEOUT = 10
-HEARTBEAT_SECONDS = 20
-
-# =========================================================
-# GLOBAL STATE
-# =========================================================
 
 app = None
 ws = None
@@ -41,15 +33,16 @@ ws = None
 connected = False
 connecting = False
 transmitting = False
-listen_enabled = False
 device_active = False
 
 audio_stream = None
 monitor_stream = None
-selected_device_index = None
 
-transmit_queue = queue.Queue(maxsize=TRANSMIT_QUEUE_SIZE)
-monitor_queue = queue.Queue(maxsize=MONITOR_QUEUE_SIZE)
+hw_sample_rate = 44100
+hw_channels = 2
+
+transmit_queue = queue.Queue(maxsize=200)
+monitor_queue = queue.Queue(maxsize=200)
 
 left_level = MIN_DB
 right_level = MIN_DB
@@ -57,16 +50,40 @@ right_level = MIN_DB
 state_lock = threading.RLock()
 ws_lock = threading.RLock()
 
-# =========================================================
-# LOGGING
-# =========================================================
+
+def load_config():
+    cfg = DEFAULT_CONFIG.copy()
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r") as f:
+                cfg.update(json.load(f))
+        except Exception as e:
+            print(f"Error loading config: {e}")
+    return cfg
+
+
+def save_config():
+    if app is None:
+        return
+    
+    config_data = {
+        "input_device_index": device_combo.current() if 'device_combo' in globals() and device_combo.get() else cfg.get("input_device_index", 0),
+        "server_url": server_entry.get().strip() if 'server_entry' in globals() else cfg["server_url"],
+        "station_name": stream_name.get().strip() if 'stream_name' in globals() else cfg["station_name"],
+        "listen_enabled": listen_var.get() if 'listen_var' in globals() else cfg["listen_enabled"]
+    }
+    
+    try:
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config_data, f, indent=4)
+    except Exception as e:
+        log(f"Failed to save config: {e}")
+
 
 def log(message):
     timestamp = time.strftime("%H:%M:%S")
     text = f"[{timestamp}] {message}\n"
-
     print(text, end="")
-
     if app is not None:
         try:
             app.after(0, lambda t=text: write_log(t))
@@ -76,34 +93,27 @@ def log(message):
 
 def write_log(text):
     try:
-        if log_box.winfo_exists():
+        if 'log_box' in globals() and log_box.winfo_exists():
             log_box.insert("end", text)
             log_box.see("end")
     except Exception:
         pass
 
 
-# =========================================================
-# UI HELPERS
-# =========================================================
-
-def set_connection_ui(text, color, button_text=None, button_state=None):
+def update_connection_ui():
     def update():
-        try:
-            connection_label.config(text=text, foreground=color)
-
-            if button_text is not None:
-                connect_button.config(text=button_text)
-
-            if button_state is not None:
-                connect_button.config(state=button_state)
-        except Exception:
-            pass
-
-    try:
+        with state_lock:
+            if connected:
+                connection_label.config(text="ONLINE", foreground="green")
+                connect_button.config(text="DISCONNECT", state="normal")
+            elif connecting:
+                connection_label.config(text="CONNECTING...", foreground="#cc8800")
+                connect_button.config(text="CONNECTING...", state="disabled")
+            else:
+                connection_label.config(text="OFFLINE", foreground="red")
+                connect_button.config(text="CONNECT", state="normal")
+    if app is not None:
         app.after(0, update)
-    except Exception:
-        pass
 
 
 def set_transmission_ui(active):
@@ -112,1197 +122,406 @@ def set_transmission_ui(active):
             if active:
                 start_button.config(state="disabled")
                 stop_button.config(state="normal")
-                status_label.config(
-                    text="TRANSMITTING",
-                    foreground="green"
-                )
+                status_label.config(text="TRANSMITTING", foreground="green")
             else:
                 start_button.config(state="normal")
                 stop_button.config(state="disabled")
-                status_label.config(
-                    text="NOT TRANSMITTING",
-                    foreground="black"
-                )
+                status_label.config(text="NOT TRANSMITTING", foreground="black")
         except Exception:
             pass
-
-    try:
+    if app is not None:
         app.after(0, update)
-    except Exception:
-        pass
 
-
-# =========================================================
-# QUEUE UTILITIES
-# =========================================================
-
-def clear_queue(target_queue):
-    while True:
-        try:
-            target_queue.get_nowait()
-        except queue.Empty:
-            break
-
-
-# =========================================================
-# AUDIO LEVEL CALCULATION
-# =========================================================
 
 def calculate_levels(audio_bytes):
     if not audio_bytes:
         return MIN_DB, MIN_DB
-
     try:
         sample_count = len(audio_bytes) // 2
-
         if sample_count < 2:
             return MIN_DB, MIN_DB
 
-        samples = struct.unpack(
-            "<" + ("h" * sample_count),
-            audio_bytes
-        )
-
+        samples = struct.unpack("<" + ("h" * sample_count), audio_bytes)
         left_samples = samples[0::2]
-        right_samples = samples[1::2]
+        right_samples = samples[1::2] if len(samples) > 1 else samples[0::2]
 
-        if not left_samples or not right_samples:
-            return MIN_DB, MIN_DB
+        left_rms = math.sqrt(sum(s * s for s in left_samples) / max(1, len(left_samples)))
+        right_rms = math.sqrt(sum(s * s for s in right_samples) / max(1, len(right_samples)))
 
-        left_sum = sum(sample * sample for sample in left_samples)
-        right_sum = sum(sample * sample for sample in right_samples)
-
-        left_rms = math.sqrt(left_sum / len(left_samples))
-        right_rms = math.sqrt(right_sum / len(right_samples))
-
-        left_amplitude = max(left_rms / 32768.0, 0.000001)
-        right_amplitude = max(right_rms / 32768.0, 0.000001)
-
-        left_db = 20.0 * math.log10(left_amplitude)
-        right_db = 20.0 * math.log10(right_amplitude)
-
-        left_db = max(MIN_DB, min(MAX_DB, left_db))
-        right_db = max(MIN_DB, min(MAX_DB, right_db))
+        left_db = max(MIN_DB, min(MAX_DB, 20.0 * math.log10(max(left_rms / 32768.0, 0.000001))))
+        right_db = max(MIN_DB, min(MAX_DB, 20.0 * math.log10(max(right_rms / 32768.0, 0.000001))))
 
         return left_db, right_db
-
     except Exception:
         return MIN_DB, MIN_DB
 
 
-# =========================================================
-# AUDIO INPUT CALLBACK
-# =========================================================
-
 def audio_callback(indata, frames, time_info, status):
     global left_level, right_level
 
-    if status:
-        print("Input status:", status)
-
-    audio_bytes = bytes(indata)
-
-    left_db, right_db = calculate_levels(audio_bytes)
+    raw_bytes = indata.tobytes()
+    left_db, right_db = calculate_levels(raw_bytes)
 
     with state_lock:
         left_level = left_db
         right_level = right_db
-        current_transmitting = transmitting
-        current_listening = listen_enabled
+        is_transmitting = transmitting
 
-    if current_transmitting:
-        try:
-            transmit_queue.put_nowait(audio_bytes)
-        except queue.Full:
-            # Drop the oldest packet to keep latency low.
-            try:
-                transmit_queue.get_nowait()
-                transmit_queue.put_nowait(audio_bytes)
-            except queue.Empty:
-                pass
-            except queue.Full:
-                pass
+    if is_transmitting:
+        if transmit_queue.full():
+            try: transmit_queue.get_nowait()
+            except queue.Empty: pass
+        transmit_queue.put_nowait(raw_bytes)
 
-    if current_listening:
-        try:
-            monitor_queue.put_nowait(audio_bytes)
-        except queue.Full:
-            try:
-                monitor_queue.get_nowait()
-                monitor_queue.put_nowait(audio_bytes)
-            except Exception:
-                pass
+    if listen_var.get():
+        if monitor_queue.full():
+            try: monitor_queue.get_nowait()
+            except queue.Empty: pass
+        monitor_queue.put_nowait(raw_bytes)
 
-
-# =========================================================
-# LOCAL MONITOR OUTPUT
-# =========================================================
 
 def monitor_callback(outdata, frames, time_info, status):
-    if status:
-        print("Output status:", status)
-
-    required_bytes = frames * CHANNELS * BYTES_PER_SAMPLE
-
+    req_bytes = frames * hw_channels * BYTES_PER_SAMPLE
     try:
-        audio_bytes = monitor_queue.get_nowait()
+        data = monitor_queue.get_nowait()
     except queue.Empty:
-        audio_bytes = b""
+        data = b"\x00" * req_bytes
 
-    if len(audio_bytes) >= required_bytes:
-        outdata[:] = audio_bytes[:required_bytes]
+    if len(data) >= req_bytes:
+        outdata[:] = data[:req_bytes]
     else:
-        outdata[:] = b"\x00" * required_bytes
-
-
-# =========================================================
-# DEVICE MANAGEMENT
-# =========================================================
-
-def get_input_devices():
-    devices = sd.query_devices()
-    result = []
-
-    for index, device in enumerate(devices):
-        if device["max_input_channels"] >= CHANNELS:
-            result.append(f"{index}: {device['name']}")
-
-    return result
+        outdata[:] = b"\x00" * req_bytes
 
 
 def refresh_devices():
     try:
-        devices = get_input_devices()
-        device_combo["values"] = devices
-
-        if not devices:
-            device_status_label.config(
-                text="NO INPUT DEVICE",
-                foreground="red"
-            )
-            log("No compatible stereo input devices found.")
-            return
-
-        log(f"{len(devices)} input device(s) detected.")
-
-        current_value = device_combo.get()
-
-        if current_value not in devices:
-            device_combo.current(0)
-
-        app.after(200, activate_selected_device)
-
-    except Exception as error:
-        device_status_label.config(
-            text="DEVICE ERROR",
-            foreground="red"
-        )
-        log(f"Device scan error: {error}")
+        devices = sd.query_devices()
+        input_devs = [f"{i}: {d['name']}" for i, d in enumerate(devices) if d["max_input_channels"] >= 1]
+        device_combo["values"] = input_devs
+        
+        saved_idx = cfg.get("input_device_index", 0)
+        if input_devs:
+            if saved_idx < len(input_devs):
+                device_combo.current(saved_idx)
+            else:
+                device_combo.current(0)
+            app.after(200, activate_selected_device)
+        else:
+            device_status_label.config(text="NO INPUT DEVICE", foreground="red")
+    except Exception as e:
+        log(f"Device refresh error: {e}")
 
 
 def activate_selected_device(event=None):
-    global audio_stream
-    global device_active
-    global selected_device_index
-
-    selected_device = device_combo.get()
-
-    if not selected_device:
+    global audio_stream, device_active, hw_sample_rate, hw_channels
+    selected = device_combo.get()
+    if not selected:
         return
 
     try:
-        device_index = int(selected_device.split(":")[0])
-
-        if (
-            device_active
-            and selected_device_index == device_index
-            and audio_stream is not None
-        ):
-            return
-
+        dev_idx = int(selected.split(":")[0])
         close_input_device()
 
-        clear_queue(transmit_queue)
-        clear_queue(monitor_queue)
+        dev_info = sd.query_devices(dev_idx)
+        hw_sample_rate = int(dev_info.get("default_samplerate", 44100))
+        hw_channels = min(2, int(dev_info.get("max_input_channels", 2)))
 
-        log(f"Opening input device: {selected_device}")
-
-        audio_stream = sd.RawInputStream(
-            samplerate=SAMPLE_RATE,
+        audio_stream = sd.InputStream(
+            samplerate=hw_sample_rate,
             blocksize=BLOCK_SIZE,
-            device=device_index,
-            channels=CHANNELS,
+            device=dev_idx,
+            channels=hw_channels,
             dtype="int16",
             callback=audio_callback
         )
-
         audio_stream.start()
 
-        selected_device_index = device_index
         device_active = True
-
-        device_status_label.config(
-            text="DEVICE ACTIVE",
-            foreground="green"
-        )
-
-        log("Input device activated.")
-        log("VU meter is monitoring the input.")
-
-    except Exception as error:
+        device_status_label.config(text="DEVICE ACTIVE", foreground="green")
+        log(f"Native Input Active: {selected} ({hw_sample_rate}Hz/{hw_channels}Ch)")
+        toggle_listen()
+        save_config()
+    except Exception as e:
         device_active = False
-        selected_device_index = None
-        audio_stream = None
-
-        device_status_label.config(
-            text="DEVICE ERROR",
-            foreground="red"
-        )
-
-        log(f"Input device activation error: {error}")
-
-        messagebox.showerror(
-            "Input Device Error",
-            str(error)
-        )
+        device_status_label.config(text="DEVICE ERROR", foreground="red")
+        log(f"Device error: {e}")
 
 
 def close_input_device():
-    global audio_stream
-    global device_active
-    global selected_device_index
-
+    global audio_stream, device_active
     device_active = False
-    selected_device_index = None
-
-    if audio_stream is not None:
+    if audio_stream:
         try:
             audio_stream.stop()
             audio_stream.close()
         except Exception:
             pass
-
     audio_stream = None
-
-    if app is not None:
-        try:
-            device_status_label.config(
-                text="DEVICE INACTIVE",
-                foreground="red"
-            )
-        except Exception:
-            pass
-
-
-# =========================================================
-# LOCAL LISTENING
-# =========================================================
-
-def start_monitor_output():
-    global monitor_stream
-
-    if monitor_stream is not None:
-        return
-
-    try:
-        monitor_stream = sd.RawOutputStream(
-            samplerate=SAMPLE_RATE,
-            blocksize=BLOCK_SIZE,
-            channels=CHANNELS,
-            dtype="int16",
-            callback=monitor_callback
-        )
-
-        monitor_stream.start()
-        log("Local audio monitor started.")
-
-    except Exception as error:
-        monitor_stream = None
-        log(f"Local monitor error: {error}")
-
-        messagebox.showerror(
-            "Monitor Error",
-            str(error)
-        )
-
-
-def stop_monitor_output():
-    global monitor_stream
-
-    if monitor_stream is not None:
-        try:
-            monitor_stream.stop()
-            monitor_stream.close()
-        except Exception:
-            pass
-
-    monitor_stream = None
-    clear_queue(monitor_queue)
 
 
 def toggle_listen():
-    global listen_enabled
-
-    listen_enabled = listen_var.get()
-    clear_queue(monitor_queue)
-
-    if listen_enabled:
-        start_monitor_output()
-        listen_button.config(text="LISTEN: ON")
-        log("Local monitoring enabled.")
+    global monitor_stream
+    if listen_var.get() and device_active:
+        if not monitor_stream:
+            try:
+                monitor_stream = sd.RawOutputStream(
+                    samplerate=hw_sample_rate,
+                    blocksize=BLOCK_SIZE,
+                    channels=hw_channels,
+                    dtype="int16",
+                    callback=monitor_callback
+                )
+                monitor_stream.start()
+                log("Local monitoring active.")
+            except Exception as e:
+                log(f"Monitor stream error: {e}")
     else:
-        stop_monitor_output()
-        listen_button.config(text="LISTEN: OFF")
-        log("Local monitoring disabled.")
+        if monitor_stream:
+            try:
+                monitor_stream.stop()
+                monitor_stream.close()
+            except Exception:
+                pass
+            monitor_stream = None
+            log("Local monitoring disabled.")
 
 
-# =========================================================
-# WEBSOCKET CONNECTION
-# =========================================================
-
-def build_registration():
-    return {
-        "type": "register",
-        "role": "transmitter",
-        "station": stream_name.get().strip() or "Main Radio Feed",
-        "sampleRate": SAMPLE_RATE,
-        "channels": CHANNELS,
-        "format": "pcm_s16le"
-    }
+def toggle_connection():
+    with state_lock:
+        if connected:
+            disconnect_server()
+        else:
+            connect_server()
 
 
 def connect_server():
-    """
-    Starts the connection in a background thread so the Tkinter
-    interface never freezes while Render wakes up.
-    """
     global connecting
-
     with state_lock:
         if connected or connecting:
             return
-
         connecting = True
 
+    update_connection_ui()
     server_url = server_entry.get().strip()
+    threading.Thread(target=connection_worker, args=(server_url,), daemon=True).start()
 
-    if not server_url:
-        with state_lock:
-            connecting = False
 
-        messagebox.showwarning(
-            "Server Address",
-            "Please enter the server address."
-        )
-        return
+def disconnect_server():
+    global ws, connected, connecting
+    stop_transmitter()
+    with ws_lock:
+        if ws:
+            try: ws.close()
+            except Exception: pass
+            ws = None
 
-    set_connection_ui(
-        "CONNECTING...",
-        "#cc8800",
-        "CONNECTING...",
-        "disabled"
-    )
+    with state_lock:
+        connected = False
+        connecting = False
 
-    log(f"Connecting to {server_url}...")
-    log(f"Connection timeout: {CONNECT_TIMEOUT} seconds.")
-
-    threading.Thread(
-        target=connection_worker,
-        args=(server_url,),
-        daemon=True
-    ).start()
+    update_connection_ui()
+    log("Disconnected from server.")
 
 
 def connection_worker(server_url):
-    global ws
-    global connected
-    global connecting
-
-    new_ws = None
-
+    global ws, connected, connecting
     try:
-        new_ws = websocket.create_connection(
-            server_url,
-            timeout=CONNECT_TIMEOUT,
-            origin=None,
-            enable_multithread=True
-        )
-
-        log("WebSocket TCP/TLS connection established.")
-
-        new_ws.settimeout(STATUS_TIMEOUT)
-
-        registration = build_registration()
-
-        new_ws.send(json.dumps(registration))
-        log("Transmitter registration sent.")
-
-        # The server sends a status message immediately after connection.
-        # We wait briefly for it, but lack of a status response does not
-        # automatically mean the WebSocket failed.
-        try:
-            response = new_ws.recv()
-
-            if isinstance(response, bytes):
-                log(f"Server sent binary data: {len(response)} bytes")
-            else:
-                log(f"Server response: {response}")
-
-        except websocket.WebSocketTimeoutException:
-            log("No immediate status response; keeping WebSocket open.")
-
-        new_ws.settimeout(None)
+        new_ws = websocket.create_connection(server_url, timeout=10)
+        reg_payload = {
+            "type": "register-transmitter",
+            "station": stream_name.get().strip() or "Main Radio Feed",
+            "sampleRate": hw_sample_rate,
+            "channels": hw_channels,
+            "format": "pcm_s16le"
+        }
+        new_ws.send(json.dumps(reg_payload))
 
         with ws_lock:
             ws = new_ws
-
         with state_lock:
             connected = True
             connecting = False
 
-        set_connection_ui(
-            "ONLINE",
-            "green",
-            "CONNECTED",
-            "disabled"
-        )
-
-        log("CONNECTED TO AUDIOBRIDGE SERVER.")
-
-        # Start the receive/heartbeat worker.
-        threading.Thread(
-            target=websocket_receive_worker,
-            args=(new_ws,),
-            daemon=True
-        ).start()
-
-        threading.Thread(
-            target=heartbeat_worker,
-            args=(new_ws,),
-            daemon=True
-        ).start()
-
-    except Exception as error:
-        try:
-            if new_ws is not None:
-                new_ws.close()
-        except Exception:
-            pass
-
-        with ws_lock:
-            if ws is new_ws:
-                ws = None
-
+        update_connection_ui()
+        log("Connected to server.")
+        threading.Thread(target=websocket_receive_worker, args=(new_ws,), daemon=True).start()
+    except Exception as e:
         with state_lock:
             connected = False
             connecting = False
-            transmitting = False
-
-        set_connection_ui(
-            "OFFLINE",
-            "red",
-            "CONNECT",
-            "normal"
-        )
-
-        set_transmission_ui(False)
-
-        log(f"Connection failed: {error}")
-
-        try:
-            app.after(
-                0,
-                lambda e=str(error): messagebox.showerror(
-                    "Connection Error",
-                    "Could not connect to AudioBridge server:\n\n" + e
-                )
-            )
-        except Exception:
-            pass
+        update_connection_ui()
+        log(f"Connection failed: {e}")
 
 
 def websocket_receive_worker(socket):
-    global connected
-    global ws
-    global transmitting
-
+    socket.settimeout(5.0)
     while True:
         try:
-            message = socket.recv()
-
-            if message is None:
-                raise ConnectionError("Server closed the WebSocket.")
-
-            if isinstance(message, bytes):
-                log(f"Received binary packet from server: {len(message)} bytes")
-                continue
-
-            try:
-                data = json.loads(message)
-                message_type = data.get("type", "")
-
-                if message_type in ("status", "server-status"):
-                    log(
-                        f"Server status: "
-                        f"{data.get('status', data.get('message', 'unknown'))} | "
-                        f"TX={data.get('transmitters', '?')} "
-                        f"RX={data.get('receivers', '?')}"
-                    )
-
-                elif message_type == "pong":
-                    pass
-
-                else:
-                    log(f"Server message: {message}")
-
-            except json.JSONDecodeError:
-                log(f"Server text: {message}")
-
-        except Exception as error:
-            # Ignore an intentional close.
-            with ws_lock:
-                same_socket = (ws is socket)
-
-            if same_socket:
-                with state_lock:
-                    connected = False
-                    transmitting = False
-
-                with ws_lock:
-                    if ws is socket:
-                        ws = None
-
-                set_connection_ui(
-                    "OFFLINE",
-                    "red",
-                    "CONNECT",
-                    "normal"
-                )
-                set_transmission_ui(False)
-
-                log(f"WebSocket disconnected: {error}")
-
-            break
-
-
-def heartbeat_worker(socket):
-    while True:
-        time.sleep(HEARTBEAT_SECONDS)
-
-        with state_lock:
-            still_connected = connected
-
-        with ws_lock:
-            same_socket = (ws is socket)
-
-        if not still_connected or not same_socket:
-            break
-
-        try:
-            socket.send(
-                json.dumps({
-                    "type": "ping",
-                    "timestamp": int(time.time() * 1000)
-                })
-            )
-        except Exception as error:
-            log(f"Heartbeat failed: {error}")
-            break
-
-
-def disconnect_server():
-    global ws
-    global connected
-    global connecting
-    global transmitting
-
-    with state_lock:
-        transmitting = False
-        connected = False
-        connecting = False
-
-    with ws_lock:
-        current_ws = ws
-        ws = None
-
-    if current_ws is not None:
-        try:
-            current_ws.close()
+            msg = socket.recv()
+            if msg is None:
+                break
+        except websocket.WebSocketTimeoutException:
+            continue
         except Exception:
-            pass
+            disconnect_server()
+            break
 
-    clear_queue(transmit_queue)
-
-    set_connection_ui(
-        "OFFLINE",
-        "red",
-        "CONNECT",
-        "normal"
-    )
-
-    set_transmission_ui(False)
-
-    log("Disconnected from AudioBridge server.")
-
-
-# =========================================================
-# TRANSMISSION
-# =========================================================
 
 def sender_thread():
     global transmitting
-    global connected
-
-    log("Audio sender thread started.")
-
-    packet_count = 0
-    byte_count = 0
-    last_report = time.time()
-
-    while True:
-        with state_lock:
-            active = transmitting
-            online = connected
-
-        if not active:
-            break
-
+    
+    while transmitting:
         try:
-            audio_bytes = transmit_queue.get(timeout=1)
+            raw_audio = transmit_queue.get(timeout=0.1)
         except queue.Empty:
             continue
 
-        if not online:
-            continue
-
         with ws_lock:
-            current_ws = ws
+            curr_ws = ws
 
-        if current_ws is None:
-            continue
-
-        try:
-            current_ws.send_binary(audio_bytes)
-
-            packet_count += 1
-            byte_count += len(audio_bytes)
-
-            now = time.time()
-
-            if now - last_report >= 5:
-                log(
-                    f"Audio transmitting: "
-                    f"{packet_count} packets / "
-                    f"{byte_count:,} bytes total"
-                )
-                last_report = now
-
-        except Exception as error:
-            log(f"Transmission error: {error}")
-
-            with state_lock:
-                transmitting = False
-                connected = False
-
-            with ws_lock:
-                if ws is current_ws:
-                    ws = None
-
+        if curr_ws and connected:
             try:
-                current_ws.close()
-            except Exception:
-                pass
-
-            set_connection_ui(
-                "OFFLINE",
-                "red",
-                "CONNECT",
-                "normal"
-            )
-
-            set_transmission_ui(False)
-            break
-
-    log("Audio sender thread stopped.")
+                curr_ws.send_binary(raw_audio)
+            except Exception as e:
+                log(f"Transmission Send Error: {e}")
+                disconnect_server()
+                break
 
 
 def start_transmitter():
     global transmitting
-
-    with state_lock:
-        if transmitting:
-            return
-        online = connected
-
-    if not device_active:
-        messagebox.showwarning(
-            "Input Device",
-            "Please select an active input device first."
-        )
+    if not device_active or not connected:
+        messagebox.showwarning("Warning", "Ensure input is ACTIVE and CONNECTED first.")
         return
 
-    if not online:
-        messagebox.showwarning(
-            "AudioBridge",
-            "Please CONNECT to the AudioBridge server first."
-        )
-        return
+    # Drain any lingering buffer
+    while not transmit_queue.empty():
+        try: transmit_queue.get_nowait()
+        except queue.Empty: break
 
-    clear_queue(transmit_queue)
-
+    save_config()
     with state_lock:
         transmitting = True
 
-    threading.Thread(
-        target=sender_thread,
-        daemon=True
-    ).start()
-
+    threading.Thread(target=sender_thread, daemon=True).start()
     set_transmission_ui(True)
-
-    log("Internet audio transmission started.")
+    log("Transmission started.")
 
 
 def stop_transmitter():
     global transmitting
-
     with state_lock:
         transmitting = False
-
-    clear_queue(transmit_queue)
     set_transmission_ui(False)
+    log("Transmission stopped.")
 
-    log("Internet audio transmission stopped.")
-    log("Input device remains active.")
-
-
-# =========================================================
-# VU METERS
-# =========================================================
 
 def draw_vu_meter(canvas, level_db, channel_label):
     canvas.delete("all")
+    width = canvas.winfo_width() or 720
+    height = canvas.winfo_height() or 28
 
-    width = canvas.winfo_width()
-    height = canvas.winfo_height()
+    norm = max(0.0, min(1.0, (level_db - MIN_DB) / (MAX_DB - MIN_DB)))
+    active_w = max(0, (width - 8) * norm)
 
-    if width <= 1:
-        width = 700
+    canvas.create_rectangle(4, 3, width - 4, height - 3, fill="#121212", outline="#333333")
+    if active_w > 0:
+        bar_color = "#00e676" if level_db < -6 else ("#ffeb3b" if level_db < -1 else "#ff1744")
+        canvas.create_rectangle(4, 4, 4 + active_w, height - 4, fill=bar_color, outline="")
 
-    if height <= 1:
-        height = 48
-
-    meter_left = 4
-    meter_right = width - 4
-    meter_top = 4
-    meter_bottom = 26
-    meter_width = meter_right - meter_left
-
-    normalized = (
-        (level_db - MIN_DB) /
-        (MAX_DB - MIN_DB)
-    )
-
-    normalized = max(0.0, min(1.0, normalized))
-    active_width = meter_width * normalized
-
-    canvas.create_rectangle(
-        meter_left,
-        meter_top,
-        meter_right,
-        meter_bottom,
-        fill="#181818",
-        outline="#555555"
-    )
-
-    segment_count = 60
-    segment_gap = 1
-
-    segment_width = (
-        meter_width -
-        ((segment_count - 1) * segment_gap)
-    ) / segment_count
-
-    active_segments = int(normalized * segment_count)
-
-    for index in range(segment_count):
-        x1 = meter_left + index * (
-            segment_width + segment_gap
-        )
-        x2 = x1 + segment_width
-
-        segment_db = MIN_DB + (
-            index / segment_count
-        ) * 60.0
-
-        if index < active_segments:
-            if segment_db >= -3:
-                fill = "#ff2020"
-            elif segment_db >= -12:
-                fill = "#ffd000"
-            else:
-                fill = "#00d83a"
-        else:
-            fill = "#303030"
-
-        canvas.create_rectangle(
-            x1,
-            meter_top + 2,
-            x2,
-            meter_bottom - 2,
-            fill=fill,
-            outline=""
-        )
-
-    canvas.create_text(
-        8,
-        15,
-        anchor="w",
-        text=channel_label,
-        fill="white",
-        font=("Segoe UI", 8, "bold")
-    )
-
-    canvas.create_text(
-        width - 8,
-        15,
-        anchor="e",
-        text=f"{level_db:5.1f} dBFS",
-        fill="white",
-        font=("Consolas", 9, "bold")
-    )
-
-    scale_values = [-60, -50, -40, -30, -20, -10, -6, -3, 0]
-
-    for db_value in scale_values:
-        position = (
-            (db_value - MIN_DB) /
-            (MAX_DB - MIN_DB)
-        )
-
-        x = meter_left + position * meter_width
-
-        canvas.create_line(
-            x,
-            meter_bottom + 1,
-            x,
-            meter_bottom + 5,
-            fill="#aaaaaa"
-        )
-
-        canvas.create_text(
-            x,
-            height - 8,
-            text=str(db_value),
-            fill="#cccccc",
-            font=("Segoe UI", 7)
-        )
+    canvas.create_text(10, height // 2, anchor="w", text=channel_label, fill="#ffffff", font=("Segoe UI", 9, "bold"))
+    canvas.create_text(width - 10, height // 2, anchor="e", text=f"{level_db:5.1f} dBFS", fill="#ffffff", font=("Consolas", 9, "bold"))
 
 
 def update_vu_meters():
-    with state_lock:
-        current_left = left_level
-        current_right = right_level
-
-    draw_vu_meter(left_meter, current_left, "L")
-    draw_vu_meter(right_meter, current_right, "R")
-
-    app.after(50, update_vu_meters)
+    if app is not None:
+        with state_lock:
+            draw_vu_meter(left_meter, left_level, "L")
+            draw_vu_meter(right_meter, right_level, "R")
+        app.after(50, update_vu_meters)
 
 
-# =========================================================
-# APPLICATION CLOSE
-# =========================================================
+def quit_app():
+    if messagebox.askokcancel("Quit", "Are you sure you want to stop transmission and exit?"):
+        save_config()
+        toggle_listen()
+        close_input_device()
+        disconnect_server()
+        app.destroy()
+
 
 def on_close():
-    global transmitting
-    global listen_enabled
-
-    with state_lock:
-        transmitting = False
-        listen_enabled = False
-
-    try:
-        stop_monitor_output()
-    except Exception:
-        pass
-
-    try:
-        close_input_device()
-    except Exception:
-        pass
-
-    try:
-        disconnect_server()
-    except Exception:
-        pass
-
-    app.destroy()
+    quit_app()
 
 
-# =========================================================
-# MAIN WINDOW
-# =========================================================
+cfg = load_config()
 
 app = tk.Tk()
 app.title("AudioBridge Transmitter")
-app.geometry("760x520")
-app.minsize(700, 480)
-
+app.geometry("760x550")
 app.protocol("WM_DELETE_WINDOW", on_close)
-
-# =========================================================
-# HEADER
-# =========================================================
 
 header = ttk.Frame(app, padding=(10, 8))
 header.pack(fill="x")
-
-title_label = ttk.Label(
-    header,
-    text="AUDIOBRIDGE TRANSMITTER",
-    font=("Segoe UI", 15, "bold")
-)
-title_label.pack(side="left")
-
-connection_label = tk.Label(
-    header,
-    text="OFFLINE",
-    foreground="red",
-    font=("Segoe UI", 9, "bold")
-)
+ttk.Label(header, text="AUDIOBRIDGE TRANSMITTER", font=("Segoe UI", 14, "bold")).pack(side="left")
+connection_label = tk.Label(header, text="OFFLINE", foreground="red", font=("Segoe UI", 9, "bold"))
 connection_label.pack(side="right")
 
-# =========================================================
-# INPUT DEVICE
-# =========================================================
+device_frame = ttk.LabelFrame(app, text="INPUT DEVICE & LOCAL MONITOR", padding=8)
+device_frame.pack(fill="x", padx=10, pady=4)
+device_combo = ttk.Combobox(device_frame, state="readonly")
+device_combo.pack(side="left", fill="x", expand=True)
+device_combo.bind("<<ComboboxSelected>>", activate_selected_device)
 
-device_frame = ttk.LabelFrame(
-    app,
-    text="INPUT DEVICE",
-    padding=8
-)
-device_frame.pack(
-    fill="x",
-    padx=10,
-    pady=4
-)
+listen_var = tk.BooleanVar(value=cfg["listen_enabled"])
+listen_check = ttk.Checkbutton(device_frame, text="LISTEN (Local Monitor)", variable=listen_var, command=toggle_listen)
+listen_check.pack(side="left", padx=10)
 
-device_combo = ttk.Combobox(
-    device_frame,
-    state="readonly"
-)
-device_combo.pack(
-    side="left",
-    fill="x",
-    expand=True
-)
+device_status_label = tk.Label(device_frame, text="DEVICE INACTIVE", foreground="red", font=("Segoe UI", 8, "bold"))
+device_status_label.pack(side="left")
 
-device_combo.bind(
-    "<<ComboboxSelected>>",
-    activate_selected_device
-)
+meter_frame = ttk.LabelFrame(app, text="AUDIO LEVEL — dBFS", padding=8)
+meter_frame.pack(fill="x", padx=10, pady=4)
+left_meter = tk.Canvas(meter_frame, height=28, background="#121212", highlightthickness=0)
+left_meter.pack(fill="x", pady=2)
+right_meter = tk.Canvas(meter_frame, height=28, background="#121212", highlightthickness=0)
+right_meter.pack(fill="x", pady=2)
 
-refresh_button = ttk.Button(
-    device_frame,
-    text="Refresh",
-    command=refresh_devices
-)
-refresh_button.pack(
-    side="left",
-    padx=(6, 0)
-)
+net_frame = ttk.Frame(app)
+net_frame.pack(fill="x", padx=10, pady=4)
 
-device_status_label = tk.Label(
-    device_frame,
-    text="DEVICE INACTIVE",
-    foreground="red",
-    font=("Segoe UI", 8, "bold")
-)
-device_status_label.pack(
-    side="left",
-    padx=(8, 0)
-)
-
-# =========================================================
-# AUDIO LEVEL
-# =========================================================
-
-meter_frame = ttk.LabelFrame(
-    app,
-    text="AUDIO LEVEL — dBFS",
-    padding=8
-)
-meter_frame.pack(
-    fill="x",
-    padx=10,
-    pady=4
-)
-
-left_meter = tk.Canvas(
-    meter_frame,
-    height=48,
-    background="#181818",
-    highlightthickness=0
-)
-left_meter.pack(
-    fill="x",
-    pady=2
-)
-
-right_meter = tk.Canvas(
-    meter_frame,
-    height=48,
-    background="#181818",
-    highlightthickness=0
-)
-right_meter.pack(
-    fill="x",
-    pady=2
-)
-
-# =========================================================
-# STREAM AND SERVER
-# =========================================================
-
-settings_frame = ttk.Frame(app)
-settings_frame.pack(
-    fill="x",
-    padx=10,
-    pady=4
-)
-
-stream_frame = ttk.LabelFrame(
-    settings_frame,
-    text="STREAM",
-    padding=8
-)
-stream_frame.pack(
-    side="left",
-    fill="both",
-    expand=True,
-    padx=(0, 5)
-)
-
-stream_name = ttk.Entry(stream_frame)
-stream_name.insert(0, "Main Radio Feed")
+stream_sub = ttk.LabelFrame(net_frame, text="STREAM NAME", padding=8)
+stream_sub.pack(side="left", fill="both", expand=True, padx=(0, 5))
+stream_name = ttk.Entry(stream_sub)
+stream_name.insert(0, cfg["station_name"])
 stream_name.pack(fill="x")
 
-server_frame = ttk.LabelFrame(
-    settings_frame,
-    text="SERVER",
-    padding=8
-)
-server_frame.pack(
-    side="left",
-    fill="both",
-    expand=True,
-    padx=(5, 0)
-)
-
-server_entry = ttk.Entry(server_frame)
-server_entry.insert(0, DEFAULT_SERVER_URL)
+server_sub = ttk.LabelFrame(net_frame, text="SERVER URL", padding=8)
+server_sub.pack(side="left", fill="both", expand=True, padx=(5, 0))
+server_entry = ttk.Entry(server_sub)
+server_entry.insert(0, cfg["server_url"])
 server_entry.pack(fill="x")
-
-# =========================================================
-# CONTROL BUTTONS
-# =========================================================
 
 control_frame = ttk.Frame(app, padding=(10, 4))
 control_frame.pack(fill="x")
+connect_button = ttk.Button(control_frame, text="CONNECT", command=toggle_connection)
+connect_button.pack(side="left", padx=(0, 5))
+start_button = ttk.Button(control_frame, text="START", command=start_transmitter)
+start_button.pack(side="left", padx=5)
+stop_button = ttk.Button(control_frame, text="STOP", command=stop_transmitter, state="disabled")
+stop_button.pack(side="left", padx=5)
 
-connect_button = ttk.Button(
-    control_frame,
-    text="CONNECT",
-    command=connect_server
-)
-connect_button.pack(
-    side="left",
-    padx=(0, 5)
-)
+quit_button = ttk.Button(control_frame, text="QUIT / EXIT", command=quit_app)
+quit_button.pack(side="left", padx=(15, 0))
 
-start_button = ttk.Button(
-    control_frame,
-    text="START",
-    command=start_transmitter
-)
-start_button.pack(
-    side="left",
-    padx=5
-)
-
-stop_button = ttk.Button(
-    control_frame,
-    text="STOP",
-    command=stop_transmitter,
-    state="disabled"
-)
-stop_button.pack(
-    side="left",
-    padx=5
-)
-
-listen_var = tk.BooleanVar(value=False)
-
-listen_button = ttk.Checkbutton(
-    control_frame,
-    text="LISTEN: OFF",
-    variable=listen_var,
-    command=toggle_listen
-)
-listen_button.pack(
-    side="left",
-    padx=12
-)
-
-status_label = tk.Label(
-    control_frame,
-    text="NOT TRANSMITTING",
-    font=("Segoe UI", 9, "bold")
-)
+status_label = tk.Label(control_frame, text="NOT TRANSMITTING", font=("Segoe UI", 9, "bold"))
 status_label.pack(side="right")
 
-# =========================================================
-# EVENT LOG
-# =========================================================
-
-log_frame = ttk.LabelFrame(
-    app,
-    text="EVENT LOG",
-    padding=6
-)
-log_frame.pack(
-    fill="both",
-    expand=True,
-    padx=10,
-    pady=(2, 8)
-)
-
-log_box = tk.Text(
-    log_frame,
-    height=5,
-    font=("Consolas", 9)
-)
-log_box.pack(
-    fill="both",
-    expand=True
-)
-
-# =========================================================
-# INITIALIZATION
-# =========================================================
-
-log("AudioBridge transmitter ready.")
-log(
-    f"Audio format: {SAMPLE_RATE} Hz / "
-    f"{CHANNELS} channels / PCM 16-bit"
-)
-log(
-    f"Network block: {BLOCK_SIZE} frames "
-    f"({BLOCK_SIZE / SAMPLE_RATE * 1000:.0f} ms)"
-)
+log_frame = ttk.LabelFrame(app, text="EVENT LOG", padding=6)
+log_frame.pack(fill="both", expand=True, padx=10, pady=(2, 8))
+log_box = tk.Text(log_frame, height=5, font=("Consolas", 9))
+log_box.pack(fill="both", expand=True)
 
 refresh_devices()
 update_vu_meters()
-
 app.mainloop()

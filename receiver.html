@@ -4,1068 +4,346 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AudioBridge Receiver</title>
-
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            min-height: 100vh;
-            background: #101418;
-            color: #e8edf2;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            margin: 0; min-height: 100vh; background: #101418; color: #e8edf2;
+            font-family: Arial, sans-serif; display: flex; justify-content: center;
+            align-items: center; padding: 20px;
         }
-
         .panel {
-            width: 100%;
-            max-width: 560px;
-            background: #1b2229;
-            border: 1px solid #39444e;
-            border-radius: 12px;
-            padding: 24px;
+            width: 100%; max-width: 560px; background: #1b2229;
+            border: 1px solid #39444e; border-radius: 12px; padding: 24px;
         }
-
-        h1 {
-            margin: 0 0 6px;
-            font-size: 25px;
-            letter-spacing: 1px;
-        }
-
-        .subtitle {
-            color: #9eabb6;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-
+        h1 { margin: 0 0 6px; font-size: 25px; letter-spacing: 1px; }
+        .subtitle { color: #9eabb6; font-size: 13px; margin-bottom: 24px; }
         .status-box {
-            background: #11171c;
-            border: 1px solid #303b44;
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 18px;
+            background: #11171c; border: 1px solid #303b44; border-radius: 8px;
+            padding: 14px; margin-bottom: 18px;
         }
-
-        .status-line {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 9px;
-            font-size: 14px;
-        }
-
-        .status-line:last-child {
-            margin-bottom: 0;
-        }
-
-        .label {
-            color: #9eabb6;
-        }
-
-        .value {
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .online {
-            color: #4ade80;
-        }
-
-        .offline {
-            color: #ff6b6b;
-        }
-
-        .warning {
-            color: #facc15;
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 9px;
-            margin-bottom: 22px;
-        }
-
-        button {
-            border: 0;
-            border-radius: 7px;
-            padding: 13px 7px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-        }
-
-        button:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
-
-        #connectButton {
-            background: #2563eb;
-        }
-
-        #playButton {
-            background: #16a34a;
-        }
-
-        #pauseButton {
-            background: #ca8a04;
-        }
-
-        #disconnectButton {
-            background: #dc2626;
-        }
-
-        .meter-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #9eabb6;
-        }
-
-        .db-value {
-            color: #4ade80;
-            font-weight: bold;
-        }
-
-        .meter {
-            height: 28px;
-            background: #080b0e;
-            border: 1px solid #303b44;
-            border-radius: 5px;
-            overflow: hidden;
-            display: flex;
-            gap: 2px;
-            padding: 4px;
-        }
-
-        .meter-bar {
-            flex: 1;
-            background: #26313a;
-            border-radius: 2px;
-        }
-
-        .meter-bar.green {
-            background: #22c55e;
-        }
-
-        .meter-bar.yellow {
-            background: #eab308;
-        }
-
-        .meter-bar.red {
-            background: #ef4444;
-        }
-
-        .scale {
-            display: flex;
-            justify-content: space-between;
-            color: #6f7d88;
-            font-size: 10px;
-            margin-top: 5px;
-        }
-
-        .log {
-            margin-top: 20px;
-            background: #080b0e;
-            border: 1px solid #303b44;
-            border-radius: 7px;
-            padding: 12px;
-            height: 165px;
-            overflow-y: auto;
-            font-family: Consolas, monospace;
-            font-size: 12px;
-            color: #b8c4ce;
-            white-space: pre-wrap;
-        }
-
-        @media (max-width: 500px) {
-            .buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        .status-line { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 9px; font-size: 14px; }
+        .status-line:last-child { margin-bottom: 0; }
+        .label { color: #9eabb6; }
+        .value { font-weight: bold; text-align: right; }
+        .online { color: #4ade80; }
+        .offline { color: #ff6b6b; }
+        .warning { color: #facc15; }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 22px; }
+        button { border: 0; border-radius: 7px; padding: 13px 7px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
+        button:disabled { opacity: 0.35; cursor: not-allowed; }
+        #connectButton { background: #2563eb; }
+        #playButton { background: #16a34a; }
+        #pauseButton { background: #ca8a04; }
+        #disconnectButton { background: #dc2626; }
+        .meter-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #9eabb6; }
+        .db-value { color: #4ade80; font-weight: bold; }
+        .meter { height: 28px; background: #080b0e; border: 1px solid #303b44; border-radius: 5px; overflow: hidden; display: flex; gap: 2px; padding: 4px; }
+        .meter-bar { flex: 1; background: #26313a; border-radius: 2px; }
+        .meter-bar.green { background: #22c55e; }
+        .meter-bar.yellow { background: #eab308; }
+        .meter-bar.red { background: #ef4444; }
+        .scale { display: flex; justify-content: space-between; color: #6f7d88; font-size: 10px; margin-top: 5px; }
+        .log { margin-top: 20px; background: #080b0e; border: 1px solid #303b44; border-radius: 7px; padding: 12px; height: 165px; overflow-y: auto; font-family: Consolas, monospace; font-size: 12px; color: #b8c4ce; white-space: pre-wrap; }
+        @media (max-width: 500px) { .buttons { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
-
 <body>
     <div class="panel">
         <h1>AUDIOBRIDGE RECEIVER</h1>
-
-        <div class="subtitle">
-            Live audio receiver and monitor
-        </div>
-
+        <div class="subtitle">Live audio receiver and monitor</div>
         <div class="status-box">
-            <div class="status-line">
-                <span class="label">Server</span>
-                <span id="serverStatus" class="value offline">
-                    Disconnected
-                </span>
-            </div>
-
-            <div class="status-line">
-                <span class="label">Audio Engine</span>
-                <span id="audioStatus" class="value offline">
-                    Stopped
-                </span>
-            </div>
-
-            <div class="status-line">
-                <span class="label">Audio Format</span>
-                <span class="value">
-                    48 kHz / Stereo / PCM16
-                </span>
-            </div>
-
-            <div class="status-line">
-                <span class="label">Received Packets</span>
-                <span id="packetCount" class="value">0</span>
-            </div>
-
-            <div class="status-line">
-                <span class="label">Received Bytes</span>
-                <span id="byteCount" class="value">0</span>
-            </div>
+            <div class="status-line"><span class="label">Server</span><span id="serverStatus" class="value offline">Disconnected</span></div>
+            <div class="status-line"><span class="label">Audio Engine</span><span id="audioStatus" class="value offline">Stopped</span></div>
+            <div class="status-line"><span class="label">Audio Format</span><span id="formatStatus" class="value">44.1 kHz / Stereo / PCM16</span></div>
+            <div class="status-line"><span class="label">Received Packets</span><span id="packetCount" class="value">0</span></div>
+            <div class="status-line"><span class="label">Received Bytes</span><span id="byteCount" class="value">0</span></div>
         </div>
 
         <div class="buttons">
             <button id="connectButton">CONNECT</button>
             <button id="playButton" disabled>PLAY</button>
             <button id="pauseButton" disabled>PAUSE</button>
-            <button id="disconnectButton" disabled>
-                DISCONNECT
-            </button>
+            <button id="disconnectButton" disabled>DISCONNECT</button>
         </div>
 
         <div class="meter-header">
             <span>RECEIVED AUDIO LEVEL</span>
             <span id="dbValue" class="db-value">-60 dB</span>
         </div>
-
         <div id="meter" class="meter"></div>
-
         <div class="scale">
-            <span>-60 dB</span>
-            <span>-30 dB</span>
-            <span>-12 dB</span>
-            <span>-3 dB</span>
-            <span>0 dB</span>
+            <span>-60 dB</span><span>-30 dB</span><span>-12 dB</span><span>-3 dB</span><span>0 dB</span>
         </div>
-
         <div id="log" class="log">Receiver ready.</div>
     </div>
 
     <script>
         "use strict";
 
-        /*
-         * ============================================================
-         * AUDIO CONFIGURATION
-         * ============================================================
-         *
-         * These values must match transmitter.py.
-         */
-
-        const SAMPLE_RATE = 48000;
-        const CHANNELS = 2;
+        // Configured to match Transmitter's 44.1kHz rate
+        let SAMPLE_RATE = 44100;
+        let CHANNELS = 2;
         const BYTES_PER_SAMPLE = 2;
 
-        const SERVER_URL =
-            "wss://transmitter-zctz.onrender.com/audio";
+        const SERVER_URL = window.location.protocol === "https:" 
+            ? "wss://localhost:10000/audio" 
+            : "ws://localhost:10000/audio";
 
-        /*
-         * ============================================================
-         * DOM ELEMENTS
-         * ============================================================
-         */
-
-        const connectButton =
-            document.getElementById("connectButton");
-
-        const playButton =
-            document.getElementById("playButton");
-
-        const pauseButton =
-            document.getElementById("pauseButton");
-
-        const disconnectButton =
-            document.getElementById("disconnectButton");
-
-        const serverStatus =
-            document.getElementById("serverStatus");
-
-        const audioStatus =
-            document.getElementById("audioStatus");
-
-        const packetCountElement =
-            document.getElementById("packetCount");
-
-        const byteCountElement =
-            document.getElementById("byteCount");
-
-        const meterElement =
-            document.getElementById("meter");
-
-        const dbValue =
-            document.getElementById("dbValue");
-
-        const logElement =
-            document.getElementById("log");
-
-        /*
-         * ============================================================
-         * STATE
-         * ============================================================
-         */
+        const connectButton = document.getElementById("connectButton");
+        const playButton = document.getElementById("playButton");
+        const pauseButton = document.getElementById("pauseButton");
+        const disconnectButton = document.getElementById("disconnectButton");
+        const serverStatus = document.getElementById("serverStatus");
+        const audioStatus = document.getElementById("audioStatus");
+        const formatStatus = document.getElementById("formatStatus");
+        const packetCountElement = document.getElementById("packetCount");
+        const byteCountElement = document.getElementById("byteCount");
+        const meterElement = document.getElementById("meter");
+        const dbValue = document.getElementById("dbValue");
+        const logElement = document.getElementById("log");
 
         let socket = null;
         let audioContext = null;
         let analyser = null;
-
         let audioStarted = false;
         let nextAudioTime = 0;
-
         let packetCount = 0;
         let byteCount = 0;
-
         let meterBars = [];
         let activeSources = new Set();
         let animationFrame = null;
 
-        /*
-         * ============================================================
-         * LOGGING
-         * ============================================================
-         */
-
         function log(message) {
-            const time =
-                new Date().toLocaleTimeString();
-
-            logElement.textContent +=
-                `\n[${time}] ${message}`;
-
-            logElement.scrollTop =
-                logElement.scrollHeight;
-
+            const time = new Date().toLocaleTimeString();
+            logElement.textContent += `\n[${time}] ${message}`;
+            logElement.scrollTop = logElement.scrollHeight;
             console.log(message);
         }
-
-        /*
-         * ============================================================
-         * STATUS
-         * ============================================================
-         */
 
         function setStatus(element, text, className) {
             element.textContent = text;
             element.className = `value ${className}`;
         }
 
-        /*
-         * ============================================================
-         * METER
-         * ============================================================
-         */
-
         function createMeter() {
+            meterElement.innerHTML = "";
+            meterBars = [];
             for (let i = 0; i < 40; i++) {
-                const bar =
-                    document.createElement("div");
-
+                const bar = document.createElement("div");
                 bar.className = "meter-bar";
-
                 meterElement.appendChild(bar);
                 meterBars.push(bar);
             }
         }
 
         function updateMeter(level, db) {
-            const activeBars =
-                Math.round(
-                    level * meterBars.length
-                );
-
+            const activeBars = Math.round(level * meterBars.length);
             meterBars.forEach((bar, index) => {
                 bar.className = "meter-bar";
-
                 if (index < activeBars) {
-                    if (
-                        index >=
-                        meterBars.length * 0.90
-                    ) {
-                        bar.classList.add("red");
-                    } else if (
-                        index >=
-                        meterBars.length * 0.70
-                    ) {
-                        bar.classList.add("yellow");
-                    } else {
-                        bar.classList.add("green");
-                    }
+                    if (index >= meterBars.length * 0.90) bar.classList.add("red");
+                    else if (index >= meterBars.length * 0.70) bar.classList.add("yellow");
+                    else bar.classList.add("green");
                 }
             });
-
-            dbValue.textContent =
-                `${db.toFixed(1)} dB`;
-
-            if (db > -3) {
-                dbValue.style.color = "#ef4444";
-            } else if (db > -12) {
-                dbValue.style.color = "#eab308";
-            } else {
-                dbValue.style.color = "#4ade80";
-            }
+            dbValue.textContent = `${db.toFixed(1)} dB`;
+            if (db > -3) dbValue.style.color = "#ef4444";
+            else if (db > -12) dbValue.style.color = "#eab308";
+            else dbValue.style.color = "#4ade80";
         }
 
-        function resetMeter() {
-            updateMeter(0, -60);
-        }
+        function resetMeter() { updateMeter(0, -60); }
 
         function startMeterAnimation() {
-            if (animationFrame) {
-                return;
-            }
-
+            if (animationFrame) return;
             function drawMeter() {
-                if (!analyser) {
-                    resetMeter();
-                    animationFrame = null;
-                    return;
-                }
-
-                const data =
-                    new Float32Array(
-                        analyser.fftSize
-                    );
-
+                if (!analyser) { resetMeter(); animationFrame = null; return; }
+                const data = new Float32Array(analyser.fftSize);
                 analyser.getFloatTimeDomainData(data);
-
                 let sum = 0;
-
-                for (let i = 0; i < data.length; i++) {
-                    sum += data[i] * data[i];
-                }
-
-                const rms =
-                    Math.sqrt(
-                        sum / data.length
-                    );
-
+                for (let i = 0; i < data.length; i++) sum += data[i] * data[i];
+                const rms = Math.sqrt(sum / data.length);
                 let db = -60;
-
-                if (rms > 0.00001) {
-                    db = 20 * Math.log10(rms);
-                }
-
-                db = Math.max(
-                    -60,
-                    Math.min(0, db)
-                );
-
-                const level =
-                    (db + 60) / 60;
-
-                if (audioStarted) {
-                    updateMeter(level, db);
-                } else {
-                    resetMeter();
-                }
-
-                animationFrame =
-                    requestAnimationFrame(
-                        drawMeter
-                    );
+                if (rms > 0.00001) db = 20 * Math.log10(rms);
+                db = Math.max(-60, Math.min(0, db));
+                const level = (db + 60) / 60;
+                if (audioStarted) updateMeter(level, db);
+                else resetMeter();
+                animationFrame = requestAnimationFrame(drawMeter);
             }
-
-            animationFrame =
-                requestAnimationFrame(
-                    drawMeter
-                );
+            animationFrame = requestAnimationFrame(drawMeter);
         }
 
-        /*
-         * ============================================================
-         * AUDIO ENGINE
-         * ============================================================
-         */
-
         function createAudioEngine() {
-            if (audioContext) {
-                return;
-            }
-
-            const AudioContextClass =
-                window.AudioContext ||
-                window.webkitAudioContext;
-
-            if (!AudioContextClass) {
-                throw new Error(
-                    "Web Audio API is not supported."
-                );
-            }
-
-            audioContext =
-                new AudioContextClass({
-                    sampleRate: SAMPLE_RATE
-                });
-
-            analyser =
-                audioContext.createAnalyser();
-
+            if (audioContext) return;
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) throw new Error("Web Audio API is not supported.");
+            
+            // Explicitly set sampleRate to 44100 matching Python Transmitter
+            audioContext = new AudioContextClass({ sampleRate: SAMPLE_RATE });
+            analyser = audioContext.createAnalyser();
             analyser.fftSize = 2048;
             analyser.smoothingTimeConstant = 0.75;
-
-            analyser.connect(
-                audioContext.destination
-            );
-
+            analyser.connect(audioContext.destination);
             startMeterAnimation();
-
-            log(
-                `Audio engine created: ` +
-                `${audioContext.sampleRate} Hz`
-            );
+            log(`Audio engine active: ${audioContext.sampleRate} Hz`);
         }
 
         function stopAllSources() {
             for (const source of activeSources) {
-                try {
-                    source.stop();
-                } catch (error) {
-                    // The source may already have stopped.
-                }
+                try { source.stop(); } catch (error) {}
             }
-
             activeSources.clear();
         }
 
-        /*
-         * ============================================================
-         * PCM CONVERSION
-         * ============================================================
-         *
-         * Expected input:
-         * signed 16-bit little-endian PCM
-         * stereo interleaved:
-         *
-         * L, R, L, R, L, R...
-         */
-
         function convertPCMToAudioBuffer(arrayBuffer) {
-            if (!audioContext) {
-                return null;
-            }
+            if (!audioContext || !(arrayBuffer instanceof ArrayBuffer)) return null;
+            const bytesPerFrame = CHANNELS * BYTES_PER_SAMPLE;
+            if (arrayBuffer.byteLength === 0 || arrayBuffer.byteLength % bytesPerFrame !== 0) return null;
 
-            if (!(arrayBuffer instanceof ArrayBuffer)) {
-                log("Audio packet is not an ArrayBuffer.");
-                return null;
-            }
-
-            const bytesPerFrame =
-                CHANNELS * BYTES_PER_SAMPLE;
-
-            if (
-                arrayBuffer.byteLength === 0 ||
-                arrayBuffer.byteLength % bytesPerFrame !== 0
-            ) {
-                log(
-                    `Invalid PCM packet length: ` +
-                    `${arrayBuffer.byteLength} bytes`
-                );
-
-                return null;
-            }
-
-            const frameCount =
-                arrayBuffer.byteLength /
-                bytesPerFrame;
-
-            const audioBuffer =
-                audioContext.createBuffer(
-                    CHANNELS,
-                    frameCount,
-                    SAMPLE_RATE
-                );
-
-            const leftChannel =
-                audioBuffer.getChannelData(0);
-
-            const rightChannel =
-                audioBuffer.getChannelData(1);
-
-            const view =
-                new DataView(arrayBuffer);
+            const frameCount = arrayBuffer.byteLength / bytesPerFrame;
+            const audioBuffer = audioContext.createBuffer(CHANNELS, frameCount, SAMPLE_RATE);
+            const leftChannel = audioBuffer.getChannelData(0);
+            const rightChannel = audioBuffer.getChannelData(1);
+            const view = new DataView(arrayBuffer);
 
             for (let frame = 0; frame < frameCount; frame++) {
-                const leftOffset =
-                    frame * bytesPerFrame;
-
-                const rightOffset =
-                    leftOffset + BYTES_PER_SAMPLE;
-
-                const leftSample =
-                    view.getInt16(
-                        leftOffset,
-                        true
-                    );
-
-                const rightSample =
-                    view.getInt16(
-                        rightOffset,
-                        true
-                    );
-
-                leftChannel[frame] =
-                    leftSample / 32768;
-
-                rightChannel[frame] =
-                    rightSample / 32768;
+                const leftOffset = frame * bytesPerFrame;
+                const rightOffset = leftOffset + BYTES_PER_SAMPLE;
+                leftChannel[frame] = view.getInt16(leftOffset, true) / 32768.0;
+                rightChannel[frame] = view.getInt16(rightOffset, true) / 32768.0;
             }
-
             return audioBuffer;
         }
 
         function playPCM(arrayBuffer) {
-            if (
-                !audioStarted ||
-                !audioContext ||
-                !analyser
-            ) {
-                return;
-            }
+            if (!audioStarted || !audioContext || !analyser) return;
+            const audioBuffer = convertPCMToAudioBuffer(arrayBuffer);
+            if (!audioBuffer) return;
 
-            const audioBuffer =
-                convertPCMToAudioBuffer(
-                    arrayBuffer
-                );
-
-            if (!audioBuffer) {
-                return;
-            }
-
-            const source =
-                audioContext.createBufferSource();
-
+            const source = audioContext.createBufferSource();
             source.buffer = audioBuffer;
             source.connect(analyser);
-
             activeSources.add(source);
 
-            source.onended = () => {
-                activeSources.delete(source);
-            };
+            source.onended = () => activeSources.delete(source);
 
-            const currentTime =
-                audioContext.currentTime;
-
-            /*
-             * Keep the playback queue close to real time.
-             */
-
-            if (
-                nextAudioTime <
-                currentTime + 0.08
-            ) {
-                nextAudioTime =
-                    currentTime + 0.08;
+            const currentTime = audioContext.currentTime;
+            // Prevent dynamic latency buildup
+            if (nextAudioTime < currentTime + 0.05) {
+                nextAudioTime = currentTime + 0.05;
             }
-
             source.start(nextAudioTime);
-
-            nextAudioTime +=
-                audioBuffer.duration;
+            nextAudioTime += audioBuffer.duration;
         }
 
-        /*
-         * ============================================================
-         * PLAYBACK CONTROLS
-         * ============================================================
-         */
-
         async function playAudio() {
-            if (
-                !socket ||
-                socket.readyState !== WebSocket.OPEN
-            ) {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
                 log("Connect to the server first.");
                 return;
             }
-
             try {
                 createAudioEngine();
-
-                if (
-                    audioContext.state === "suspended"
-                ) {
-                    await audioContext.resume();
-                }
-
+                if (audioContext.state === "suspended") await audioContext.resume();
                 audioStarted = true;
-
-                nextAudioTime =
-                    audioContext.currentTime + 0.1;
-
-                setStatus(
-                    audioStatus,
-                    "Playing",
-                    "online"
-                );
-
+                nextAudioTime = audioContext.currentTime + 0.05;
+                setStatus(audioStatus, "Playing", "online");
                 playButton.disabled = true;
                 pauseButton.disabled = false;
-
                 log("Audio playback started.");
             } catch (error) {
-                log(
-                    "Audio engine error: " +
-                    error.message
-                );
+                log("Audio engine error: " + error.message);
             }
         }
 
         function pauseAudio() {
             audioStarted = false;
             nextAudioTime = 0;
-
             stopAllSources();
-
-            if (
-                audioContext &&
-                audioContext.state === "running"
-            ) {
-                audioContext.suspend();
-            }
-
-            setStatus(
-                audioStatus,
-                "Paused",
-                "warning"
-            );
-
+            if (audioContext && audioContext.state === "running") audioContext.suspend();
+            setStatus(audioStatus, "Paused", "warning");
             playButton.disabled = false;
             pauseButton.disabled = true;
-
             resetMeter();
-
             log("Audio playback paused.");
         }
 
-        /*
-         * ============================================================
-         * WEBSOCKET CONNECTION
-         * ============================================================
-         */
-
         function connectToServer() {
-            if (
-                socket &&
-                socket.readyState === WebSocket.OPEN
-            ) {
-                log("Already connected.");
-                return;
-            }
+            if (socket && socket.readyState === WebSocket.OPEN) return;
+            log(`Connecting to ${SERVER_URL}...`);
+            setStatus(serverStatus, "Connecting...", "warning");
 
-            log(
-                `Connecting to ${SERVER_URL}...`
-            );
-
-            setStatus(
-                serverStatus,
-                "Connecting...",
-                "warning"
-            );
-
-            socket =
-                new WebSocket(SERVER_URL);
-
-            /*
-             * Request binary frames as ArrayBuffer.
-             */
-
+            socket = new WebSocket(SERVER_URL);
             socket.binaryType = "arraybuffer";
 
             socket.onopen = () => {
-                setStatus(
-                    serverStatus,
-                    "Connected",
-                    "online"
-                );
-
+                setStatus(serverStatus, "Connected", "online");
                 connectButton.disabled = true;
                 playButton.disabled = false;
                 pauseButton.disabled = true;
                 disconnectButton.disabled = false;
-
-                log(
-                    "Connected to AudioBridge server."
-                );
-
-                socket.send(
-                    JSON.stringify({
-                        type: "register-receiver"
-                    })
-                );
-
-                log(
-                    "Receiver registration sent."
-                );
+                log("Connected to AudioBridge server.");
+                socket.send(JSON.stringify({ type: "register-receiver" }));
             };
 
             socket.onmessage = async (event) => {
-                /*
-                 * ====================================================
-                 * TEXT SERVER MESSAGE
-                 * ====================================================
-                 */
-
                 if (typeof event.data === "string") {
-                    let message;
-
                     try {
-                        message =
-                            JSON.parse(event.data);
-                    } catch (error) {
-                        log(
-                            "Invalid server message: " +
-                            event.data
-                        );
-
-                        return;
-                    }
-
-                    if (message.type === "connected") {
-                        log(
-                            message.message ||
-                            "Connected to AudioBridge server."
-                        );
-
-                        return;
-                    }
-
-                    if (message.type === "registered") {
-                        log(
-                            message.message ||
-                            "Receiver registered successfully."
-                        );
-
-                        return;
-                    }
-
-                    if (message.type === "status") {
-                        log(
-                            "Server status: " +
-                            (
-                                message.message ||
-                                message.status ||
-                                "Unknown"
-                            )
-                        );
-
-                        return;
-                    }
-
-                    if (message.type === "error") {
-                        log(
-                            "Server error: " +
-                            (
-                                message.message ||
-                                "Unknown error"
-                            )
-                        );
-
-                        return;
-                    }
-
-                    log(
-                        "Server message: " +
-                        JSON.stringify(message)
-                    );
-
+                        const message = JSON.parse(event.data);
+                        // Dynamic format detection from server payload
+                        if (message.sampleRate) {
+                            SAMPLE_RATE = message.sampleRate;
+                            CHANNELS = message.channels || 2;
+                            formatStatus.textContent = `${(SAMPLE_RATE / 1000).toFixed(1)} kHz / ${CHANNELS === 2 ? 'Stereo' : 'Mono'} / PCM16`;
+                        }
+                        log("Server message: " + (message.message || JSON.stringify(message)));
+                    } catch (e) {}
                     return;
                 }
 
-                /*
-                 * ====================================================
-                 * BINARY AUDIO PACKET
-                 * ====================================================
-                 */
-
-                let arrayBuffer = null;
-
-                try {
-                    if (
-                        event.data instanceof ArrayBuffer
-                    ) {
-                        arrayBuffer = event.data;
-                    } else if (
-                        event.data instanceof Blob
-                    ) {
-                        arrayBuffer =
-                            await event.data.arrayBuffer();
-                    } else {
-                        log(
-                            "Unknown binary data type."
-                        );
-
-                        return;
-                    }
-                } catch (error) {
-                    log(
-                        "Could not read audio packet: " +
-                        error.message
-                    );
-
-                    return;
-                }
+                let arrayBuffer = event.data instanceof ArrayBuffer 
+                    ? event.data 
+                    : await event.data.arrayBuffer();
 
                 packetCount++;
                 byteCount += arrayBuffer.byteLength;
+                packetCountElement.textContent = packetCount.toLocaleString();
+                byteCountElement.textContent = byteCount.toLocaleString();
 
-                packetCountElement.textContent =
-                    packetCount.toLocaleString();
-
-                byteCountElement.textContent =
-                    byteCount.toLocaleString();
-
-                /*
-                 * Log only the first packet and every
-                 * 100th packet to avoid flooding the log.
-                 */
-
-                if (
-                    packetCount === 1 ||
-                    packetCount % 100 === 0
-                ) {
-                    log(
-                        `Audio packet received: ` +
-                        `${arrayBuffer.byteLength} bytes ` +
-                        `(packet ${packetCount})`
-                    );
+                if (packetCount === 1 || packetCount % 200 === 0) {
+                    log(`Audio packet received: ${arrayBuffer.byteLength} bytes`);
                 }
 
                 playPCM(arrayBuffer);
             };
 
-            socket.onerror = () => {
-                log(
-                    "WebSocket connection error."
-                );
-            };
-
-            socket.onclose = () => {
-                audioStarted = false;
-
-                stopAllSources();
-
-                setStatus(
-                    serverStatus,
-                    "Disconnected",
-                    "offline"
-                );
-
-                setStatus(
-                    audioStatus,
-                    "Stopped",
-                    "offline"
-                );
-
-                connectButton.disabled = false;
-                playButton.disabled = true;
-                pauseButton.disabled = true;
-                disconnectButton.disabled = true;
-
-                resetMeter();
-
-                log(
-                    "Disconnected from server."
-                );
-            };
+            socket.onerror = () => log("WebSocket connection error.");
+            socket.onclose = () => disconnectFromServer();
         }
 
         function disconnectFromServer() {
-            if (socket) {
-                socket.close();
-            }
-
+            if (socket) socket.close();
             socket = null;
             audioStarted = false;
-
             stopAllSources();
-
-            setStatus(
-                serverStatus,
-                "Disconnected",
-                "offline"
-            );
-
-            setStatus(
-                audioStatus,
-                "Stopped",
-                "offline"
-            );
-
+            setStatus(serverStatus, "Disconnected", "offline");
+            setStatus(audioStatus, "Stopped", "offline");
             connectButton.disabled = false;
             playButton.disabled = true;
             pauseButton.disabled = true;
             disconnectButton.disabled = true;
-
             resetMeter();
-
-            log("Disconnected.");
+            log("Disconnected from server.");
         }
 
-        /*
-         * ============================================================
-         * BUTTON EVENTS
-         * ============================================================
-         */
-
-        connectButton.addEventListener(
-            "click",
-            connectToServer
-        );
-
-        playButton.addEventListener(
-            "click",
-            playAudio
-        );
-
-        pauseButton.addEventListener(
-            "click",
-            pauseAudio
-        );
-
-        disconnectButton.addEventListener(
-            "click",
-            disconnectFromServer
-        );
-
-        /*
-         * ============================================================
-         * INITIALIZATION
-         * ============================================================
-         */
+        connectButton.addEventListener("click", connectToServer);
+        playButton.addEventListener("click", playAudio);
+        pauseButton.addEventListener("click", pauseAudio);
+        disconnectButton.addEventListener("click", disconnectFromServer);
 
         createMeter();
         resetMeter();
-
-        log(
-            "Server URL: " +
-            SERVER_URL
-        );
-
-        log(
-            `PCM format: ${SAMPLE_RATE} Hz, ` +
-            `${CHANNELS} channels, signed 16-bit LE`
-        );
+        log("Server URL: " + SERVER_URL);
     </script>
 </body>
 </html>
