@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,6 +41,56 @@
             color: #9eabb6;
             font-size: 13px;
             margin-bottom: 24px;
+        }
+
+        .settings {
+            margin-bottom: 18px;
+            border: 1px solid #39444e;
+            border-radius: 8px;
+            background: #141a20;
+            overflow: hidden;
+        }
+
+        .settings summary {
+            padding: 13px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            color: #cbd5df;
+            user-select: none;
+        }
+
+        .settings-content {
+            padding: 14px;
+            border-top: 1px solid #39444e;
+        }
+
+        .settings-label {
+            display: block;
+            color: #9eabb6;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .server-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        #serverUrlInput {
+            flex: 1;
+            min-width: 0;
+            padding: 11px;
+            border: 1px solid #46535e;
+            border-radius: 6px;
+            background: #080b0e;
+            color: #ffffff;
+            font-size: 13px;
+        }
+
+        #saveServerButton {
+            background: #475569;
+            white-space: nowrap;
         }
 
         .status-box {
@@ -191,6 +240,10 @@
             .buttons {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .server-input-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -200,15 +253,41 @@
         <h1>AUDIOBRIDGE RECEIVER</h1>
         <div class="subtitle">Live audio receiver and monitor</div>
 
+        <details class="settings">
+            <summary>⚙ SETTINGS — SERVER CONFIGURATION</summary>
+
+            <div class="settings-content">
+                <label class="settings-label" for="serverUrlInput">
+                    AudioBridge WebSocket Server URL
+                </label>
+
+                <div class="server-input-row">
+                    <input
+                        id="serverUrlInput"
+                        type="text"
+                        placeholder="wss://your-service.onrender.com/audio"
+                    >
+
+                    <button id="saveServerButton">
+                        SAVE
+                    </button>
+                </div>
+            </div>
+        </details>
+
         <div class="status-box">
             <div class="status-line">
                 <span class="label">Server</span>
-                <span id="serverStatus" class="value offline">Disconnected</span>
+                <span id="serverStatus" class="value offline">
+                    Disconnected
+                </span>
             </div>
 
             <div class="status-line">
                 <span class="label">Audio Engine</span>
-                <span id="audioStatus" class="value offline">Stopped</span>
+                <span id="audioStatus" class="value offline">
+                    Stopped
+                </span>
             </div>
 
             <div class="status-line">
@@ -226,7 +305,9 @@
             <button id="connectButton">CONNECT</button>
             <button id="playButton" disabled>PLAY</button>
             <button id="pauseButton" disabled>PAUSE</button>
-            <button id="disconnectButton" disabled>DISCONNECT</button>
+            <button id="disconnectButton" disabled>
+                DISCONNECT
+            </button>
         </div>
 
         <div class="meter-header">
@@ -250,22 +331,47 @@
     <script>
         "use strict";
 
-        const SERVER_URL = "ws://192.168.1.205:8080";
-
         const SAMPLE_RATE = 48000;
         const CHANNELS = 2;
 
-        const connectButton = document.getElementById("connectButton");
-        const playButton = document.getElementById("playButton");
-        const pauseButton = document.getElementById("pauseButton");
-        const disconnectButton = document.getElementById("disconnectButton");
+        const DEFAULT_SERVER_URL =
+            "wss://YOUR-RENDER-SERVICE.onrender.com/audio";
 
-        const serverStatus = document.getElementById("serverStatus");
-        const audioStatus = document.getElementById("audioStatus");
-        const packetCountElement = document.getElementById("packetCount");
-        const meterElement = document.getElementById("meter");
-        const dbValue = document.getElementById("dbValue");
-        const logElement = document.getElementById("log");
+        const connectButton =
+            document.getElementById("connectButton");
+
+        const playButton =
+            document.getElementById("playButton");
+
+        const pauseButton =
+            document.getElementById("pauseButton");
+
+        const disconnectButton =
+            document.getElementById("disconnectButton");
+
+        const saveServerButton =
+            document.getElementById("saveServerButton");
+
+        const serverUrlInput =
+            document.getElementById("serverUrlInput");
+
+        const serverStatus =
+            document.getElementById("serverStatus");
+
+        const audioStatus =
+            document.getElementById("audioStatus");
+
+        const packetCountElement =
+            document.getElementById("packetCount");
+
+        const meterElement =
+            document.getElementById("meter");
+
+        const dbValue =
+            document.getElementById("dbValue");
+
+        const logElement =
+            document.getElementById("log");
 
         let socket = null;
         let audioContext = null;
@@ -277,10 +383,45 @@
         let activeSources = new Set();
         let animationFrame = null;
 
+        function getSavedServerUrl() {
+            try {
+                return localStorage.getItem("audiobridge_server_url")
+                    || DEFAULT_SERVER_URL;
+            } catch (error) {
+                return DEFAULT_SERVER_URL;
+            }
+        }
+
+        function saveServerUrl() {
+            const url = serverUrlInput.value.trim();
+
+            if (!url) {
+                log("Please enter a server URL.");
+                return;
+            }
+
+            try {
+                localStorage.setItem(
+                    "audiobridge_server_url",
+                    url
+                );
+            } catch (error) {
+                log("Could not save URL in browser storage.");
+            }
+
+            log("Server URL saved.");
+        }
+
+        function getServerUrl() {
+            return serverUrlInput.value.trim();
+        }
+
         function log(message) {
             const time = new Date().toLocaleTimeString();
 
-            logElement.textContent += `\n[${time}] ${message}`;
+            logElement.textContent +=
+                `\n[${time}] ${message}`;
+
             logElement.scrollTop = logElement.scrollHeight;
         }
 
@@ -300,7 +441,8 @@
         }
 
         function updateMeter(level, db) {
-            const activeBars = Math.round(level * meterBars.length);
+            const activeBars =
+                Math.round(level * meterBars.length);
 
             meterBars.forEach((bar, index) => {
                 bar.className = "meter-bar";
@@ -343,7 +485,8 @@
                     return;
                 }
 
-                const data = new Float32Array(analyser.fftSize);
+                const data =
+                    new Float32Array(analyser.fftSize);
 
                 analyser.getFloatTimeDomainData(data);
 
@@ -363,7 +506,6 @@
 
                 db = Math.max(-60, Math.min(0, db));
 
-                // Convert -60 dB to 0 dB into a 0 to 1 meter value.
                 const level = (db + 60) / 60;
 
                 if (audioStarted) {
@@ -372,19 +514,12 @@
                     resetMeter();
                 }
 
-                animationFrame = requestAnimationFrame(drawMeter);
+                animationFrame =
+                    requestAnimationFrame(drawMeter);
             }
 
-            animationFrame = requestAnimationFrame(drawMeter);
-        }
-
-        function stopMeterAnimation() {
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-                animationFrame = null;
-            }
-
-            resetMeter();
+            animationFrame =
+                requestAnimationFrame(drawMeter);
         }
 
         function createAudioEngine() {
@@ -410,7 +545,7 @@
                 try {
                     source.stop();
                 } catch (error) {
-                    // The source may have already stopped.
+                    // Source may have already stopped.
                 }
             }
 
@@ -428,37 +563,51 @@
                 return null;
             }
 
-            const frameCount = Math.floor(input.length / CHANNELS);
+            const frameCount =
+                Math.floor(input.length / CHANNELS);
 
-            const audioBuffer = audioContext.createBuffer(
-                CHANNELS,
-                frameCount,
-                SAMPLE_RATE
-            );
+            const audioBuffer =
+                audioContext.createBuffer(
+                    CHANNELS,
+                    frameCount,
+                    SAMPLE_RATE
+                );
 
-            const leftChannel = audioBuffer.getChannelData(0);
-            const rightChannel = audioBuffer.getChannelData(1);
+            const leftChannel =
+                audioBuffer.getChannelData(0);
+
+            const rightChannel =
+                audioBuffer.getChannelData(1);
 
             for (let frame = 0; frame < frameCount; frame++) {
-                leftChannel[frame] = input[frame * 2] / 32768;
-                rightChannel[frame] = input[frame * 2 + 1] / 32768;
+                leftChannel[frame] =
+                    input[frame * 2] / 32768;
+
+                rightChannel[frame] =
+                    input[frame * 2 + 1] / 32768;
             }
 
             return audioBuffer;
         }
 
         function playPCM(arrayBuffer) {
-            if (!audioStarted || !audioContext || !analyser) {
+            if (
+                !audioStarted ||
+                !audioContext ||
+                !analyser
+            ) {
                 return;
             }
 
-            const audioBuffer = convertPCMToAudioBuffer(arrayBuffer);
+            const audioBuffer =
+                convertPCMToAudioBuffer(arrayBuffer);
 
             if (!audioBuffer) {
                 return;
             }
 
-            const source = audioContext.createBufferSource();
+            const source =
+                audioContext.createBufferSource();
 
             source.buffer = audioBuffer;
             source.connect(analyser);
@@ -469,7 +618,8 @@
                 activeSources.delete(source);
             };
 
-            const currentTime = audioContext.currentTime;
+            const currentTime =
+                audioContext.currentTime;
 
             if (nextAudioTime < currentTime + 0.08) {
                 nextAudioTime = currentTime + 0.08;
@@ -480,7 +630,10 @@
         }
 
         async function playAudio() {
-            if (!socket || socket.readyState !== WebSocket.OPEN) {
+            if (
+                !socket ||
+                socket.readyState !== WebSocket.OPEN
+            ) {
                 log("Connect to the server first.");
                 return;
             }
@@ -492,7 +645,8 @@
             }
 
             audioStarted = true;
-            nextAudioTime = audioContext.currentTime + 0.1;
+            nextAudioTime =
+                audioContext.currentTime + 0.1;
 
             setStatus(audioStatus, "Playing", "online");
 
@@ -508,7 +662,10 @@
 
             stopAllSources();
 
-            if (audioContext && audioContext.state === "running") {
+            if (
+                audioContext &&
+                audioContext.state === "running"
+            ) {
                 audioContext.suspend();
             }
 
@@ -523,14 +680,27 @@
         }
 
         function connectToServer() {
-            if (socket && socket.readyState === WebSocket.OPEN) {
+            if (
+                socket &&
+                socket.readyState === WebSocket.OPEN
+            ) {
                 log("Already connected.");
                 return;
             }
 
-            log(`Connecting to ${SERVER_URL}...`);
+            const serverUrl = getServerUrl();
 
-            socket = new WebSocket(SERVER_URL);
+            if (
+                !serverUrl ||
+                serverUrl.includes("YOUR-RENDER-SERVICE")
+            ) {
+                log("Please configure the server URL in SETTINGS.");
+                return;
+            }
+
+            log(`Connecting to ${serverUrl}...`);
+
+            socket = new WebSocket(serverUrl);
             socket.binaryType = "arraybuffer";
 
             socket.onopen = () => {
@@ -543,8 +713,7 @@
                 log("Connected to AudioBridge server.");
 
                 socket.send(JSON.stringify({
-                    type: "register",
-                    role: "receiver"
+                    type: "register-receiver"
                 }));
             };
 
@@ -563,10 +732,12 @@
                         log("Receiver registered successfully.");
                     }
 
-                    if (message.type === "server_info") {
+                    if (message.type === "status") {
                         log(
                             `Transmitter connected: ${
-                                message.transmitterConnected ? "YES" : "NO"
+                                message.transmitterConnected
+                                    ? "YES"
+                                    : "NO"
                             }`
                         );
                     }
@@ -592,8 +763,17 @@
                 audioStarted = false;
                 stopAllSources();
 
-                setStatus(serverStatus, "Disconnected", "offline");
-                setStatus(audioStatus, "Stopped", "offline");
+                setStatus(
+                    serverStatus,
+                    "Disconnected",
+                    "offline"
+                );
+
+                setStatus(
+                    audioStatus,
+                    "Stopped",
+                    "offline"
+                );
 
                 connectButton.disabled = false;
                 playButton.disabled = true;
@@ -613,10 +793,20 @@
 
             socket = null;
             audioStarted = false;
+
             stopAllSources();
 
-            setStatus(serverStatus, "Disconnected", "offline");
-            setStatus(audioStatus, "Stopped", "offline");
+            setStatus(
+                serverStatus,
+                "Disconnected",
+                "offline"
+            );
+
+            setStatus(
+                audioStatus,
+                "Stopped",
+                "offline"
+            );
 
             connectButton.disabled = false;
             playButton.disabled = true;
@@ -628,10 +818,32 @@
             log("Disconnected.");
         }
 
-        connectButton.addEventListener("click", connectToServer);
-        playButton.addEventListener("click", playAudio);
-        pauseButton.addEventListener("click", pauseAudio);
-        disconnectButton.addEventListener("click", disconnectFromServer);
+        saveServerButton.addEventListener(
+            "click",
+            saveServerUrl
+        );
+
+        connectButton.addEventListener(
+            "click",
+            connectToServer
+        );
+
+        playButton.addEventListener(
+            "click",
+            playAudio
+        );
+
+        pauseButton.addEventListener(
+            "click",
+            pauseAudio
+        );
+
+        disconnectButton.addEventListener(
+            "click",
+            disconnectFromServer
+        );
+
+        serverUrlInput.value = getSavedServerUrl();
 
         createMeter();
         resetMeter();
