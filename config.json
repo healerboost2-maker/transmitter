@@ -1,6 +1,6 @@
 {
     "input_device_index": 4,
-    "server_url": "wss://transmitter-zctz.onrender.com/audio",
+    "server_url": "wss://transmitter-zctz.onrender.com/tx",
     "station_name": "Main Radio Feed",
     "listen_enabled": false
 }
