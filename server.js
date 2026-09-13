@@ -1,7 +1,8 @@
 const http = require("http");
 const WebSocket = require("ws");
 
-const PORT = 10000;
+// Render assigns dynamic ports via environment variable
+const PORT = process.env.PORT || 10000;
 const PATH = "/audio";
 
 // Create HTTP server
@@ -26,15 +27,18 @@ let activeAudioConfig = {
 wss.on("connection", (ws, req) => {
     ws.isTransmitter = false;
     ws.isReceiver = false;
-    const clientIp = req.socket.remoteAddress;
+    const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
     console.log(`[+] New client connected from ${clientIp}`);
 
     ws.on("message", (message, isBinary) => {
+        // Detect binary frames directly or Buffer types
+        const isBinaryData = isBinary || Buffer.isBuffer(message) || message instanceof ArrayBuffer;
+
         // -------------------------------------------------------------
         // 1. JSON CONTROL MESSAGES
         // -------------------------------------------------------------
-        if (!isBinary) {
+        if (!isBinaryData) {
             try {
                 const data = JSON.parse(message.toString());
 
@@ -43,19 +47,19 @@ wss.on("connection", (ws, req) => {
                     ws.isTransmitter = true;
                     ws.isReceiver = false;
                     transmitters.add(ws);
+                    receivers.delete(ws);
 
                     if (data.sampleRate) activeAudioConfig.sampleRate = data.sampleRate;
                     if (data.channels) activeAudioConfig.channels = data.channels;
 
                     console.log(`[Transmitter Registered] SampleRate: ${activeAudioConfig.sampleRate}Hz, Channels: ${activeAudioConfig.channels}`);
 
-                    // Send confirmation back to transmitter
                     ws.send(JSON.stringify({
                         type: "status",
                         message: "Transmitter registered successfully."
                     }));
 
-                    // Broadcast updated dynamic stream metadata to all current receivers
+                    // Broadcast updated format to all receivers
                     const formatNotice = JSON.stringify({
                         type: "format-update",
                         sampleRate: activeAudioConfig.sampleRate,
@@ -67,6 +71,7 @@ wss.on("connection", (ws, req) => {
                             receiver.send(formatNotice);
                         }
                     });
+                    return;
                 }
 
                 // Registering a Receiver
@@ -74,30 +79,37 @@ wss.on("connection", (ws, req) => {
                     ws.isReceiver = true;
                     ws.isTransmitter = false;
                     receivers.add(ws);
+                    transmitters.delete(ws);
 
                     console.log(`[Receiver Registered] Total active receivers: ${receivers.size}`);
 
-                    // Acknowledge receiver registration and send current audio layout
                     ws.send(JSON.stringify({
                         type: "status",
                         message: "Connected to AudioBridge server",
                         sampleRate: activeAudioConfig.sampleRate,
                         channels: activeAudioConfig.channels
                     }));
+                    return;
                 }
             } catch (err) {
-                console.error("[-] Failed to process JSON control message:", err.message);
+                // Message wasn't JSON control frame; fall back to binary processing
             }
-            return;
         }
 
         // -------------------------------------------------------------
         // 2. RAW BINARY PCM AUDIO FORWARDING
         // -------------------------------------------------------------
+        // Auto-promote socket to transmitter if sending binary audio directly
+        if (!ws.isTransmitter && !ws.isReceiver) {
+            ws.isTransmitter = true;
+            transmitters.add(ws);
+            console.log("[Auto-Promoted] Socket registered as Transmitter via binary audio stream.");
+        }
+
         if (ws.isTransmitter) {
             if (receivers.size === 0) return;
 
-            // Broadcast incoming binary audio chunk to all connected receivers
+            // Broadcast binary frame to all connected receivers
             receivers.forEach((receiver) => {
                 if (receiver.readyState === WebSocket.OPEN) {
                     receiver.send(message, { binary: true });
@@ -124,9 +136,10 @@ wss.on("connection", (ws, req) => {
     });
 });
 
-server.listen(PORT, () => {
+// Bind server to 0.0.0.0 and dynamic process.env.PORT for Render hosting
+server.listen(PORT, "0.0.0.0", () => {
     console.log(`====================================================`);
     console.log(` AudioBridge Server is active`);
-    console.log(` Listening on: ws://localhost:${PORT}${PATH}`);
+    console.log(` Listening on port: ${PORT}${PATH}`);
     console.log(`====================================================`);
 });

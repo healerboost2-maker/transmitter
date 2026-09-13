@@ -1,6 +1,6 @@
 {
     "input_device_index": 4,
-    "server_url": "ws://localhost:10000/audio",
+    "server_url": "wss://transmitter-zctz.onrender.com/audio",
     "station_name": "Main Radio Feed",
     "listen_enabled": false
 }

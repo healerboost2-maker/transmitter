@@ -17,6 +17,12 @@
         }
         h1 { margin: 0 0 6px; font-size: 25px; letter-spacing: 1px; }
         .subtitle { color: #9eabb6; font-size: 13px; margin-bottom: 24px; }
+        .server-config { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+        .server-config label { color: #9eabb6; font-size: 12px; font-weight: bold; }
+        .server-config input {
+            background: #11171c; border: 1px solid #303b44; border-radius: 6px;
+            padding: 10px; color: #4ade80; font-family: Consolas, monospace; font-size: 13px;
+        }
         .status-box {
             background: #11171c; border: 1px solid #303b44; border-radius: 8px;
             padding: 14px; margin-bottom: 18px;
@@ -51,6 +57,12 @@
     <div class="panel">
         <h1>AUDIOBRIDGE RECEIVER</h1>
         <div class="subtitle">Live audio receiver and monitor</div>
+
+        <div class="server-config">
+            <label for="serverInput">SERVER WEBSOCKET URL</label>
+            <input type="text" id="serverInput" spellcheck="false" />
+        </div>
+
         <div class="status-box">
             <div class="status-line"><span class="label">Server</span><span id="serverStatus" class="value offline">Disconnected</span></div>
             <div class="status-line"><span class="label">Audio Engine</span><span id="audioStatus" class="value offline">Stopped</span></div>
@@ -80,15 +92,11 @@
     <script>
         "use strict";
 
-        // Configured to match Transmitter's 44.1kHz rate
         let SAMPLE_RATE = 44100;
         let CHANNELS = 2;
         const BYTES_PER_SAMPLE = 2;
 
-        const SERVER_URL = window.location.protocol === "https:" 
-            ? "wss://localhost:10000/audio" 
-            : "ws://localhost:10000/audio";
-
+        const serverInput = document.getElementById("serverInput");
         const connectButton = document.getElementById("connectButton");
         const playButton = document.getElementById("playButton");
         const pauseButton = document.getElementById("pauseButton");
@@ -101,6 +109,27 @@
         const meterElement = document.getElementById("meter");
         const dbValue = document.getElementById("dbValue");
         const logElement = document.getElementById("log");
+
+        // Dynamic Server URL Resolution
+        function getDefaultServerUrl() {
+            if (!window.location.host) {
+                return "wss://transmitter-zctz.onrender.com/audio";
+            }
+            const isSecure = window.location.protocol === "https:";
+            const wsProtocol = isSecure ? "wss:" : "ws:";
+            
+            // Handle Local Network vs Remote Host
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+                return `${wsProtocol}//${window.location.hostname}:10000/audio`;
+            }
+            if (window.location.host.includes("onrender.com")) {
+                return `${wsProtocol}//${window.location.host}/audio`;
+            }
+            // LAN fallback including Port 10000
+            return `${wsProtocol}//${window.location.hostname}:10000/audio`;
+        }
+
+        serverInput.value = getDefaultServerUrl();
 
         let socket = null;
         let audioContext = null;
@@ -179,7 +208,6 @@
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass) throw new Error("Web Audio API is not supported.");
             
-            // Explicitly set sampleRate to 44100 matching Python Transmitter
             audioContext = new AudioContextClass({ sampleRate: SAMPLE_RATE });
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 2048;
@@ -229,7 +257,6 @@
             source.onended = () => activeSources.delete(source);
 
             const currentTime = audioContext.currentTime;
-            // Prevent dynamic latency buildup
             if (nextAudioTime < currentTime + 0.05) {
                 nextAudioTime = currentTime + 0.05;
             }
@@ -270,15 +297,23 @@
 
         function connectToServer() {
             if (socket && socket.readyState === WebSocket.OPEN) return;
-            log(`Connecting to ${SERVER_URL}...`);
+            const targetUrl = serverInput.value.trim();
+            log(`Connecting to ${targetUrl}...`);
             setStatus(serverStatus, "Connecting...", "warning");
 
-            socket = new WebSocket(SERVER_URL);
-            socket.binaryType = "arraybuffer";
+            try {
+                socket = new WebSocket(targetUrl);
+                socket.binaryType = "arraybuffer";
+            } catch (err) {
+                log(`Invalid URL error: ${err.message}`);
+                setStatus(serverStatus, "Disconnected", "offline");
+                return;
+            }
 
             socket.onopen = () => {
                 setStatus(serverStatus, "Connected", "online");
                 connectButton.disabled = true;
+                serverInput.disabled = true;
                 playButton.disabled = false;
                 pauseButton.disabled = true;
                 disconnectButton.disabled = false;
@@ -290,7 +325,6 @@
                 if (typeof event.data === "string") {
                     try {
                         const message = JSON.parse(event.data);
-                        // Dynamic format detection from server payload
                         if (message.sampleRate) {
                             SAMPLE_RATE = message.sampleRate;
                             CHANNELS = message.channels || 2;
@@ -329,6 +363,7 @@
             setStatus(serverStatus, "Disconnected", "offline");
             setStatus(audioStatus, "Stopped", "offline");
             connectButton.disabled = false;
+            serverInput.disabled = false;
             playButton.disabled = true;
             pauseButton.disabled = true;
             disconnectButton.disabled = true;
@@ -343,7 +378,7 @@
 
         createMeter();
         resetMeter();
-        log("Server URL: " + SERVER_URL);
+        log("Receiver ready.");
     </script>
 </body>
 </html>
