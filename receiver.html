@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AudioBridge Receiver</title>
 
 <style>
@@ -13,207 +12,151 @@
 
     body {
         margin: 0;
-        padding: 20px;
-        background: #111827;
-        color: #f9fafb;
-        font-family: Arial, Helvetica, sans-serif;
+        background: #101010;
+        color: #eee;
+        font-family: Arial, sans-serif;
     }
 
     .container {
-        width: 100%;
-        max-width: 850px;
-        margin: 0 auto;
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
     }
 
     h1 {
-        margin: 0 0 18px;
-        font-size: 25px;
-        letter-spacing: 1px;
+        margin: 0 0 8px;
+        font-size: 24px;
     }
 
-    .panel {
-        background: #1f2937;
-        border: 1px solid #374151;
-        border-radius: 10px;
-        padding: 16px;
-        margin-bottom: 15px;
-    }
-
-    .label {
-        color: #9ca3af;
-        font-size: 12px;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-    }
-
-    .value {
-        font-size: 17px;
-        font-weight: bold;
-        overflow-wrap: anywhere;
+    .server {
+        color: #aaa;
+        margin-bottom: 20px;
+        word-break: break-all;
     }
 
     .status {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 5px;
-        background: #374151;
-        color: #f9fafb;
+        padding: 12px;
+        background: #181818;
+        border: 1px solid #333;
+        margin-bottom: 15px;
+    }
+
+    .online {
+        color: #00e676;
+    }
+
+    .offline {
+        color: #ff5252;
+    }
+
+    button {
+        padding: 12px 18px;
+        margin-right: 8px;
+        border: 0;
+        cursor: pointer;
         font-weight: bold;
     }
 
-    .status.connected {
-        background: #065f46;
-        color: #a7f3d0;
+    #connectBtn {
+        background: #1976d2;
+        color: white;
     }
 
-    .status.error {
-        background: #7f1d1d;
-        color: #fecaca;
+    #audioBtn {
+        background: #00a152;
+        color: white;
     }
 
-    .grid {
+    #stopBtn {
+        background: #c62828;
+        color: white;
+    }
+
+    .stats {
+        margin-top: 20px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
+        gap: 10px;
     }
 
-    .stat {
-        background: #111827;
-        border: 1px solid #374151;
-        border-radius: 8px;
-        padding: 12px;
+    .card {
+        background: #181818;
+        border: 1px solid #333;
+        padding: 15px;
     }
 
-    .stat-value {
-        font-size: 24px;
+    .value {
+        font-size: 22px;
         font-weight: bold;
         margin-top: 5px;
     }
 
-    button {
-        border: 0;
-        border-radius: 6px;
-        padding: 11px 16px;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        background: #2563eb;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #1d4ed8;
-    }
-
-    button.stop {
-        background: #b91c1c;
-    }
-
-    button.stop:hover {
-        background: #991b1b;
-    }
-
-    pre {
-        margin: 0;
-        min-height: 150px;
-        max-height: 260px;
-        overflow-y: auto;
+    #log {
+        margin-top: 20px;
+        height: 220px;
+        overflow: auto;
         white-space: pre-wrap;
-        overflow-wrap: anywhere;
-        background: #030712;
-        border: 1px solid #374151;
-        border-radius: 6px;
+        background: #080808;
+        border: 1px solid #333;
         padding: 12px;
-        color: #d1d5db;
         font-family: Consolas, monospace;
         font-size: 12px;
-    }
-
-    @media (max-width: 600px) {
-        body {
-            padding: 12px;
-        }
-
-        .grid {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
     <h1>AUDIOBRIDGE RECEIVER</h1>
 
-    <div class="panel">
-        <div class="label">Server</div>
-        <div class="value">
-            wss://transmitter-zctz.onrender.com/audio
+    <div class="server">
+        Server:
+        <span id="serverText"></span>
+    </div>
+
+    <div class="status">
+        Status:
+        <strong id="status" class="offline">
+            OFFLINE
+        </strong>
+    </div>
+
+    <button id="connectBtn">
+        CONNECT
+    </button>
+
+    <button id="audioBtn">
+        ENABLE AUDIO
+    </button>
+
+    <button id="stopBtn">
+        STOP AUDIO
+    </button>
+
+    <div class="stats">
+        <div class="card">
+            Packets
+            <div class="value" id="packetCount">0</div>
+        </div>
+
+        <div class="card">
+            Bytes
+            <div class="value" id="byteCount">0</div>
+        </div>
+
+        <div class="card">
+            Audio
+            <div class="value" id="audioStatus">OFF</div>
         </div>
     </div>
 
-    <div class="panel">
-        <div class="label">Connection Status</div>
-        <div id="connectionStatus" class="status">
-            DISCONNECTED
-        </div>
-
-        <p id="serverStatus">
-            Server status: Unknown
-        </p>
-
-        <button id="connectButton">
-            CONNECT
-        </button>
-
-        <button id="disconnectButton" class="stop">
-            DISCONNECT
-        </button>
-
-        <button id="audioButton">
-            ENABLE AUDIO
-        </button>
-    </div>
-
-    <div class="panel">
-        <div class="grid">
-
-            <div class="stat">
-                <div class="label">Packets Received</div>
-                <div id="packetCount" class="stat-value">
-                    0
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="label">Bytes Received</div>
-                <div id="byteCount" class="stat-value">
-                    0
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="label">Audio Status</div>
-                <div id="audioStatus" class="stat-value">
-                    OFF
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="panel">
-        <div class="label">Event Log</div>
-        <pre id="logBox"></pre>
-    </div>
+    <div id="log"></div>
 
 </div>
 
 <script>
-"use strict";
-
 const SERVER_URL =
     "wss://transmitter-zctz.onrender.com/audio";
 
@@ -225,17 +168,16 @@ let socket = null;
 let audioContext = null;
 let audioEnabled = false;
 
+let nextAudioTime = 0;
+
 let packetCount = 0;
 let byteCount = 0;
 
-let audioQueue = [];
-let nextAudioTime = 0;
+const serverText =
+    document.getElementById("serverText");
 
-const connectionStatus =
-    document.getElementById("connectionStatus");
-
-const serverStatus =
-    document.getElementById("serverStatus");
+const status =
+    document.getElementById("status");
 
 const packetCountElement =
     document.getElementById("packetCount");
@@ -246,77 +188,72 @@ const byteCountElement =
 const audioStatus =
     document.getElementById("audioStatus");
 
-const logBox =
-    document.getElementById("logBox");
+const logElement =
+    document.getElementById("log");
 
-const connectButton =
-    document.getElementById("connectButton");
-
-const disconnectButton =
-    document.getElementById("disconnectButton");
-
-const audioButton =
-    document.getElementById("audioButton");
-
+serverText.textContent = SERVER_URL;
 
 function log(message) {
-    const timestamp = new Date().toLocaleTimeString();
+    const time =
+        new Date().toLocaleTimeString();
 
-    logBox.textContent +=
-        `[${timestamp}] ${message}\n`;
+    logElement.textContent +=
+        `[${time}] ${message}\n`;
 
-    logBox.scrollTop = logBox.scrollHeight;
+    logElement.scrollTop =
+        logElement.scrollHeight;
 }
 
+function setStatus(text, online) {
+    status.textContent = text;
 
-function setConnectionStatus(text, type) {
-    connectionStatus.textContent = text;
-
-    connectionStatus.className = "status";
-
-    if (type === "connected") {
-        connectionStatus.classList.add("connected");
-    }
-
-    if (type === "error") {
-        connectionStatus.classList.add("error");
-    }
+    status.className =
+        online ? "online" : "offline";
 }
-
-
-function updateCounters() {
-    packetCountElement.textContent =
-        packetCount.toLocaleString();
-
-    byteCountElement.textContent =
-        byteCount.toLocaleString();
-}
-
 
 async function enableAudio() {
     try {
         if (!audioContext) {
-            audioContext = new AudioContext({
-                sampleRate: SAMPLE_RATE
-            });
+            audioContext =
+                new AudioContext({
+                    sampleRate: SAMPLE_RATE
+                });
         }
 
-        if (audioContext.state === "suspended") {
-            await audioContext.resume();
-        }
+        await audioContext.resume();
 
         audioEnabled = true;
-        audioStatus.textContent = "ON";
-        audioButton.textContent = "AUDIO ENABLED";
 
-        log("Audio playback enabled.");
+        audioStatus.textContent = "ON";
+
+        log(
+            `Audio enabled at ${audioContext.sampleRate} Hz`
+        );
+
+        if (
+            nextAudioTime <
+            audioContext.currentTime
+        ) {
+            nextAudioTime =
+                audioContext.currentTime + 0.05;
+        }
+
     } catch (error) {
         log(
-            "Audio enable error: " + error.message
+            `Audio enable error: ${error.message}`
         );
     }
 }
 
+function stopAudio() {
+    audioEnabled = false;
+
+    nextAudioTime = 0;
+
+    audioStatus.textContent = "OFF";
+
+    log("Audio playback disabled.");
+}
 
 function connect() {
     if (
@@ -326,30 +263,23 @@ function connect() {
             socket.readyState === WebSocket.CONNECTING
         )
     ) {
-        log("Already connected or connecting.");
         return;
     }
 
     log(
-        "Connecting to " + SERVER_URL + "..."
+        `Connecting to ${SERVER_URL}...`
     );
 
-    setConnectionStatus(
-        "CONNECTING",
-        ""
-    );
+    setStatus("CONNECTING...", false);
 
     socket = new WebSocket(SERVER_URL);
 
     socket.binaryType = "arraybuffer";
 
     socket.onopen = () => {
-        setConnectionStatus(
-            "CONNECTED",
-            "connected"
-        );
+        setStatus("ONLINE", true);
 
-        log("WebSocket connection established.");
+        log("WebSocket connected.");
 
         socket.send(
             JSON.stringify({
@@ -361,169 +291,184 @@ function connect() {
     };
 
     socket.onmessage = async (event) => {
+
         if (typeof event.data === "string") {
             handleTextMessage(event.data);
             return;
         }
 
-        if (event.data instanceof ArrayBuffer) {
-            handleAudioPacket(event.data);
+        if (event.data instanceof Blob) {
+            const buffer =
+                await event.data.arrayBuffer();
+
+            handleAudioPacket(buffer);
             return;
         }
 
-        if (event.data instanceof Blob) {
-            const arrayBuffer =
-                await event.data.arrayBuffer();
-
-            handleAudioPacket(arrayBuffer);
+        if (event.data instanceof ArrayBuffer) {
+            handleAudioPacket(event.data);
         }
     };
 
     socket.onerror = () => {
-        setConnectionStatus(
-            "ERROR",
-            "error"
-        );
-
-        log("WebSocket error occurred.");
+        log("WebSocket error.");
     };
 
-    socket.onclose = () => {
-        setConnectionStatus(
-            "DISCONNECTED",
-            ""
+    socket.onclose = (event) => {
+        setStatus("OFFLINE", false);
+
+        log(
+            `WebSocket closed. code=${event.code}`
         );
 
-        log("WebSocket connection closed.");
+        socket = null;
     };
 }
-
 
 function handleTextMessage(text) {
-    log("Server: " + text);
-
-    let message;
-
     try {
-        message = JSON.parse(text);
-    } catch (error) {
-        return;
-    }
+        const message =
+            JSON.parse(text);
 
-    if (message.message || message.status) {
-        serverStatus.textContent =
-            "Server status: " +
-            (
-                message.message ||
-                message.status ||
-                "Unknown"
+        if (
+            message.type === "status" ||
+            message.type === "server-status"
+        ) {
+            log(
+                `Server: ${
+                    message.message ||
+                    message.status ||
+                    "online"
+                }`
             );
+
+            return;
+        }
+
+        if (message.type === "pong") {
+            return;
+        }
+
+        log(
+            `Server message: ${text}`
+        );
+
+    } catch {
+        log(
+            `Server text: ${text}`
+        );
     }
 }
-
 
 function handleAudioPacket(arrayBuffer) {
     packetCount++;
     byteCount += arrayBuffer.byteLength;
 
-    updateCounters();
+    packetCountElement.textContent =
+        packetCount.toLocaleString();
 
-    if (audioEnabled) {
-        playPcm16Stereo(arrayBuffer);
+    byteCountElement.textContent =
+        byteCount.toLocaleString();
+
+    if (!audioEnabled) {
+        return;
     }
-}
 
+    playPcm16Stereo(arrayBuffer);
+}
 
 function playPcm16Stereo(arrayBuffer) {
     if (!audioContext) {
         return;
     }
 
-    const input =
+    const int16 =
         new Int16Array(arrayBuffer);
 
     const frameCount =
-        Math.floor(input.length / CHANNELS);
+        Math.floor(
+            int16.length / CHANNELS
+        );
 
     if (frameCount <= 0) {
         return;
     }
 
-    const audioBuffer =
+    const buffer =
         audioContext.createBuffer(
             CHANNELS,
             frameCount,
             SAMPLE_RATE
         );
 
-    const leftChannel =
-        audioBuffer.getChannelData(0);
+    const left =
+        buffer.getChannelData(0);
 
-    const rightChannel =
-        audioBuffer.getChannelData(1);
+    const right =
+        buffer.getChannelData(1);
 
-    for (let index = 0; index < frameCount; index++) {
-        const left =
-            input[index * 2] / 32768;
+    for (let i = 0; i < frameCount; i++) {
+        left[i] =
+            int16[i * 2] / 32768;
 
-        const right =
-            input[index * 2 + 1] / 32768;
-
-        leftChannel[index] = left;
-        rightChannel[index] = right;
+        right[i] =
+            int16[i * 2 + 1] / 32768;
     }
 
     const source =
         audioContext.createBufferSource();
 
-    source.buffer = audioBuffer;
-    source.connect(audioContext.destination);
+    source.buffer = buffer;
 
-    const currentTime =
+    source.connect(
+        audioContext.destination
+    );
+
+    const duration =
+        frameCount / SAMPLE_RATE;
+
+    const now =
         audioContext.currentTime;
 
-    if (nextAudioTime < currentTime) {
-        nextAudioTime = currentTime + 0.03;
+    if (
+        nextAudioTime <
+        now + 0.02
+    ) {
+        nextAudioTime =
+            now + 0.05;
     }
 
     source.start(nextAudioTime);
 
-    nextAudioTime += audioBuffer.duration;
+    nextAudioTime += duration;
 }
 
-
-function disconnect() {
-    if (socket) {
-        socket.close();
-        socket = null;
-    }
-
-    setConnectionStatus(
-        "DISCONNECTED",
-        ""
+document
+    .getElementById("connectBtn")
+    .addEventListener(
+        "click",
+        connect
     );
 
-    log("Disconnected.");
-}
+document
+    .getElementById("audioBtn")
+    .addEventListener(
+        "click",
+        enableAudio
+    );
 
-
-connectButton.addEventListener(
-    "click",
-    connect
-);
-
-disconnectButton.addEventListener(
-    "click",
-    disconnect
-);
-
-audioButton.addEventListener(
-    "click",
-    enableAudio
-);
+document
+    .getElementById("stopBtn")
+    .addEventListener(
+        "click",
+        stopAudio
+    );
 
 log("AudioBridge receiver ready.");
-log("Server: " + SERVER_URL);
+log(
+    `Format: ${SAMPLE_RATE} Hz / ` +
+    `${CHANNELS} channels / PCM 16-bit`
+);
 </script>
 
 </body>
