@@ -16,7 +16,7 @@ import struct
 # CONFIGURATION
 # =========================================================
 
-DEFAULT_SERVER_URL = "ws://127.0.0.1:8080"
+DEFAULT_SERVER_URL = wss://transmitter-zctz.onrender.com/audio"
 
 SAMPLE_RATE = 48000
 CHANNELS = 2

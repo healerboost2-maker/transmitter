@@ -1,6 +1,7 @@
 {
   "name": "audiobridge-server",
   "version": "1.0.0",
+  "description": "AudioBridge PCM audio WebSocket relay",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
