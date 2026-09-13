@@ -1,0 +1,71 @@
+{
+    "minimize_to_tray": true,
+    "auto_start_boot": true,
+    "auto_start_connect": true,
+    "window": {
+        "width": 429,
+        "height": 870,
+        "x": 761,
+        "y": 65
+    },
+    "stations": {
+        "am": {
+            "station_name": "GMA Super Radyo Davao (AM)",
+            "server_url": "ws://localhost:10000/tx/am",
+            "input_device_index": 4,
+            "monitor_output_index": 6,
+            "monitor_enabled": false,
+            "format": "Raw PCM (s16le)",
+            "bitrate": "128 kbps",
+            "sample_rate": 44100,
+            "gain_db": 0.0,
+            "volume_db": 2.388059701492537,
+            "noise_gate": -40.0,
+            "gate_enabled": false,
+            "compressor_db": -12.0,
+            "comp_enabled": false,
+            "limiter_db": 0.0,
+            "lim_enabled": false,
+            "hpf_enabled": false,
+            "channel_mode": "Stereo",
+            "agc_enabled": false,
+            "multiband": {
+                "low_thresh": -12.0,
+                "low_ratio": 4.0,
+                "mid_thresh": -14.0,
+                "mid_ratio": 3.0,
+                "high_thresh": -16.0,
+                "high_ratio": 2.5
+            }
+        },
+        "fm": {
+            "station_name": "Barangay LS Davao (FM)",
+            "server_url": "ws://localhost:10000/tx/fm",
+            "input_device_index": 1,
+            "monitor_output_index": 5,
+            "monitor_enabled": false,
+            "format": "Raw PCM (s16le)",
+            "bitrate": "128 kbps",
+            "sample_rate": 44100,
+            "gain_db": 0.0,
+            "volume_db": 3.9402985074626855,
+            "noise_gate": -40.0,
+            "gate_enabled": false,
+            "compressor_db": -12.0,
+            "comp_enabled": false,
+            "limiter_db": 0.0,
+            "lim_enabled": false,
+            "hpf_enabled": false,
+            "channel_mode": "Stereo",
+            "agc_enabled": false,
+            "multiband": {
+                "low_thresh": -12.0,
+                "low_ratio": 4.0,
+                "mid_thresh": -14.0,
+                "mid_ratio": 3.0,
+                "high_thresh": -16.0,
+                "high_ratio": 2.5
+            }
+        }
+    }
+}

@@ -1,54 +1,62 @@
 const http = require("http");
 const WebSocket = require("ws");
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 1000;
 
 const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain" });
-    res.end("AudioBridge WebSocket Server Running");
+    res.end("AudioBridge Multi-Stream Server Running");
 });
 
-// Create a single WebSocket server on the HTTP server, then handle paths manually in connection
 const wss = new WebSocket.Server({ server });
 
-const transmitters = new Set();
-const receivers = new Set();
-
-let activeAudioConfig = {
-    sampleRate: 44100,
-    channels: 2,
-    bitDepth: 16
+const rooms = {
+    am: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } },
+    fm: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } }
 };
 
 wss.on("connection", (ws, req) => {
     const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
+    
+    // Safely parse URL path without crashing on missing base host headers
+    let urlPath = "/";
+    try {
+        const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+        urlPath = parsedUrl.pathname;
+    } catch (e) {
+        urlPath = req.url || "/";
+    }
 
-    console.log(`[+] New client connected from ${clientIp} on path: ${urlPath}`);
+    console.log(`[+] Connection from ${clientIp} on path: ${urlPath}`);
 
-    // Auto-assign roles based on the URL path requested
-    if (urlPath === "/tx") {
+    let station = "am";
+    if (urlPath.includes("fm")) {
+        station = "fm";
+    }
+
+    const isTx = urlPath.includes("tx") || urlPath === "/" || urlPath === "";
+
+    if (isTx) {
         ws.isTransmitter = true;
         ws.isReceiver = false;
-        transmitters.add(ws);
-        console.log(`[Transmitter Connected via /tx] Total active transmitters: ${transmitters.size}`);
-    } else if (urlPath === "/rx") {
+        ws.stationRoom = station;
+        rooms[station].transmitters.add(ws);
+        console.log(`[Transmitter Connected -> ${station.toUpperCase()}] Active Tx: ${rooms[station].transmitters.size}`);
+        
+        ws.send(JSON.stringify({ type: "status", message: `Transmitter bound to ${station.toUpperCase()}` }));
+    } else {
         ws.isReceiver = true;
         ws.isTransmitter = false;
-        receivers.add(ws);
-        console.log(`[Receiver Connected via /rx] Total active receivers: ${receivers.size}`);
+        ws.stationRoom = station;
+        rooms[station].receivers.add(ws);
+        console.log(`[Receiver Connected -> ${station.toUpperCase()}] Active Rx: ${rooms[station].receivers.size}`);
 
-        // Send current format configuration right away to the receiver
         ws.send(JSON.stringify({
             type: "status",
-            message: "Connected to AudioBridge server (/rx)",
-            sampleRate: activeAudioConfig.sampleRate,
-            channels: activeAudioConfig.channels
+            message: `Connected to ${station.toUpperCase()} stream`,
+            sampleRate: rooms[station].config.sampleRate,
+            channels: rooms[station].config.channels
         }));
-    } else {
-        // Fallback / legacy support for generic connection paths
-        ws.isTransmitter = false;
-        ws.isReceiver = false;
     }
 
     ws.on("message", (message, isBinary) => {
@@ -57,94 +65,53 @@ wss.on("connection", (ws, req) => {
         if (!isBinaryData) {
             try {
                 const data = JSON.parse(message.toString());
-
-                if (data.type === "register-transmitter") {
-                    ws.isTransmitter = true;
-                    ws.isReceiver = false;
-                    transmitters.add(ws);
-                    receivers.delete(ws);
-
-                    if (data.sampleRate) activeAudioConfig.sampleRate = data.sampleRate;
-                    if (data.channels) activeAudioConfig.channels = data.channels;
-
-                    console.log(`[Transmitter Registered] SampleRate: ${activeAudioConfig.sampleRate}Hz, Channels: ${activeAudioConfig.channels}`);
-
-                    ws.send(JSON.stringify({
-                        type: "status",
-                        message: "Transmitter registered successfully."
-                    }));
-
-                    const formatNotice = JSON.stringify({
-                        type: "format-update",
-                        sampleRate: activeAudioConfig.sampleRate,
-                        channels: activeAudioConfig.channels
-                    });
-
-                    receivers.forEach((receiver) => {
-                        if (receiver.readyState === WebSocket.OPEN) {
-                            receiver.send(formatNotice);
-                        }
-                    });
-                    return;
-                } else if (data.type === "register-receiver") {
-                    ws.isReceiver = true;
-                    ws.isTransmitter = false;
-                    receivers.add(ws);
-                    transmitters.delete(ws);
-
-                    console.log(`[Receiver Registered] Total active receivers: ${receivers.size}`);
-
-                    ws.send(JSON.stringify({
-                        type: "status",
-                        message: "Connected to AudioBridge server",
-                        sampleRate: activeAudioConfig.sampleRate,
-                        channels: activeAudioConfig.channels
-                    }));
+                if (data.type === "register-transmitter" && data.station) {
+                    const oldStation = ws.stationRoom;
+                    if (oldStation && rooms[oldStation]) {
+                        rooms[oldStation].transmitters.delete(ws);
+                    }
+                    ws.stationRoom = data.station;
+                    if (rooms[data.station]) {
+                        rooms[data.station].transmitters.add(ws);
+                        console.log(`[Transmitter Re-registered to ${data.station.toUpperCase()}]`);
+                    }
                     return;
                 }
-            } catch (err) {
-                // Fallback to binary processing if JSON parsing fails
-            }
+            } catch (e) {}
         }
 
-        // Fallback safety if connected without explicit /tx path designation
-        if (!ws.isTransmitter && !ws.isReceiver) {
-            ws.isTransmitter = true;
-            transmitters.add(ws);
-            console.log("[Auto-Promoted] Socket registered as Transmitter via binary audio stream.");
-        }
-
+        // Forward audio chunks to all active receivers in the corresponding room
         if (ws.isTransmitter) {
-            if (receivers.size === 0) return;
-
-            receivers.forEach((receiver) => {
-                if (receiver.readyState === WebSocket.OPEN) {
-                    receiver.send(message, { binary: true });
-                }
-            });
+            const currentRoom = rooms[ws.stationRoom || station];
+            if (currentRoom && currentRoom.receivers.size > 0) {
+                currentRoom.receivers.forEach((receiver) => {
+                    if (receiver.readyState === WebSocket.OPEN) {
+                        receiver.send(message, { binary: isBinaryData });
+                    }
+                });
+            }
         }
     });
 
     ws.on("close", () => {
-        if (ws.isTransmitter) {
-            transmitters.delete(ws);
-            console.log("[-] Transmitter disconnected.");
-        }
-        if (ws.isReceiver) {
-            receivers.delete(ws);
-            console.log(`[-] Receiver disconnected. Remaining receivers: ${receivers.size}`);
+        const currentRoom = rooms[ws.stationRoom || station];
+        if (currentRoom) {
+            if (ws.isTransmitter) {
+                currentRoom.transmitters.delete(ws);
+                console.log(`[-] Transmitter disconnected from ${ws.stationRoom?.toUpperCase() || station.toUpperCase()}`);
+            }
+            if (ws.isReceiver) {
+                currentRoom.receivers.delete(ws);
+                console.log(`[-] Receiver disconnected from ${ws.stationRoom?.toUpperCase() || station.toUpperCase()}`);
+            }
         }
     });
 
-    ws.on("error", (error) => {
-        console.error(`[-] Socket error (${clientIp}):`, error.message);
+    ws.on("error", (err) => {
+        console.error(`[-] Error (${clientIp}):`, err.message);
     });
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-    console.log(`====================================================`);
-    console.log(` AudioBridge Server is active`);
-    console.log(` Listening on port: ${PORT}`);
-    console.log(` Endpoints: /tx (Transmitter), /rx (Receiver)`);
-    console.log(`====================================================`);
+    console.log(`AudioBridge Server running on port ${PORT}`);
 });
