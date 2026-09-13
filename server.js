@@ -3,22 +3,44 @@ const WebSocket = require("ws");
 
 const PORT = process.env.PORT || 1000;
 
+// Create standard HTTP server
 const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("AudioBridge Multi-Stream Server Running");
 });
 
-const wss = new WebSocket.Server({ server });
+// Initialize WebSocket server attached to the HTTP server instance
+const wss = new WebSocket.Server({ noServer: true });
 
 const rooms = {
     am: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } },
     fm: { transmitters: new Set(), receivers: new Set(), config: { sampleRate: 44100, channels: 2 } }
 };
 
+// Handle explicit HTTP upgrade requests for WebSockets to support Render's proxy routing
+server.on("upgrade", (request, socket, head) => {
+    let urlPath = "/";
+    try {
+        const parsedUrl = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+        urlPath = parsedUrl.pathname;
+    } catch (e) {
+        urlPath = request.url || "/";
+    }
+
+    // Accept connections on /am, /fm, or root
+    if (urlPath.startsWith("/am") || urlPath.startsWith("/fm") || urlPath === "/") {
+        wss.handleUpgrade(request, socket, head, (ws) => {
+            wss.emit("connection", ws, request);
+        });
+    } else {
+        socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+        socket.destroy();
+    }
+});
+
 wss.on("connection", (ws, req) => {
     const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     
-    // Safely parse URL path without crashing on missing base host headers
     let urlPath = "/";
     try {
         const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
@@ -80,7 +102,6 @@ wss.on("connection", (ws, req) => {
             } catch (e) {}
         }
 
-        // Forward audio chunks to all active receivers in the corresponding room
         if (ws.isTransmitter) {
             const currentRoom = rooms[ws.stationRoom || station];
             if (currentRoom && currentRoom.receivers.size > 0) {
@@ -112,6 +133,7 @@ wss.on("connection", (ws, req) => {
     });
 });
 
+// Explicitly bind to 0.0.0.0 for cloud hosting compatibility
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`AudioBridge Server running on port ${PORT}`);
 });
