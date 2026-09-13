@@ -111,19 +111,7 @@
         const logElement = document.getElementById("log");
 
         function getDefaultServerUrl() {
-            if (!window.location.host) {
-                return "wss://transmitter-zctz.onrender.com/rx";
-            }
-            const isSecure = window.location.protocol === "https:";
-            const wsProtocol = isSecure ? "wss:" : "ws:";
-            
-            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-                return `${wsProtocol}//${window.location.hostname}:10000/audio`;
-            }
-            if (window.location.host.includes("onrender.com")) {
-                return `${wsProtocol}//${window.location.host}/audio`;
-            }
-            return `${wsProtocol}//${window.location.hostname}:10000/audio`;
+            return "https://transmitter-zctz.onrender.com/rx";
         }
 
         serverInput.value = getDefaultServerUrl();
