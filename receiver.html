@@ -43,56 +43,6 @@
             margin-bottom: 24px;
         }
 
-        .settings {
-            margin-bottom: 18px;
-            border: 1px solid #39444e;
-            border-radius: 8px;
-            background: #141a20;
-            overflow: hidden;
-        }
-
-        .settings summary {
-            padding: 13px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            color: #cbd5df;
-            user-select: none;
-        }
-
-        .settings-content {
-            padding: 14px;
-            border-top: 1px solid #39444e;
-        }
-
-        .settings-label {
-            display: block;
-            color: #9eabb6;
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
-
-        .server-input-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        #serverUrlInput {
-            flex: 1;
-            min-width: 0;
-            padding: 11px;
-            border: 1px solid #46535e;
-            border-radius: 6px;
-            background: #080b0e;
-            color: #ffffff;
-            font-size: 13px;
-        }
-
-        #saveServerButton {
-            background: #475569;
-            white-space: nowrap;
-        }
-
         .status-box {
             background: #11171c;
             border: 1px solid #303b44;
@@ -228,7 +178,7 @@
             border: 1px solid #303b44;
             border-radius: 7px;
             padding: 12px;
-            height: 135px;
+            height: 165px;
             overflow-y: auto;
             font-family: Consolas, monospace;
             font-size: 12px;
@@ -240,10 +190,6 @@
             .buttons {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .server-input-row {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -251,29 +197,10 @@
 <body>
     <div class="panel">
         <h1>AUDIOBRIDGE RECEIVER</h1>
-        <div class="subtitle">Live audio receiver and monitor</div>
 
-        <details class="settings">
-            <summary>⚙ SETTINGS — SERVER CONFIGURATION</summary>
-
-            <div class="settings-content">
-                <label class="settings-label" for="serverUrlInput">
-                    AudioBridge WebSocket Server URL
-                </label>
-
-                <div class="server-input-row">
-                    <input
-                        id="serverUrlInput"
-                        type="text"
-                        placeholder="wss://your-service.onrender.com/audio"
-                    >
-
-                    <button id="saveServerButton">
-                        SAVE
-                    </button>
-                </div>
-            </div>
-        </details>
+        <div class="subtitle">
+            Live audio receiver and monitor
+        </div>
 
         <div class="status-box">
             <div class="status-line">
@@ -292,12 +219,19 @@
 
             <div class="status-line">
                 <span class="label">Audio Format</span>
-                <span class="value">48 kHz / Stereo / PCM</span>
+                <span class="value">
+                    48 kHz / Stereo / PCM16
+                </span>
             </div>
 
             <div class="status-line">
                 <span class="label">Received Packets</span>
                 <span id="packetCount" class="value">0</span>
+            </div>
+
+            <div class="status-line">
+                <span class="label">Received Bytes</span>
+                <span id="byteCount" class="value">0</span>
             </div>
         </div>
 
@@ -331,11 +265,26 @@
     <script>
         "use strict";
 
+        /*
+         * ============================================================
+         * AUDIO CONFIGURATION
+         * ============================================================
+         *
+         * These values must match transmitter.py.
+         */
+
         const SAMPLE_RATE = 48000;
         const CHANNELS = 2;
+        const BYTES_PER_SAMPLE = 2;
 
-        const DEFAULT_SERVER_URL =
-            "wss://YOUR-RENDER-SERVICE.onrender.com/audio";
+        const SERVER_URL =
+            "wss://transmitter-zctz.onrender.com/audio";
+
+        /*
+         * ============================================================
+         * DOM ELEMENTS
+         * ============================================================
+         */
 
         const connectButton =
             document.getElementById("connectButton");
@@ -349,12 +298,6 @@
         const disconnectButton =
             document.getElementById("disconnectButton");
 
-        const saveServerButton =
-            document.getElementById("saveServerButton");
-
-        const serverUrlInput =
-            document.getElementById("serverUrlInput");
-
         const serverStatus =
             document.getElementById("serverStatus");
 
@@ -363,6 +306,9 @@
 
         const packetCountElement =
             document.getElementById("packetCount");
+
+        const byteCountElement =
+            document.getElementById("byteCount");
 
         const meterElement =
             document.getElementById("meter");
@@ -373,68 +319,69 @@
         const logElement =
             document.getElementById("log");
 
+        /*
+         * ============================================================
+         * STATE
+         * ============================================================
+         */
+
         let socket = null;
         let audioContext = null;
         let analyser = null;
+
         let audioStarted = false;
         let nextAudioTime = 0;
+
         let packetCount = 0;
+        let byteCount = 0;
+
         let meterBars = [];
         let activeSources = new Set();
         let animationFrame = null;
 
-        function getSavedServerUrl() {
-            try {
-                return localStorage.getItem("audiobridge_server_url")
-                    || DEFAULT_SERVER_URL;
-            } catch (error) {
-                return DEFAULT_SERVER_URL;
-            }
-        }
-
-        function saveServerUrl() {
-            const url = serverUrlInput.value.trim();
-
-            if (!url) {
-                log("Please enter a server URL.");
-                return;
-            }
-
-            try {
-                localStorage.setItem(
-                    "audiobridge_server_url",
-                    url
-                );
-            } catch (error) {
-                log("Could not save URL in browser storage.");
-            }
-
-            log("Server URL saved.");
-        }
-
-        function getServerUrl() {
-            return serverUrlInput.value.trim();
-        }
+        /*
+         * ============================================================
+         * LOGGING
+         * ============================================================
+         */
 
         function log(message) {
-            const time = new Date().toLocaleTimeString();
+            const time =
+                new Date().toLocaleTimeString();
 
             logElement.textContent +=
                 `\n[${time}] ${message}`;
 
-            logElement.scrollTop = logElement.scrollHeight;
+            logElement.scrollTop =
+                logElement.scrollHeight;
+
+            console.log(message);
         }
+
+        /*
+         * ============================================================
+         * STATUS
+         * ============================================================
+         */
 
         function setStatus(element, text, className) {
             element.textContent = text;
             element.className = `value ${className}`;
         }
 
+        /*
+         * ============================================================
+         * METER
+         * ============================================================
+         */
+
         function createMeter() {
             for (let i = 0; i < 40; i++) {
-                const bar = document.createElement("div");
+                const bar =
+                    document.createElement("div");
 
                 bar.className = "meter-bar";
+
                 meterElement.appendChild(bar);
                 meterBars.push(bar);
             }
@@ -442,15 +389,23 @@
 
         function updateMeter(level, db) {
             const activeBars =
-                Math.round(level * meterBars.length);
+                Math.round(
+                    level * meterBars.length
+                );
 
             meterBars.forEach((bar, index) => {
                 bar.className = "meter-bar";
 
                 if (index < activeBars) {
-                    if (index >= meterBars.length * 0.90) {
+                    if (
+                        index >=
+                        meterBars.length * 0.90
+                    ) {
                         bar.classList.add("red");
-                    } else if (index >= meterBars.length * 0.70) {
+                    } else if (
+                        index >=
+                        meterBars.length * 0.70
+                    ) {
                         bar.classList.add("yellow");
                     } else {
                         bar.classList.add("green");
@@ -458,7 +413,8 @@
                 }
             });
 
-            dbValue.textContent = `${db.toFixed(1)} dB`;
+            dbValue.textContent =
+                `${db.toFixed(1)} dB`;
 
             if (db > -3) {
                 dbValue.style.color = "#ef4444";
@@ -486,7 +442,9 @@
                 }
 
                 const data =
-                    new Float32Array(analyser.fftSize);
+                    new Float32Array(
+                        analyser.fftSize
+                    );
 
                 analyser.getFloatTimeDomainData(data);
 
@@ -496,7 +454,10 @@
                     sum += data[i] * data[i];
                 }
 
-                const rms = Math.sqrt(sum / data.length);
+                const rms =
+                    Math.sqrt(
+                        sum / data.length
+                    );
 
                 let db = -60;
 
@@ -504,9 +465,13 @@
                     db = 20 * Math.log10(rms);
                 }
 
-                db = Math.max(-60, Math.min(0, db));
+                db = Math.max(
+                    -60,
+                    Math.min(0, db)
+                );
 
-                const level = (db + 60) / 60;
+                const level =
+                    (db + 60) / 60;
 
                 if (audioStarted) {
                     updateMeter(level, db);
@@ -515,29 +480,59 @@
                 }
 
                 animationFrame =
-                    requestAnimationFrame(drawMeter);
+                    requestAnimationFrame(
+                        drawMeter
+                    );
             }
 
             animationFrame =
-                requestAnimationFrame(drawMeter);
+                requestAnimationFrame(
+                    drawMeter
+                );
         }
+
+        /*
+         * ============================================================
+         * AUDIO ENGINE
+         * ============================================================
+         */
 
         function createAudioEngine() {
             if (audioContext) {
                 return;
             }
 
-            audioContext = new AudioContext({
-                sampleRate: SAMPLE_RATE
-            });
+            const AudioContextClass =
+                window.AudioContext ||
+                window.webkitAudioContext;
 
-            analyser = audioContext.createAnalyser();
+            if (!AudioContextClass) {
+                throw new Error(
+                    "Web Audio API is not supported."
+                );
+            }
+
+            audioContext =
+                new AudioContextClass({
+                    sampleRate: SAMPLE_RATE
+                });
+
+            analyser =
+                audioContext.createAnalyser();
+
             analyser.fftSize = 2048;
             analyser.smoothingTimeConstant = 0.75;
 
-            analyser.connect(audioContext.destination);
+            analyser.connect(
+                audioContext.destination
+            );
 
             startMeterAnimation();
+
+            log(
+                `Audio engine created: ` +
+                `${audioContext.sampleRate} Hz`
+            );
         }
 
         function stopAllSources() {
@@ -545,26 +540,53 @@
                 try {
                     source.stop();
                 } catch (error) {
-                    // Source may have already stopped.
+                    // The source may already have stopped.
                 }
             }
 
             activeSources.clear();
         }
 
+        /*
+         * ============================================================
+         * PCM CONVERSION
+         * ============================================================
+         *
+         * Expected input:
+         * signed 16-bit little-endian PCM
+         * stereo interleaved:
+         *
+         * L, R, L, R, L, R...
+         */
+
         function convertPCMToAudioBuffer(arrayBuffer) {
             if (!audioContext) {
                 return null;
             }
 
-            const input = new Int16Array(arrayBuffer);
+            if (!(arrayBuffer instanceof ArrayBuffer)) {
+                log("Audio packet is not an ArrayBuffer.");
+                return null;
+            }
 
-            if (input.length < CHANNELS) {
+            const bytesPerFrame =
+                CHANNELS * BYTES_PER_SAMPLE;
+
+            if (
+                arrayBuffer.byteLength === 0 ||
+                arrayBuffer.byteLength % bytesPerFrame !== 0
+            ) {
+                log(
+                    `Invalid PCM packet length: ` +
+                    `${arrayBuffer.byteLength} bytes`
+                );
+
                 return null;
             }
 
             const frameCount =
-                Math.floor(input.length / CHANNELS);
+                arrayBuffer.byteLength /
+                bytesPerFrame;
 
             const audioBuffer =
                 audioContext.createBuffer(
@@ -579,12 +601,33 @@
             const rightChannel =
                 audioBuffer.getChannelData(1);
 
+            const view =
+                new DataView(arrayBuffer);
+
             for (let frame = 0; frame < frameCount; frame++) {
+                const leftOffset =
+                    frame * bytesPerFrame;
+
+                const rightOffset =
+                    leftOffset + BYTES_PER_SAMPLE;
+
+                const leftSample =
+                    view.getInt16(
+                        leftOffset,
+                        true
+                    );
+
+                const rightSample =
+                    view.getInt16(
+                        rightOffset,
+                        true
+                    );
+
                 leftChannel[frame] =
-                    input[frame * 2] / 32768;
+                    leftSample / 32768;
 
                 rightChannel[frame] =
-                    input[frame * 2 + 1] / 32768;
+                    rightSample / 32768;
             }
 
             return audioBuffer;
@@ -600,7 +643,9 @@
             }
 
             const audioBuffer =
-                convertPCMToAudioBuffer(arrayBuffer);
+                convertPCMToAudioBuffer(
+                    arrayBuffer
+                );
 
             if (!audioBuffer) {
                 return;
@@ -621,13 +666,29 @@
             const currentTime =
                 audioContext.currentTime;
 
-            if (nextAudioTime < currentTime + 0.08) {
-                nextAudioTime = currentTime + 0.08;
+            /*
+             * Keep the playback queue close to real time.
+             */
+
+            if (
+                nextAudioTime <
+                currentTime + 0.08
+            ) {
+                nextAudioTime =
+                    currentTime + 0.08;
             }
 
             source.start(nextAudioTime);
-            nextAudioTime += audioBuffer.duration;
+
+            nextAudioTime +=
+                audioBuffer.duration;
         }
+
+        /*
+         * ============================================================
+         * PLAYBACK CONTROLS
+         * ============================================================
+         */
 
         async function playAudio() {
             if (
@@ -638,22 +699,36 @@
                 return;
             }
 
-            createAudioEngine();
+            try {
+                createAudioEngine();
 
-            if (audioContext.state === "suspended") {
-                await audioContext.resume();
+                if (
+                    audioContext.state === "suspended"
+                ) {
+                    await audioContext.resume();
+                }
+
+                audioStarted = true;
+
+                nextAudioTime =
+                    audioContext.currentTime + 0.1;
+
+                setStatus(
+                    audioStatus,
+                    "Playing",
+                    "online"
+                );
+
+                playButton.disabled = true;
+                pauseButton.disabled = false;
+
+                log("Audio playback started.");
+            } catch (error) {
+                log(
+                    "Audio engine error: " +
+                    error.message
+                );
             }
-
-            audioStarted = true;
-            nextAudioTime =
-                audioContext.currentTime + 0.1;
-
-            setStatus(audioStatus, "Playing", "online");
-
-            playButton.disabled = true;
-            pauseButton.disabled = false;
-
-            log("Audio playback started.");
         }
 
         function pauseAudio() {
@@ -669,7 +744,11 @@
                 audioContext.suspend();
             }
 
-            setStatus(audioStatus, "Paused", "warning");
+            setStatus(
+                audioStatus,
+                "Paused",
+                "warning"
+            );
 
             playButton.disabled = false;
             pauseButton.disabled = true;
@@ -678,6 +757,12 @@
 
             log("Audio playback paused.");
         }
+
+        /*
+         * ============================================================
+         * WEBSOCKET CONNECTION
+         * ============================================================
+         */
 
         function connectToServer() {
             if (
@@ -688,79 +773,196 @@
                 return;
             }
 
-            const serverUrl = getServerUrl();
+            log(
+                `Connecting to ${SERVER_URL}...`
+            );
 
-            if (
-                !serverUrl ||
-                serverUrl.includes("YOUR-RENDER-SERVICE")
-            ) {
-                log("Please configure the server URL in SETTINGS.");
-                return;
-            }
+            setStatus(
+                serverStatus,
+                "Connecting...",
+                "warning"
+            );
 
-            log(`Connecting to ${serverUrl}...`);
+            socket =
+                new WebSocket(SERVER_URL);
 
-            socket = new WebSocket(serverUrl);
+            /*
+             * Request binary frames as ArrayBuffer.
+             */
+
             socket.binaryType = "arraybuffer";
 
             socket.onopen = () => {
-                setStatus(serverStatus, "Connected", "online");
+                setStatus(
+                    serverStatus,
+                    "Connected",
+                    "online"
+                );
 
                 connectButton.disabled = true;
                 playButton.disabled = false;
+                pauseButton.disabled = true;
                 disconnectButton.disabled = false;
 
-                log("Connected to AudioBridge server.");
+                log(
+                    "Connected to AudioBridge server."
+                );
 
-                socket.send(JSON.stringify({
-                    type: "register-receiver"
-                }));
+                socket.send(
+                    JSON.stringify({
+                        type: "register-receiver"
+                    })
+                );
+
+                log(
+                    "Receiver registration sent."
+                );
             };
 
-            socket.onmessage = (event) => {
+            socket.onmessage = async (event) => {
+                /*
+                 * ====================================================
+                 * TEXT SERVER MESSAGE
+                 * ====================================================
+                 */
+
                 if (typeof event.data === "string") {
                     let message;
 
                     try {
-                        message = JSON.parse(event.data);
+                        message =
+                            JSON.parse(event.data);
                     } catch (error) {
-                        log("Invalid server message.");
+                        log(
+                            "Invalid server message: " +
+                            event.data
+                        );
+
+                        return;
+                    }
+
+                    if (message.type === "connected") {
+                        log(
+                            message.message ||
+                            "Connected to AudioBridge server."
+                        );
+
                         return;
                     }
 
                     if (message.type === "registered") {
-                        log("Receiver registered successfully.");
+                        log(
+                            message.message ||
+                            "Receiver registered successfully."
+                        );
+
+                        return;
                     }
 
                     if (message.type === "status") {
                         log(
-                            `Transmitter connected: ${
-                                message.transmitterConnected
-                                    ? "YES"
-                                    : "NO"
-                            }`
+                            "Server status: " +
+                            (
+                                message.message ||
+                                message.status ||
+                                "Unknown"
+                            )
                         );
+
+                        return;
                     }
 
                     if (message.type === "error") {
-                        log(`Server error: ${message.message}`);
+                        log(
+                            "Server error: " +
+                            (
+                                message.message ||
+                                "Unknown error"
+                            )
+                        );
+
+                        return;
                     }
+
+                    log(
+                        "Server message: " +
+                        JSON.stringify(message)
+                    );
+
+                    return;
+                }
+
+                /*
+                 * ====================================================
+                 * BINARY AUDIO PACKET
+                 * ====================================================
+                 */
+
+                let arrayBuffer = null;
+
+                try {
+                    if (
+                        event.data instanceof ArrayBuffer
+                    ) {
+                        arrayBuffer = event.data;
+                    } else if (
+                        event.data instanceof Blob
+                    ) {
+                        arrayBuffer =
+                            await event.data.arrayBuffer();
+                    } else {
+                        log(
+                            "Unknown binary data type."
+                        );
+
+                        return;
+                    }
+                } catch (error) {
+                    log(
+                        "Could not read audio packet: " +
+                        error.message
+                    );
 
                     return;
                 }
 
                 packetCount++;
-                packetCountElement.textContent = packetCount;
+                byteCount += arrayBuffer.byteLength;
 
-                playPCM(event.data);
+                packetCountElement.textContent =
+                    packetCount.toLocaleString();
+
+                byteCountElement.textContent =
+                    byteCount.toLocaleString();
+
+                /*
+                 * Log only the first packet and every
+                 * 100th packet to avoid flooding the log.
+                 */
+
+                if (
+                    packetCount === 1 ||
+                    packetCount % 100 === 0
+                ) {
+                    log(
+                        `Audio packet received: ` +
+                        `${arrayBuffer.byteLength} bytes ` +
+                        `(packet ${packetCount})`
+                    );
+                }
+
+                playPCM(arrayBuffer);
             };
 
             socket.onerror = () => {
-                log("WebSocket connection error.");
+                log(
+                    "WebSocket connection error."
+                );
             };
 
             socket.onclose = () => {
                 audioStarted = false;
+
                 stopAllSources();
 
                 setStatus(
@@ -782,7 +984,9 @@
 
                 resetMeter();
 
-                log("Disconnected from server.");
+                log(
+                    "Disconnected from server."
+                );
             };
         }
 
@@ -818,10 +1022,11 @@
             log("Disconnected.");
         }
 
-        saveServerButton.addEventListener(
-            "click",
-            saveServerUrl
-        );
+        /*
+         * ============================================================
+         * BUTTON EVENTS
+         * ============================================================
+         */
 
         connectButton.addEventListener(
             "click",
@@ -843,10 +1048,24 @@
             disconnectFromServer
         );
 
-        serverUrlInput.value = getSavedServerUrl();
+        /*
+         * ============================================================
+         * INITIALIZATION
+         * ============================================================
+         */
 
         createMeter();
         resetMeter();
+
+        log(
+            "Server URL: " +
+            SERVER_URL
+        );
+
+        log(
+            `PCM format: ${SAMPLE_RATE} Hz, ` +
+            `${CHANNELS} channels, signed 16-bit LE`
+        );
     </script>
 </body>
 </html>
