@@ -37,6 +37,30 @@ const rooms = {
 
 
 // ================================
+// HEARTBEAT PING-PONG (Keeps idle proxy connections alive)
+// ================================
+function heartbeat() {
+    this.isAlive = true;
+}
+
+const pingInterval = setInterval(() => {
+    wss.clients.forEach((ws) => {
+        if (ws.isAlive === false) {
+            console.log(`[!] Terminating inactive/dead WebSocket client`);
+            return ws.terminate();
+        }
+
+        ws.isAlive = false;
+        ws.ping();
+    });
+}, 30000); // Check client status every 30 seconds
+
+wss.on("close", () => {
+    clearInterval(pingInterval);
+});
+
+
+// ================================
 // WEBSOCKET UPGRADE
 // ================================
 
@@ -109,6 +133,10 @@ server.on("upgrade", (request, socket, head) => {
 // ================================
 
 wss.on("connection", (ws, req) => {
+
+    // Initialize heartbeat tracking
+    ws.isAlive = true;
+    ws.on("pong", heartbeat);
 
     const clientIp =
         req.headers["x-forwarded-for"] ||
