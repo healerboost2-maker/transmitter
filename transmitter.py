@@ -1,4 +1,3 @@
-# source: transmitter.py
 import os
 import sys
 import ctypes
@@ -8,41 +7,23 @@ import math
 import struct
 import queue
 import threading
-import tkinter as tk
-from tkinter import ttk, messagebox
+import urllib.request
+import webbrowser
 from functools import partial
+import tkinter as tk
+from tkinter import messagebox
 
 import numpy as np
 import sounddevice as sd
 import websocket
+import customtkinter as ctk
 
-
-
-# ============================================================
-# USER CONFIGURATION
-# ============================================================
-
-APPDATA_DIR = os.path.join(
-    os.environ.get("APPDATA", os.path.expanduser("~")),
-    "GMA DAVAO AMFM Caster"
-)
-
-# Make sure the directory exists
-os.makedirs(APPDATA_DIR, exist_ok=True)
-
-# Writable user configuration file
-CONFIG_FILE = os.path.join(
-    APPDATA_DIR,
-    "config_gma_caster.json"
-)
-
-print("========================================")
-print("CONFIG FILE:")
-print(CONFIG_FILE)
-print("========================================")
-
-
-
+# PyAV for low-bandwidth stream encoding
+try:
+    import av
+    HAS_AV = True
+except ImportError:
+    HAS_AV = False
 
 # System Tray support
 try:
@@ -52,90 +33,148 @@ try:
 except ImportError:
     HAS_TRAY = False
 
-# Windows API support for tray window anchoring
+# Windows API support for tray window anchoring & autostart registry
 try:
     import win32gui
-    HAS_WIN32GUI = True
+    import winreg
+    HAS_WIN32 = True
 except ImportError:
-    HAS_WIN32GUI = False
+    HAS_WIN32 = False
 
+
+# ============================================================
+# USER CONFIGURATION & CONSTANTS
+# ============================================================
 
 APP_NAME = "GMA DAVAO AMFM Caster"
 APP_AUTHOR = "Neil Jay Dinoy IV"
-APP_VERSION = "1.0.0.1"
+APP_VERSION = "2.1.1"
+
+SUPPORTED_FORMATS = ["Opus", "AAC", "MP3", "WAV", "Raw PCM (s16le)"]
+BLOCK_SIZE = 1024
+MIN_DB = -60.0
+MAX_DB = 0.0
+
+APPDATA_DIR = os.path.join(
+    os.environ.get("APPDATA", os.path.expanduser("~")),
+    "GMA DAVAO AMFM Caster"
+)
+os.makedirs(APPDATA_DIR, exist_ok=True)
+CONFIG_FILE = os.path.join(APPDATA_DIR, "config_gma_caster.json")
+
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme("blue")
 
 
 # ============================================================
-# SINGLE INSTANCE PROTECTION
+# AUDIO ENCODER ENGINE (Opus / AAC / MP3 / WAV / PCM)
 # ============================================================
-# Keep one running instance of the application.  This works with
-# both the Python source and the PyInstaller/ISS executable.
+
+class AudioEncoder:
+    """Handles real-time audio block compression using PyAV."""
+    def __init__(self, fmt="Opus", bitrate="128 kbps", sample_rate=44100, channels=2):
+        self.fmt = fmt
+        self.sample_rate = sample_rate
+        self.channels = channels
+        
+        try:
+            self.bitrate_num = int(bitrate.split()[0]) * 1000
+        except Exception:
+            self.bitrate_num = 128000
+
+        self.codec_name = self._get_codec_name(fmt)
+        self.encoder = None
+        
+        if HAS_AV and self.codec_name:
+            try:
+                self.codec = av.Codec(self.codec_name, 'w')
+                self.encoder = av.CodecContext.create(self.codec)
+                self.encoder.sample_rate = self.sample_rate
+                self.encoder.channels = self.channels
+                self.encoder.layout = 'stereo' if self.channels == 2 else 'mono'
+                self.encoder.format = av.AudioFormat('s16').packed
+                if hasattr(self.encoder, 'bit_rate'):
+                    self.encoder.bit_rate = self.bitrate_num
+                self.encoder.open()
+            except Exception as e:
+                print(f"[ENCODER ERROR] {fmt} initialization failed: {e}")
+                self.encoder = None
+
+    def _get_codec_name(self, fmt):
+        mapping = {
+            "Opus": "libopus",
+            "AAC": "aac",
+            "MP3": "libmp3lame",
+            "WAV": "pcm_s16le",
+            "Raw PCM (s16le)": None
+        }
+        return mapping.get(fmt, None)
+
+    def encode(self, pcm_bytes):
+        if not self.encoder or self.fmt == "Raw PCM (s16le)":
+            return pcm_bytes
+
+        try:
+            audio_array = np.frombuffer(pcm_bytes, dtype=np.int16).reshape(-1, self.channels)
+            frame = av.AudioFrame.from_ndarray(audio_array.T, format='s16', layout='stereo' if self.channels == 2 else 'mono')
+            frame.sample_rate = self.sample_rate
+
+            out_bytes = bytearray()
+            packets = self.encoder.encode(frame)
+            for packet in packets:
+                out_bytes.extend(packet.to_bytes())
+            return bytes(out_bytes)
+        except Exception:
+            return pcm_bytes
+
+
+# ============================================================
+# SINGLE INSTANCE MUTEX
+# ============================================================
+
 _SINGLE_INSTANCE_MUTEX_NAME = "Local\\GMA_DAVAO_AMFM_Caster_SingleInstance"
 _single_instance_mutex = None
 
-
 def _bring_existing_instance_to_front():
-    """Restore and focus the already-running Caster window."""
+    if not HAS_WIN32: return False
     try:
         hwnd = win32gui.FindWindow(None, APP_NAME)
         if hwnd:
-            try:
-                win32gui.ShowWindow(hwnd, 9)  # SW_RESTORE
-            except Exception:
-                pass
-            try:
-                win32gui.SetForegroundWindow(hwnd)
-            except Exception:
-                pass
+            try: win32gui.ShowWindow(hwnd, 9)
+            except Exception: pass
+            try: win32gui.SetForegroundWindow(hwnd)
+            except Exception: pass
             return True
     except Exception:
         pass
     return False
 
-
 def _enforce_single_instance():
-    """Create a named Windows mutex and stop if another instance exists."""
     global _single_instance_mutex
-
     if os.name != "nt":
         return True
-
     try:
         kernel32 = ctypes.windll.kernel32
-        _single_instance_mutex = kernel32.CreateMutexW(
-            None,
-            False,
-            _SINGLE_INSTANCE_MUTEX_NAME
-        )
-
+        _single_instance_mutex = kernel32.CreateMutexW(None, False, _SINGLE_INSTANCE_MUTEX_NAME)
         if not _single_instance_mutex:
-            # If mutex creation itself fails, do not prevent the app
-            # from starting.
             return True
-
-        ERROR_ALREADY_EXISTS = 183
-        if kernel32.GetLastError() == ERROR_ALREADY_EXISTS:
+        if kernel32.GetLastError() == 183:
             _bring_existing_instance_to_front()
             return False
-
         return True
     except Exception:
-        # Single-instance protection must never break the radio app.
         return True
+
+
+# ============================================================
+# APP STATE & CONFIGURATION
+# ============================================================
 
 DEFAULT_CONFIG = {
     "minimize_to_tray": True,
     "auto_start_boot": False,
     "auto_start_connect": False,
-
-    # Main application window settings
-    "window": {
-        "width": 740,
-        "height": 870,
-        "x": None,
-        "y": None
-    },
-
+    "window": {"width": 800, "height": 720, "x": None, "y": None},
     "stations": {
         "am": {
             "station_name": "GMA Super Radyo Davao (AM)",
@@ -143,7 +182,7 @@ DEFAULT_CONFIG = {
             "input_device_index": 0,
             "monitor_output_index": 0,
             "monitor_enabled": False,
-            "format": "Raw PCM (s16le)",
+            "format": "Opus",
             "bitrate": "128 kbps",
             "sample_rate": 44100,
             "gain_db": 0.0,
@@ -169,7 +208,7 @@ DEFAULT_CONFIG = {
             "input_device_index": 0,
             "monitor_output_index": 0,
             "monitor_enabled": False,
-            "format": "Raw PCM (s16le)",
+            "format": "Opus",
             "bitrate": "128 kbps",
             "sample_rate": 44100,
             "gain_db": 0.0,
@@ -192,34 +231,22 @@ DEFAULT_CONFIG = {
     }
 }
 
-BLOCK_SIZE = 1024
-MIN_DB = -60.0
-MAX_DB = 0.0
-
 app = None
 tray_icon = None
 station_states = {
     "am": {
         "ws": None, "connected": False, "connecting": False, "transmitting": False,
         "pending_start": False, "in_stream": None, "out_stream": None, "active": False,
-        "raw_input_queue": queue.Queue(maxsize=100),
-        "queue": queue.Queue(maxsize=300),
-        "monitor_queue": queue.Queue(maxsize=300),
-        "left_db": MIN_DB, "right_db": MIN_DB,
-        "agc_gain": 1.0,
-        "input_device_index": 0,
-        "monitor_output_index": 0
+        "raw_input_queue": queue.Queue(maxsize=100), "queue": queue.Queue(maxsize=300),
+        "monitor_queue": queue.Queue(maxsize=300), "left_db": MIN_DB, "right_db": MIN_DB,
+        "agc_gain": 1.0, "input_device_index": 0, "monitor_output_index": 0, "encoder": None
     },
     "fm": {
         "ws": None, "connected": False, "connecting": False, "transmitting": False,
         "pending_start": False, "in_stream": None, "out_stream": None, "active": False,
-        "raw_input_queue": queue.Queue(maxsize=100),
-        "queue": queue.Queue(maxsize=300),
-        "monitor_queue": queue.Queue(maxsize=300),
-        "left_db": MIN_DB, "right_db": MIN_DB,
-        "agc_gain": 1.0,
-        "input_device_index": 0,
-        "monitor_output_index": 0
+        "raw_input_queue": queue.Queue(maxsize=100), "queue": queue.Queue(maxsize=300),
+        "monitor_queue": queue.Queue(maxsize=300), "left_db": MIN_DB, "right_db": MIN_DB,
+        "agc_gain": 1.0, "input_device_index": 0, "monitor_output_index": 0, "encoder": None
     }
 }
 
@@ -246,34 +273,18 @@ def save_config(station_key=None, show_popup=False):
         return
 
     try:
-        # Make sure Tkinter has updated the actual window geometry.
         app.update_idletasks()
-
-        # Capture the current window size and position.
-        window_width = app.winfo_width()
-        window_height = app.winfo_height()
-        window_x = app.winfo_x()
-        window_y = app.winfo_y()
-
-        # Safety fallbacks for the first few milliseconds of startup.
-        if window_width <= 1:
-            window_width = DEFAULT_CONFIG["window"]["width"]
-        if window_height <= 1:
-            window_height = DEFAULT_CONFIG["window"]["height"]
+        w_width = max(app.winfo_width(), DEFAULT_CONFIG["window"]["width"])
+        w_height = max(app.winfo_height(), DEFAULT_CONFIG["window"]["height"])
 
         config_data = {
             "minimize_to_tray": tray_var.get() if 'tray_var' in globals() else DEFAULT_CONFIG["minimize_to_tray"],
             "auto_start_boot": autostart_var.get() if 'autostart_var' in globals() else DEFAULT_CONFIG["auto_start_boot"],
             "auto_start_connect": autostart_connect_var.get() if 'autostart_connect_var' in globals() else DEFAULT_CONFIG["auto_start_connect"],
-
-            # Remember window size and position.
             "window": {
-                "width": int(window_width),
-                "height": int(window_height),
-                "x": int(window_x),
-                "y": int(window_y)
+                "width": int(w_width), "height": int(w_height),
+                "x": int(app.winfo_x()), "y": int(app.winfo_y())
             },
-
             "stations": {}
         }
 
@@ -281,61 +292,68 @@ def save_config(station_key=None, show_popup=False):
             in_selection = ui["in_device_combo"].get()
             in_idx = station_states[key]["input_device_index"]
             if in_selection and not in_selection.startswith("==="):
-                try:
-                    in_idx = int(in_selection.split(":")[0])
-                except Exception:
-                    pass
+                try: in_idx = int(in_selection.split(":")[0])
+                except Exception: pass
 
             out_selection = ui["out_device_combo"].get()
             out_idx = station_states[key]["monitor_output_index"]
             if out_selection and not out_selection.startswith("==="):
-                try:
-                    out_idx = int(out_selection.split(":")[0])
-                except Exception:
-                    pass
+                try: out_idx = int(out_selection.split(":")[0])
+                except Exception: pass
 
             config_data["stations"][key] = {
-                "station_name": ui["name_entry"].get().strip(),
-                "server_url": ui["url_entry"].get().strip(),
+                "station_name": ui["station_name"],
+                "server_url": ui["server_url"],
                 "input_device_index": in_idx,
                 "monitor_output_index": out_idx,
-                "monitor_enabled": ui["monitor_var"].get(),
-                "format": "Raw PCM (s16le)",
+                "monitor_enabled": bool(ui["monitor_var"].get()),
+                "format": ui["format_combo"].get(),
                 "bitrate": ui["bitrate_combo"].get(),
                 "sample_rate": int(ui["sr_combo"].get()),
-                "gain_db": ui["gain_scale"].get(),
-                "volume_db": ui["vol_scale"].get(),
-                "noise_gate": ui["gate_scale"].get(),
-                "gate_enabled": ui["gate_var"].get(),
-                "compressor_db": ui["comp_scale"].get(),
-                "comp_enabled": ui["comp_var"].get(),
-                "limiter_db": ui["lim_scale"].get(),
-                "lim_enabled": ui["lim_var"].get(),
-                "hpf_enabled": ui["hpf_var"].get(),
-                "channel_mode": ui["mode_combo"].get(),
-                "agc_enabled": ui["agc_var"].get(),
-                "multiband": ui.get(
-                    "multiband_data",
-                    DEFAULT_CONFIG["stations"]["am"]["multiband"]
-                )
+                "gain_db": ui["dsp_data"]["gain_db"],
+                "volume_db": ui["dsp_data"]["volume_db"],
+                "noise_gate": ui["dsp_data"]["noise_gate"],
+                "gate_enabled": ui["dsp_data"]["gate_enabled"],
+                "compressor_db": ui["dsp_data"]["compressor_db"],
+                "comp_enabled": ui["dsp_data"]["comp_enabled"],
+                "limiter_db": ui["dsp_data"]["limiter_db"],
+                "lim_enabled": ui["dsp_data"]["lim_enabled"],
+                "hpf_enabled": ui["dsp_data"]["hpf_enabled"],
+                "channel_mode": ui["dsp_data"]["channel_mode"],
+                "agc_enabled": ui["dsp_data"]["agc_enabled"],
+                "multiband": ui.get("multiband_data", DEFAULT_CONFIG["stations"]["am"]["multiband"])
             }
 
         with open(CONFIG_FILE, "w") as f:
             json.dump(config_data, f, indent=4)
 
-        log("[SYSTEM] Successfully saved configuration.")
-
+        log("[SYSTEM] Saved configuration settings.")
         if show_popup:
-            messagebox.showinfo("Save Configuration", "Successfully saved.")
-
+            messagebox.showinfo("Save Configuration", "Successfully saved configuration.")
     except Exception as e:
         log(f"Failed to save config: {e}")
-
         if show_popup:
-            messagebox.showerror(
-                "Save Error",
-                f"Failed to save configuration:\n{e}"
-            )
+            messagebox.showerror("Save Error", f"Failed to save configuration:\n{e}")
+
+
+def set_auto_start(enable):
+    if not HAS_WIN32: return
+    try:
+        key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE | winreg.KEY_QUERY_VALUE)
+        if enable:
+            exe_path = f'"{sys.executable}" "{os.path.abspath(__file__)}"'
+            winreg.SetValueEx(key, APP_NAME, 0, winreg.REG_SZ, exe_path)
+            log("[SYSTEM] Enabled auto-start on boot.")
+        else:
+            try:
+                winreg.DeleteValue(key, APP_NAME)
+                log("[SYSTEM] Disabled auto-start on boot.")
+            except FileNotFoundError:
+                pass
+        winreg.CloseKey(key)
+    except Exception as e:
+        log(f"[SYSTEM] Error setting autostart registry: {e}")
 
 
 def refresh_all_device_dropdowns():
@@ -343,13 +361,10 @@ def refresh_all_device_dropdowns():
     try:
         all_devices_cache = sd.query_devices()
         all_host_apis_cache = sd.query_hostapis()
-        try:
-            default_in_idx_cache, default_out_idx_cache = sd.default.device
-        except Exception:
-            default_in_idx_cache, default_out_idx_cache = -1, -1
+        try: default_in_idx_cache, default_out_idx_cache = sd.default.device
+        except Exception: default_in_idx_cache, default_out_idx_cache = -1, -1
     except Exception:
-        all_devices_cache = []
-        all_host_apis_cache = []
+        all_devices_cache, all_host_apis_cache = [], []
 
     for key in ["am", "fm"]:
         if key in ui_elements:
@@ -358,113 +373,63 @@ def refresh_all_device_dropdowns():
 
 def update_device_lists_for_station(station_key):
     ui = ui_elements[station_key]
-    
-    current_in_sel = ui["in_device_combo"].get()
-    current_out_sel = ui["out_device_combo"].get()
-    
     in_idx_selected = station_states[station_key]["input_device_index"]
-    if current_in_sel and not current_in_sel.startswith("==="):
-        try:
-            in_idx_selected = int(current_in_sel.split(":")[0])
-        except Exception:
-            pass
-
     out_idx_selected = station_states[station_key]["monitor_output_index"]
-    if current_out_sel and not current_out_sel.startswith("==="):
-        try:
-            out_idx_selected = int(current_out_sel.split(":")[0])
-        except Exception:
-            pass
 
-    api_groups_in = {}
-    api_groups_out = {}
+    api_groups_in, api_groups_out = {}, {}
 
     for i, d in enumerate(all_devices_cache):
         dev_name = d.get("name", "").strip()
-        if not dev_name or "Input ()" in dev_name or dev_name.startswith("Input ("):
+        if not dev_name or "Input ()" in dev_name:
             continue
-            
         host_api_name = all_host_apis_cache[d["hostapi"]]["name"] if d["hostapi"] < len(all_host_apis_cache) else "Audio"
 
         if d["max_input_channels"] >= 1:
-            if host_api_name not in api_groups_in:
-                api_groups_in[host_api_name] = []
-            
-            indicators = []
-            if i == default_in_idx_cache:
-                indicators.append("[System Default]")
-            
-            for skey, st_data in station_states.items():
-                if st_data["input_device_index"] == i:
-                    indicators.append(f"<<Used for {skey.upper()}>>")
-            
-            suffix = " " + " ".join(indicators) if indicators else ""
+            api_groups_in.setdefault(host_api_name, [])
+            suffix = " [Default]" if i == default_in_idx_cache else ""
             api_groups_in[host_api_name].append((i, f"{i}: {dev_name}{suffix}"))
 
         if d["max_output_channels"] >= 1:
-            if host_api_name not in api_groups_out:
-                api_groups_out[host_api_name] = []
-            
-            indicators = []
-            if i == default_out_idx_cache:
-                indicators.append("[System Default]")
-            
-            suffix = " " + " ".join(indicators) if indicators else ""
+            api_groups_out.setdefault(host_api_name, [])
+            suffix = " [Default]" if i == default_out_idx_cache else ""
             api_groups_out[host_api_name].append((i, f"{i}: {dev_name}{suffix}"))
 
-    formatted_inputs = []
-    in_val_to_set = ""
+    formatted_inputs, in_val_to_set = [], ""
     for api_name, dev_tuples in api_groups_in.items():
         formatted_inputs.append(f"=== {api_name} ===")
         for idx, text_str in dev_tuples:
             formatted_inputs.append(text_str)
-            if idx == in_idx_selected:
-                in_val_to_set = text_str
+            if idx == in_idx_selected: in_val_to_set = text_str
 
-    formatted_outputs = []
-    out_val_to_set = ""
+    formatted_outputs, out_val_to_set = [], ""
     for api_name, dev_tuples in api_groups_out.items():
         formatted_outputs.append(f"=== {api_name} ===")
         for idx, text_str in dev_tuples:
             formatted_outputs.append(text_str)
-            if idx == out_idx_selected:
-                out_val_to_set = text_str
+            if idx == out_idx_selected: out_val_to_set = text_str
 
-    ui["in_device_combo"]["values"] = formatted_inputs
-    if in_val_to_set:
-        ui["in_device_combo"].set(in_val_to_set)
-    elif formatted_inputs:
-        for val in formatted_inputs:
-            if not val.startswith("==="):
-                ui["in_device_combo"].set(val)
-                break
+    ui["in_device_combo"].configure(values=formatted_inputs)
+    if in_val_to_set: ui["in_device_combo"].set(in_val_to_set)
 
-    ui["out_device_combo"]["values"] = formatted_outputs
-    if out_val_to_set:
-        ui["out_device_combo"].set(out_val_to_set)
-    elif formatted_outputs:
-        for val in formatted_outputs:
-            if not val.startswith("==="):
-                ui["out_device_combo"].set(val)
-                break
+    ui["out_device_combo"].configure(values=formatted_outputs)
+    if out_val_to_set: ui["out_device_combo"].set(out_val_to_set)
 
 
 def log(message):
-    timestamp = time.strftime("%H:%M:%S")
-    text = f"[{timestamp}] {message}\n"
+    text = f"[{time.strftime('%H:%M:%S')}] {message}\n"
     print(text, end="")
     if app is not None:
-        try:
-            app.after(0, lambda t=text: write_log(t))
-        except Exception:
-            pass
+        try: app.after(0, lambda: write_log(text))
+        except Exception: pass
 
 
 def write_log(text):
     try:
         if 'log_box' in globals() and log_box.winfo_exists():
+            log_box.configure(state="normal")
             log_box.insert("end", text)
             log_box.see("end")
+            log_box.configure(state="disabled")
     except Exception:
         pass
 
@@ -475,23 +440,128 @@ def update_ui_states(station_key):
         ui = ui_elements[station_key]
         
         if st["transmitting"]:
-            ui["start_btn"].config(text="STOP BROADCAST", state="normal", style="Danger.TButton")
-            ui["status_label"].config(text="ON AIR (TRANSMITTING)", foreground="#003366")
-            ui["conn_label"].config(text="ONLINE", foreground="#009933")
+            ui["start_btn"].configure(text="STOP BROADCAST", fg_color="#cc0000", hover_color="#990000")
+            ui["status_label"].configure(text="ON AIR (TRANSMITTING)", text_color="#1fcf71")
+            ui["conn_label"].configure(text="ONLINE", text_color="#1fcf71")
         elif st["pending_start"] or st["connecting"]:
-            ui["start_btn"].config(text="CONNECTING...", state="disabled", style="TButton")
-            ui["status_label"].config(text="CONNECTING...", foreground="#cc8800")
-            ui["conn_label"].config(text="CONNECTING...", foreground="#cc8800")
+            ui["start_btn"].configure(text="CONNECTING...", state="disabled", fg_color="#333333")
+            ui["status_label"].configure(text="CONNECTING...", text_color="#e67e22")
+            ui["conn_label"].configure(text="CONNECTING...", text_color="#e67e22")
         else:
-            ui["start_btn"].config(text="START BROADCAST", state="normal", style="GMA.TButton")
-            ui["status_label"].config(text="STANDBY", foreground="gray")
-            if st["connected"]:
-                ui["conn_label"].config(text="ONLINE", foreground="#009933")
-            else:
-                ui["conn_label"].config(text="OFFLINE", foreground="#cc0000")
+            ui["start_btn"].configure(text="START BROADCAST", state="normal", fg_color="#1f538d", hover_color="#14375e")
+            ui["status_label"].configure(text="STANDBY", text_color="#888888")
+            ui["conn_label"].configure(
+                text="ONLINE" if st["connected"] else "OFFLINE",
+                text_color="#1fcf71" if st["connected"] else "#e74c3c"
+            )
 
     if app is not None:
         app.after(0, update)
+
+
+# ============================================================
+# WEBSOCKET TRANSMITTER & CONNECTION WORKERS (ADDED)
+# ============================================================
+
+def websocket_worker(station_key):
+    st, ui = station_states[station_key], ui_elements[station_key]
+    url = ui["server_url"]
+    log(f"[{station_key.upper()}] Connecting to server at {url}...")
+    
+    st["connecting"] = True
+    update_ui_states(station_key)
+
+    try:
+        ws = websocket.create_connection(url, timeout=5)
+        st["ws"] = ws
+        st["connected"] = True
+        st["connecting"] = False
+        st["pending_start"] = False
+        st["transmitting"] = True
+        update_ui_states(station_key)
+        log(f"[{station_key.upper()}] Connected and transmitting on air!")
+
+        reg_payload = {
+            "type": "register-transmitter",
+            "station": ui["station_name"] or f"Station {station_key.upper()}",
+            "format": ui["format_combo"].get(),
+            "bitrate": ui["bitrate_combo"].get(),
+            "sampleRate": int(ui["sr_combo"].get())
+        }
+        ws.send(json.dumps(reg_payload))
+
+        st["encoder"] = AudioEncoder(
+            fmt=ui["format_combo"].get(),
+            bitrate=ui["bitrate_combo"].get(),
+            sample_rate=int(ui["sr_combo"].get()),
+            channels=2
+        )
+
+        while not st["queue"].empty():
+            try: st["queue"].get_nowait()
+            except queue.Empty: break
+
+        while st["connected"] and st["transmitting"]:
+            try:
+                raw_pcm = st["queue"].get(timeout=0.1)
+            except queue.Empty:
+                continue
+
+            if st["encoder"]:
+                encoded_data = st["encoder"].encode(raw_pcm)
+            else:
+                encoded_data = raw_pcm
+
+            try:
+                ws.send_binary(encoded_data)
+            except Exception as e:
+                log(f"[{station_key.upper()}] Send error: {e}")
+                break
+
+    except Exception as e:
+        log(f"[{station_key.upper()}] Connection error: {e}")
+    finally:
+        st["connected"] = False
+        st["connecting"] = False
+        st["transmitting"] = False
+        st["pending_start"] = False
+        st["ws"] = None
+        st["encoder"] = None
+        update_ui_states(station_key)
+        log(f"[{station_key.upper()}] Disconnected from server.")
+
+
+def start_transmitter(station_key):
+    st = station_states[station_key]
+    if st["connected"] or st["transmitting"] or st["connecting"]:
+        return
+    st["pending_start"] = True
+    update_ui_states(station_key)
+    threading.Thread(target=websocket_worker, args=(station_key,), daemon=True).start()
+
+
+def disconnect_server(station_key):
+    st = station_states[station_key]
+    st["transmitting"] = False
+    st["connected"] = False
+    st["connecting"] = False
+    st["pending_start"] = False
+    if st["ws"]:
+        try:
+            st["ws"].close()
+        except Exception:
+            pass
+        st["ws"] = None
+    update_ui_states(station_key)
+    log(f"[{station_key.upper()}] Manually disconnected.")
+
+
+def handle_start_stop_button(station_key):
+    st = station_states[station_key]
+    if st["connected"] or st["transmitting"] or st["connecting"] or st["pending_start"]:
+        disconnect_server(station_key)
+    else:
+        start_transmitter(station_key)
 
 
 def calculate_levels(audio_bytes):
@@ -499,8 +569,7 @@ def calculate_levels(audio_bytes):
         return MIN_DB, MIN_DB
     try:
         sample_count = len(audio_bytes) // 2
-        if sample_count < 2:
-            return MIN_DB, MIN_DB
+        if sample_count < 2: return MIN_DB, MIN_DB
         samples = struct.unpack("<" + ("h" * sample_count), audio_bytes)
         left_samples = samples[0::2]
         right_samples = samples[1::2] if len(samples) > 1 else samples[0::2]
@@ -518,22 +587,19 @@ def calculate_levels(audio_bytes):
 def process_audio_dsp(indata, station_key):
     ui = ui_elements[station_key]
     st = station_states[station_key]
+    dsp = ui["dsp_data"]
     
-    gain_db_val = ui["gain_scale"].get()
-    vol_db_val = ui["vol_scale"].get()
-    
-    gate_db = ui["gate_scale"].get()
-    gate_on = ui["gate_var"].get()
-
-    comp_db = ui["comp_scale"].get()
-    comp_on = ui["comp_var"].get()
-
-    lim_db = ui["lim_scale"].get()
-    lim_on = ui["lim_var"].get()
-
-    hpf_on = ui["hpf_var"].get()
-    mode = ui["mode_combo"].get()
-    agc_on = ui["agc_var"].get()
+    gain_db_val = dsp["gain_db"]
+    vol_db_val = dsp["volume_db"]
+    gate_db = dsp["noise_gate"]
+    gate_on = dsp["gate_enabled"]
+    comp_db = dsp["compressor_db"]
+    comp_on = dsp["comp_enabled"]
+    lim_db = dsp["limiter_db"]
+    lim_on = dsp["lim_enabled"]
+    hpf_on = dsp["hpf_enabled"]
+    mode = dsp["channel_mode"]
+    agc_on = dsp["agc_enabled"]
 
     audio_f = indata.astype(np.float32) / 32768.0
 
@@ -566,21 +632,14 @@ def process_audio_dsp(indata, station_key):
         abs_audio = np.abs(audio_f)
         exceed = abs_audio > comp_thresh
         if np.any(exceed):
-            audio_f[exceed] = np.sign(audio_f[exceed]) * (
-                comp_thresh + (abs_audio[exceed] - comp_thresh) / ratio
-            )
+            audio_f[exceed] = np.sign(audio_f[exceed]) * (comp_thresh + (abs_audio[exceed] - comp_thresh) / ratio)
 
     if agc_on:
         current_rms = np.sqrt(np.mean(audio_f**2))
         target_rms = 0.18
-        
         if current_rms > 0.0001:
-            instant_gain = target_rms / current_rms
-            instant_gain = min(instant_gain, 10.0)
-            
-            alpha = 0.08
-            st["agc_gain"] = (1.0 - alpha) * st.get("agc_gain", 1.0) + alpha * instant_gain
-            
+            instant_gain = min(target_rms / current_rms, 10.0)
+            st["agc_gain"] = (1.0 - 0.08) * st.get("agc_gain", 1.0) + 0.08 * instant_gain
             audio_f *= st["agc_gain"]
         else:
             st["agc_gain"] = 0.98 * st.get("agc_gain", 1.0) + 0.02 * 1.0
@@ -603,31 +662,23 @@ def process_audio_dsp(indata, station_key):
 def make_audio_callback(station_key):
     def audio_callback(indata, frames, time_info, status):
         st = station_states[station_key]
-        if not st["active"]:
-            return
+        if not st["active"]: return
         if st["raw_input_queue"].full():
-            try:
-                st["raw_input_queue"].get_nowait()
-            except queue.Empty:
-                pass
+            try: st["raw_input_queue"].get_nowait()
+            except queue.Empty: pass
         st["raw_input_queue"].put_nowait(indata.copy())
     return audio_callback
 
 
 def dsp_worker_thread(station_key):
-    st = station_states[station_key]
-    ui = ui_elements[station_key]
+    st, ui = station_states[station_key], ui_elements[station_key]
     while st["active"]:
-        try:
-            indata = st["raw_input_queue"].get(timeout=0.05)
-        except queue.Empty:
-            continue
+        try: indata = st["raw_input_queue"].get(timeout=0.05)
+        except queue.Empty: continue
 
         processed_bytes = process_audio_dsp(indata, station_key)
         left_db, right_db = calculate_levels(processed_bytes)
-
-        st["left_db"] = left_db
-        st["right_db"] = right_db
+        st["left_db"], st["right_db"] = left_db, right_db
 
         if st["transmitting"]:
             if st["queue"].full():
@@ -646,10 +697,8 @@ def make_monitor_callback(station_key):
     def monitor_callback(outdata, frames, time_info, status):
         st = station_states[station_key]
         req_bytes = frames * 2 * 2
-        try:
-            data = st["monitor_queue"].get_nowait()
-        except queue.Empty:
-            data = b"\x00" * req_bytes
+        try: data = st["monitor_queue"].get_nowait()
+        except queue.Empty: data = b"\x00" * req_bytes
 
         if len(data) >= req_bytes:
             outdata[:] = np.frombuffer(data[:req_bytes], dtype=np.int16).reshape(frames, 2)
@@ -659,53 +708,30 @@ def make_monitor_callback(station_key):
 
 
 def activate_station_input(station_key):
-    ui = ui_elements[station_key]
-    st = station_states[station_key]
+    ui, st = ui_elements[station_key], station_states[station_key]
     selected = ui["in_device_combo"].get()
-    
-    if not selected or selected.startswith("==="):
-        return False
+    if not selected or selected.startswith("==="): return False
 
     try:
         dev_idx = int(selected.split(":")[0])
         st["input_device_index"] = dev_idx
-        
         st["active"] = False
+        
         if st["in_stream"]:
-            try:
-                st["in_stream"].stop()
-                st["in_stream"].close()
-            except Exception:
-                pass
+            try: st["in_stream"].stop(); st["in_stream"].close()
+            except Exception: pass
 
         sr = int(ui["sr_combo"].get())
-        ch = 2
-
-        while not st["raw_input_queue"].empty():
-            try: st["raw_input_queue"].get_nowait()
-            except queue.Empty: break
-        while not st["queue"].empty():
-            try: st["queue"].get_nowait()
-            except queue.Empty: break
-        while not st["monitor_queue"].empty():
-            try: st["monitor_queue"].get_nowait()
-            except queue.Empty: break
-
         st["active"] = True
         st["in_stream"] = sd.InputStream(
-            samplerate=sr,
-            blocksize=BLOCK_SIZE,
-            device=dev_idx,
-            channels=ch,
-            dtype="int16",
-            callback=make_audio_callback(station_key)
+            samplerate=sr, blocksize=BLOCK_SIZE, device=dev_idx,
+            channels=2, dtype="int16", callback=make_audio_callback(station_key)
         )
         st["in_stream"].start()
         
         threading.Thread(target=dsp_worker_thread, args=(station_key,), daemon=True).start()
-
-        ui["in_status"].config(text="ACTIVE", foreground="#009933")
-        log(f"[{station_key.upper()}] Input stream running: {selected} @ {sr}Hz")
+        ui["in_status"].configure(text="ACTIVE", text_color="#1fcf71")
+        log(f"[{station_key.upper()}] Input stream running on device {dev_idx} @ {sr}Hz")
         
         toggle_monitoring(station_key)
         refresh_all_device_dropdowns()
@@ -714,23 +740,21 @@ def activate_station_input(station_key):
         if st["connected"] and st["ws"]:
             threading.Thread(target=lambda: send_format_update(station_key), daemon=True).start()
         return True
-
     except Exception as e:
         st["active"] = False
-        ui["in_status"].config(text="ERROR", foreground="#cc0000")
-        log(f"[{station_key.upper()}] Input activation error: {e}")
+        ui["in_status"].configure(text="ERROR", text_color="#e74c3c")
+        log(f"[{station_key.upper()}] Input error: {e}")
         return False
 
 
 def send_format_update(station_key):
-    st = station_states[station_key]
-    ui = ui_elements[station_key]
+    st, ui = station_states[station_key], ui_elements[station_key]
     if st["ws"] and st["connected"]:
         try:
             reg_payload = {
                 "type": "register-transmitter",
-                "station": ui["name_entry"].get().strip() or f"Station {station_key.upper()}",
-                "format": "Raw PCM (s16le)",
+                "station": ui["station_name"] or f"Station {station_key.upper()}",
+                "format": ui["format_combo"].get(),
                 "bitrate": ui["bitrate_combo"].get(),
                 "sampleRate": int(ui["sr_combo"].get())
             }
@@ -740,54 +764,37 @@ def send_format_update(station_key):
 
 
 def toggle_monitoring(station_key):
-    ui = ui_elements[station_key]
-    st = station_states[station_key]
-    
+    ui, st = ui_elements[station_key], station_states[station_key]
     selected_out = ui["out_device_combo"].get()
     if selected_out and not selected_out.startswith("==="):
-        try:
-            out_idx = int(selected_out.split(":")[0])
-            st["monitor_output_index"] = out_idx
-        except Exception:
-            pass
+        try: st["monitor_output_index"] = int(selected_out.split(":")[0])
+        except Exception: pass
 
     if ui["monitor_var"].get() and st["active"]:
-        if not selected_out or selected_out.startswith("==="):
-            return
+        if not selected_out or selected_out.startswith("==="): return
         try:
             out_idx = st["monitor_output_index"]
             if st["out_stream"]:
-                st["out_stream"].stop()
-                st["out_stream"].close()
+                try: st["out_stream"].stop(); st["out_stream"].close()
+                except Exception: pass
             
             sr = int(ui["sr_combo"].get())
             st["out_stream"] = sd.OutputStream(
-                samplerate=sr,
-                blocksize=BLOCK_SIZE,
-                device=out_idx,
-                channels=2,
-                dtype="int16",
-                callback=make_monitor_callback(station_key)
+                samplerate=sr, blocksize=BLOCK_SIZE, device=out_idx,
+                channels=2, dtype="int16", callback=make_monitor_callback(station_key)
             )
             st["out_stream"].start()
-            log(f"[{station_key.upper()}] Monitor Output Active on device ID {out_idx}")
+            log(f"[{station_key.upper()}] Monitor active on output device ID {out_idx}")
         except Exception as e:
             log(f"[{station_key.upper()}] Monitor output error: {e}")
     else:
         if st["out_stream"]:
-            try:
-                st["out_stream"].stop()
-                st["out_stream"].close()
-            except Exception:
-                pass
+            try: st["out_stream"].stop(); st["out_stream"].close()
+            except Exception: pass
             st["out_stream"] = None
-            
+
     refresh_all_device_dropdowns()
     save_config(station_key)
-
-
-def on_format_changed(station_key):
-    on_setting_changed(station_key)
 
 
 def on_setting_changed(station_key, *args):
@@ -797,201 +804,189 @@ def on_setting_changed(station_key, *args):
         threading.Thread(target=lambda: activate_station_input(station_key), daemon=True).start()
 
 
-def connect_server(station_key, on_complete=None):
-    st = station_states[station_key]
-    if st["connected"]:
-        if on_complete:
-            app.after(0, lambda: on_complete(True))
-        return
-    if st["connecting"]:
-        return
-        
-    st["connecting"] = True
-    update_ui_states(station_key)
+# ============================================================
+# MODALS: NETWORK CONFIG, DSP PROCESSORS & MULTIBAND COMPRESSOR
+# ============================================================
 
-    def background_connect():
-        server_url = ui_elements[station_key]["url_entry"].get().strip()
-        try:
-            new_ws = websocket.create_connection(server_url, timeout=3)
-            ui = ui_elements[station_key]
-            reg_payload = {
-                "type": "register-transmitter",
-                "station": ui["name_entry"].get().strip() or f"Station {station_key.upper()}",
-                "format": "Raw PCM (s16le)",
-                "bitrate": ui["bitrate_combo"].get(),
-                "sampleRate": int(ui["sr_combo"].get())
-            }
-            new_ws.send(json.dumps(reg_payload))
+def open_network_config_modal(station_key):
+    ui = ui_elements[station_key]
 
-            st["ws"] = new_ws
-            st["connected"] = True
-            st["connecting"] = False
+    modal = ctk.CTkToplevel(app)
+    modal.title(f"Network & Server Config ({station_key.upper()})")
+    modal.geometry("460x220")
+    modal.transient(app)
+    modal.grab_set()
 
-            update_ui_states(station_key)
-            log(f"[{station_key.upper()}] Connected to server successfully.")
-            threading.Thread(target=websocket_receive_worker, args=(station_key, new_ws), daemon=True).start()
-            
-            if on_complete:
-                app.after(0, lambda: on_complete(True))
-        except Exception as e:
-            st["connected"] = False
-            st["connecting"] = False
-            update_ui_states(station_key)
-            log(f"[{station_key.upper()}] Connection failed: {e}")
-            if on_complete:
-                app.after(0, lambda: on_complete(False))
+    ctk.CTkLabel(modal, text="Cloud Streaming Target Configuration", font=("Segoe UI", 14, "bold")).pack(pady=12)
+    frame = ctk.CTkFrame(modal)
+    frame.pack(fill="both", expand=True, padx=12, pady=6)
 
-    threading.Thread(target=background_connect, daemon=True).start()
+    ctk.CTkLabel(frame, text="Station Name:").grid(row=0, column=0, sticky="w", padx=12, pady=8)
+    name_entry = ctk.CTkEntry(frame, width=280)
+    name_entry.insert(0, ui["station_name"])
+    name_entry.grid(row=0, column=1, sticky="ew", padx=12, pady=8)
+
+    ctk.CTkLabel(frame, text="Server URL:").grid(row=1, column=0, sticky="w", padx=12, pady=8)
+    url_entry = ctk.CTkEntry(frame, width=280)
+    url_entry.insert(0, ui["server_url"])
+    url_entry.grid(row=1, column=1, sticky="ew", padx=12, pady=8)
+    frame.columnconfigure(1, weight=1)
+
+    def save_and_close():
+        ui["station_name"] = name_entry.get().strip()
+        ui["server_url"] = url_entry.get().strip()
+        ui["net_info_lbl"].configure(text=f"Target Name: {ui['station_name']}   |   URL: {ui['server_url']}")
+        save_config(station_key)
+        log(f"[{station_key.upper()}] Updated network connection target.")
+        modal.destroy()
+
+    btn_frame = ctk.CTkFrame(modal, fg_color="transparent")
+    btn_frame.pack(fill="x", padx=12, pady=12)
+    ctk.CTkButton(btn_frame, text="Save & Close", command=save_and_close).pack(side="right", padx=4)
+    ctk.CTkButton(btn_frame, text="Cancel", fg_color="#444444", hover_color="#333333", command=modal.destroy).pack(side="right", padx=4)
 
 
-def disconnect_server(station_key):
-    st = station_states[station_key]
-    st["pending_start"] = False
-    stop_transmitter(station_key)
-    if st["ws"]:
-        try: st["ws"].close()
-        except Exception: pass
-        st["ws"] = None
+def open_dsp_config_modal(station_key):
+    ui = ui_elements[station_key]
+    dsp = ui["dsp_data"]
 
-    st["connected"] = False
-    st["connecting"] = False
-    update_ui_states(station_key)
-    log(f"[{station_key.upper()}] Disconnected from server.")
+    modal = ctk.CTkToplevel(app)
+    modal.title(f"Audio DSP & Studio Processors ({station_key.upper()})")
+    modal.geometry("520x480")
+    modal.transient(app)
+    modal.grab_set()
 
+    ctk.CTkLabel(modal, text="Broadcast Audio Processing Studio", font=("Segoe UI", 14, "bold")).pack(pady=10)
+    frame = ctk.CTkFrame(modal)
+    frame.pack(fill="both", expand=True, padx=12, pady=6)
 
-def websocket_receive_worker(station_key, socket):
-    socket.settimeout(5.0)
-    while station_states[station_key]["connected"]:
-        try:
-            msg = socket.recv()
-            if msg is None:
-                break
-        except websocket.WebSocketTimeoutException:
-            continue
-        except Exception:
-            disconnect_server(station_key)
-            break
+    def make_slider_row(parent, row_idx, label_text, from_val, to_val, init_val, fmt_str):
+        lbl = ctk.CTkLabel(parent, text=label_text)
+        lbl.grid(row=row_idx, column=0, sticky="w", padx=6, pady=4)
 
+        scale = ctk.CTkSlider(parent, from_=from_val, to=to_val)
+        scale.set(init_val)
+        scale.grid(row=row_idx, column=1, sticky="ew", padx=6, pady=4)
 
-def sender_thread(station_key):
-    st = station_states[station_key]
-    while st["transmitting"]:
-        try:
-            raw_audio = st["queue"].get(timeout=0.1)
-        except queue.Empty:
-            continue
+        val_lbl = ctk.CTkLabel(parent, text=fmt_str.format(init_val), width=75)
+        val_lbl.grid(row=row_idx, column=2, sticky="w", padx=6, pady=4)
 
-        curr_ws = st["ws"]
-        if curr_ws and st["connected"]:
-            try:
-                curr_ws.send_binary(raw_audio)
-            except Exception as e:
-                log(f"[{station_key.upper()}] Transmission Error: {e}")
-                disconnect_server(station_key)
-                break
+        def on_slide(v): val_lbl.configure(text=fmt_str.format(float(v)))
+        scale.configure(command=on_slide)
+        parent.columnconfigure(1, weight=1)
+        return scale
 
-
-def handle_start_stop_button(station_key):
-    st = station_states[station_key]
-    if st["transmitting"]:
-        stop_transmitter(station_key)
-        disconnect_server(station_key)
-    else:
-        start_transmitter(station_key)
-
-
-def start_transmitter(station_key):
-    st = station_states[station_key]
+    gain_scale = make_slider_row(frame, 0, "Gain:", 0.0, 36.0, dsp["gain_db"], "+{:.1f} dB")
+    vol_scale = make_slider_row(frame, 1, "Volume:", -24.0, 24.0, dsp["volume_db"], "{:+.1f} dB")
+    gate_scale = make_slider_row(frame, 2, "Noise Gate:", -60.0, -10.0, dsp["noise_gate"], "{:.1f} dB")
     
-    if not st["active"]:
-        success = activate_station_input(station_key)
-        if not success:
-            messagebox.showwarning("Warning", f"Could not activate input device for {station_key.upper()}.")
-            return
+    gate_var = ctk.BooleanVar(value=dsp["gate_enabled"])
+    ctk.CTkCheckBox(frame, text="On", variable=gate_var).grid(row=2, column=3, padx=6)
 
-    if st["connected"]:
-        _kickoff_transmission(station_key)
-    elif st["connecting"]:
-        st["pending_start"] = True
-        update_ui_states(station_key)
-        log(f"[{station_key.upper()}] Connecting... Transmission queued to start automatically.")
-    else:
-        st["pending_start"] = True
-        update_ui_states(station_key)
-        connect_server(station_key, on_complete=lambda success: _on_start_connected(station_key, success))
+    comp_scale = make_slider_row(frame, 3, "Compressor:", -36.0, 0.0, dsp["compressor_db"], "{:.1f} dB")
+    comp_var = ctk.BooleanVar(value=dsp["comp_enabled"])
+    
+    def on_comp_modal_toggle():
+        if comp_var.get():
+            multiband_btn_modal.configure(state="disabled", fg_color="#444444")
+        else:
+            multiband_btn_modal.configure(state="normal", fg_color="#1f538d")
 
+    ctk.CTkCheckBox(frame, text="On", variable=comp_var, command=on_comp_modal_toggle).grid(row=3, column=3, padx=6)
 
-def _on_start_connected(station_key, success):
-    st = station_states[station_key]
-    if success:
-        if st.get("pending_start", False):
-            _kickoff_transmission(station_key)
-    else:
-        st["pending_start"] = False
-        update_ui_states(station_key)
-        messagebox.showwarning("Warning", f"Could not connect to {station_key.upper()} server.")
+    lim_scale = make_slider_row(frame, 4, "Limiter:", -18.0, 0.0, dsp["limiter_db"], "{:.1f} dB")
+    lim_var = ctk.BooleanVar(value=dsp["lim_enabled"])
+    ctk.CTkCheckBox(frame, text="On", variable=lim_var).grid(row=4, column=3, padx=6)
 
+    ctk.CTkLabel(frame, text="Channel Mode:").grid(row=5, column=0, sticky="w", padx=6, pady=4)
+    mode_combo = ctk.CTkOptionMenu(frame, values=["Stereo", "Mono (Downmix L+R)", "Left Channel Only", "Right Channel Only"])
+    mode_combo.set(dsp["channel_mode"])
+    mode_combo.grid(row=5, column=1, sticky="ew", padx=6, pady=4)
 
-def _kickoff_transmission(station_key):
-    st = station_states[station_key]
-    st["pending_start"] = False
-    while not st["queue"].empty():
-        try: st["queue"].get_nowait()
-        except queue.Empty: break
+    hpf_var = ctk.BooleanVar(value=dsp["hpf_enabled"])
+    ctk.CTkCheckBox(frame, text="HPF Cut", variable=hpf_var).grid(row=6, column=0, padx=6, pady=6, sticky="w")
 
-    save_config(station_key)
-    st["transmitting"] = True
-    threading.Thread(target=sender_thread, args=(station_key,), daemon=True).start()
-    update_ui_states(station_key)
-    log(f"[{station_key.upper()}] Transmission started.")
+    agc_var = ctk.BooleanVar(value=dsp["agc_enabled"])
+    ctk.CTkCheckBox(frame, text="Auto Gain (AGC)", variable=agc_var).grid(row=6, column=1, sticky="w", padx=6, pady=6)
 
+    multiband_btn_modal = ctk.CTkButton(frame, text="Multiband Setup", command=lambda k=station_key: open_multiband_modal(k))
+    multiband_btn_modal.grid(row=6, column=2, columnspan=2, padx=6, pady=6, sticky="ew")
 
-def stop_transmitter(station_key):
-    st = station_states[station_key]
-    st["pending_start"] = False
-    st["transmitting"] = False
-    update_ui_states(station_key)
-    log(f"[{station_key.upper()}] Transmission stopped.")
+    if comp_var.get():
+        multiband_btn_modal.configure(state="disabled", fg_color="#444444")
+
+    def save_and_close():
+        dsp["gain_db"] = gain_scale.get()
+        dsp["volume_db"] = vol_scale.get()
+        dsp["noise_gate"] = gate_scale.get()
+        dsp["gate_enabled"] = gate_var.get()
+        dsp["compressor_db"] = comp_scale.get()
+        dsp["comp_enabled"] = comp_var.get()
+        dsp["limiter_db"] = lim_scale.get()
+        dsp["lim_enabled"] = lim_var.get()
+        dsp["channel_mode"] = mode_combo.get()
+        dsp["hpf_enabled"] = hpf_var.get()
+        dsp["agc_enabled"] = agc_var.get()
+
+        if "multiband_btn" in ui:
+            if dsp["comp_enabled"]:
+                ui["multiband_btn"].configure(state="disabled", fg_color="#444444")
+            else:
+                ui["multiband_btn"].configure(state="normal", fg_color="#1f538d")
+
+        on_setting_changed(station_key)
+        log(f"[{station_key.upper()}] Updated DSP & Studio Processor settings.")
+        modal.destroy()
+
+    btn_frame = ctk.CTkFrame(modal, fg_color="transparent")
+    btn_frame.pack(fill="x", padx=12, pady=10)
+    ctk.CTkButton(btn_frame, text="Save & Close", command=save_and_close).pack(side="right", padx=4)
+    ctk.CTkButton(btn_frame, text="Cancel", fg_color="#444444", hover_color="#333333", command=modal.destroy).pack(side="right", padx=4)
 
 
 def open_multiband_modal(station_key):
     ui = ui_elements[station_key]
+    if ui["dsp_data"]["comp_enabled"]:
+        messagebox.showinfo("Multiband Locked", "Multiband dynamics is disabled while the standard Compressor is enabled.")
+        return
+
     mb_data = ui.get("multiband_data", DEFAULT_CONFIG["stations"]["am"]["multiband"])
 
-    modal = tk.Toplevel(app)
-    modal.title(f"Multiband Compressor Setup ({station_key.upper()})")
-    modal.geometry("420x360")
+    modal = ctk.CTkToplevel(app)
+    modal.title(f"Multiband Compressor ({station_key.upper()})")
+    modal.geometry("440x380")
     modal.transient(app)
     modal.grab_set()
 
-    ttk.Label(modal, text="3-Band Broadcast Dynamics Matrix", font=("Segoe UI", 10, "bold")).pack(pady=8)
-
-    frame = ttk.Frame(modal, padding=10)
-    frame.pack(fill="both", expand=True)
+    ctk.CTkLabel(modal, text="3-Band Broadcast Dynamics Matrix", font=("Segoe UI", 14, "bold")).pack(pady=12)
+    frame = ctk.CTkFrame(modal)
+    frame.pack(fill="both", expand=True, padx=12, pady=8)
 
     def make_band_controls(parent, row, band_name, t_val, r_val):
-        ttk.Label(parent, text=f"{band_name} Band", font=("Segoe UI", 9, "bold")).grid(row=row, column=0, sticky="w", pady=4)
-        
-        ttk.Label(parent, text="Thresh:").grid(row=row+1, column=0, sticky="w")
-        t_scale = ttk.Scale(parent, from_=-36.0, to=0.0, value=t_val, orient="horizontal")
-        t_scale.grid(row=row+1, column=1, sticky="ew", padx=4)
-        t_lbl = ttk.Label(parent, text=f"{t_val:.1f} dB", width=8, font=("Consolas", 8))
-        t_lbl.grid(row=row+1, column=2, sticky="w")
-        t_scale.config(command=lambda v: t_lbl.config(text=f"{float(v):.1f} dB"))
+        ctk.CTkLabel(parent, text=band_name, font=("Segoe UI", 11, "bold")).grid(row=row, column=0, sticky="w", padx=8, pady=4)
 
-        ttk.Label(parent, text="Ratio:").grid(row=row+2, column=0, sticky="w")
-        r_scale = ttk.Scale(parent, from_=1.0, to=10.0, value=r_val, orient="horizontal")
-        r_scale.grid(row=row+2, column=1, sticky="ew", padx=4)
-        r_lbl = ttk.Label(parent, text=f"{r_val:.1f}:1", width=8, font=("Consolas", 8))
-        r_lbl.grid(row=row+2, column=2, sticky="w")
-        r_scale.config(command=lambda v: r_lbl.config(text=f"{float(v):.1f}:1"))
+        ctk.CTkLabel(parent, text="Thresh:").grid(row=row+1, column=0, sticky="w", padx=8)
+        t_scale = ctk.CTkSlider(parent, from_=-36.0, to=0.0, number_of_steps=36)
+        t_scale.set(t_val)
+        t_scale.grid(row=row+1, column=1, sticky="ew", padx=8)
+        t_lbl = ctk.CTkLabel(parent, text=f"{t_val:.1f} dB", width=60)
+        t_lbl.grid(row=row+1, column=2, sticky="w", padx=8)
+        t_scale.configure(command=lambda v: t_lbl.configure(text=f"{float(v):.1f} dB"))
+
+        ctk.CTkLabel(parent, text="Ratio:").grid(row=row+2, column=0, sticky="w", padx=8)
+        r_scale = ctk.CTkSlider(parent, from_=1.0, to=10.0, number_of_steps=18)
+        r_scale.set(r_val)
+        r_scale.grid(row=row+2, column=1, sticky="ew", padx=8)
+        r_lbl = ctk.CTkLabel(parent, text=f"{r_val:.1f}:1", width=60)
+        r_lbl.grid(row=row+2, column=2, sticky="w", padx=8)
+        r_scale.configure(command=lambda v: r_lbl.configure(text=f"{float(v):.1f}:1"))
 
         parent.columnconfigure(1, weight=1)
         return t_scale, r_scale
 
-    t_low, r_low = make_band_controls(frame, 0, "Low (<200Hz)", mb_data["low_thresh"], mb_data["low_ratio"])
-    t_mid, r_mid = make_band_controls(frame, 4, "Mid (200Hz-4kHz)", mb_data["mid_thresh"], mb_data["mid_ratio"])
-    t_high, r_high = make_band_controls(frame, 8, "High (>4kHz)", mb_data["high_thresh"], mb_data["high_ratio"])
+    t_low, r_low = make_band_controls(frame, 0, "Low Band (<200Hz)", mb_data["low_thresh"], mb_data["low_ratio"])
+    t_mid, r_mid = make_band_controls(frame, 3, "Mid Band (200Hz-4kHz)", mb_data["mid_thresh"], mb_data["mid_ratio"])
+    t_high, r_high = make_band_controls(frame, 6, "High Band (>4kHz)", mb_data["high_thresh"], mb_data["high_ratio"])
 
     def save_and_close():
         ui["multiband_data"] = {
@@ -1000,118 +995,94 @@ def open_multiband_modal(station_key):
             "high_thresh": t_high.get(), "high_ratio": r_high.get()
         }
         save_config(station_key)
-        log(f"[{station_key.upper()}] Multiband compressor parameters updated successfully.")
+        log(f"[{station_key.upper()}] Updated multiband dynamics settings.")
         modal.destroy()
 
-    btn_frame = ttk.Frame(modal, padding=8)
-    btn_frame.pack(fill="x")
-    ttk.Button(btn_frame, text="Apply & Close", command=save_and_close).pack(side="right", padx=4)
-    ttk.Button(btn_frame, text="Cancel", command=modal.destroy).pack(side="right", padx=4)
+    btn_frame = ctk.CTkFrame(modal, fg_color="transparent")
+    btn_frame.pack(fill="x", padx=12, pady=12)
+    ctk.CTkButton(btn_frame, text="Apply & Close", command=save_and_close).pack(side="right", padx=4)
+    ctk.CTkButton(btn_frame, text="Cancel", fg_color="#444444", hover_color="#333333", command=modal.destroy).pack(side="right", padx=4)
 
+
+# ============================================================
+# LIVE VU METER CANVAS RENDERING
+# ============================================================
 
 def draw_solid_vu_meter(canvas, level_db, channel_label):
     canvas.delete("all")
     width = canvas.winfo_width() or 680
-    height = canvas.winfo_height() or 18
+    height = canvas.winfo_height() or 20
 
     norm = max(0.0, min(1.0, (level_db - MIN_DB) / (MAX_DB - MIN_DB)))
     active_w = max(0, (width - 8) * norm)
 
-    canvas.create_rectangle(4, 3, width - 4, height - 3, fill="#121212", outline="#333333")
+    canvas.create_rectangle(4, 3, width - 4, height - 3, fill="#1a1a1a", outline="#2b2b2b")
     if active_w > 0:
-        if level_db < -10.0:
-            bar_color = "#009933"  # GMA Green/Safe
-        elif level_db < -2.0:
-            bar_color = "#ffcc00"  # GMA Yellow/Peak
-        else:
-            bar_color = "#cc0000"  # GMA Red/Clip
-
+        bar_color = "#1fcf71" if level_db < -10.0 else ("#f1c40f" if level_db < -2.0 else "#e74c3c")
         canvas.create_rectangle(4, 4, 4 + active_w, height - 4, fill=bar_color, outline="")
 
-    canvas.create_text(10, height // 2, anchor="w", text=channel_label, fill="#ffffff", font=("Segoe UI", 8, "bold"))
-    canvas.create_text(width - 10, height // 2, anchor="e", text=f"{level_db:5.1f} dBFS", fill="#ffffff", font=("Consolas", 8, "bold"))
+    canvas.create_text(12, height // 2, anchor="w", text=channel_label, fill="#ffffff", font=("Segoe UI", 9, "bold"))
+    canvas.create_text(width - 12, height // 2, anchor="e", text=f"{level_db:5.1f} dBFS", fill="#ffffff", font=("Consolas", 8, "bold"))
 
 
 def update_vu_meters():
     if app is not None:
         try:
-            current_tab = notebook.index(notebook.select())
-            active_key = "am" if current_tab == 0 else "fm"
-            st = station_states[active_key]
-            ui = ui_elements[active_key]
+            active_key = "am" if notebook.get() == "AM Station" else "fm"
+            st, ui = station_states[active_key], ui_elements[active_key]
             draw_solid_vu_meter(ui["left_meter"], st["left_db"], "L")
             draw_solid_vu_meter(ui["right_meter"], st["right_db"], "R")
-        except Exception:
-            pass
+        except Exception: pass
         app.after(50, update_vu_meters)
 
 
-# --- System Tray Management ---
+# ============================================================
+# SYSTEM TRAY & WINDOW MANAGEMENT
+# ============================================================
+
 def create_tray_image(left_db=-40.0, right_db=-40.0, connected=False):
-    if not HAS_TRAY:
-        return None
-    image = Image.new("RGB", (64, 64), color="#003366")
+    if not HAS_TRAY: return None
+    image = Image.new("RGB", (64, 64), color="#1a1a1a")
     draw = ImageDraw.Draw(image)
     
-    status_color = "#009933" if connected else "#cc0000"
-    draw.ellipse([48, 4, 60, 16], fill=status_color)
-    
+    draw.ellipse([48, 4, 60, 16], fill="#1fcf71" if connected else "#e74c3c")
     for idx, db in enumerate([left_db, right_db]):
         x_offset = 14 + (idx * 20)
         norm = max(0.0, min(1.0, (db - MIN_DB) / (MAX_DB - MIN_DB)))
         bar_h = int(40 * norm)
-        draw.rectangle([x_offset, 52 - 40, x_offset + 10, 52], outline="#ffffff", fill="#111111")
+        draw.rectangle([x_offset, 12, x_offset + 10, 52], outline="#444444", fill="#111111")
         if bar_h > 0:
-            bar_color = "#009933" if db < -10 else ("#ffcc00" if db < -2 else "#cc0000")
+            bar_color = "#1fcf71" if db < -10 else ("#f1c40f" if db < -2 else "#e74c3c")
             draw.rectangle([x_offset, 52 - bar_h, x_offset + 10, 52], fill=bar_color)
-            
     return image
 
 
 def update_tray_icon():
-    if not HAS_TRAY or not tray_icon:
-        return
+    if not HAS_TRAY or not tray_icon: return
     try:
-        current_tab = notebook.index(notebook.select()) if 'notebook' in globals() else 0
-        active_key = "am" if current_tab == 0 else "fm"
+        active_key = "am" if notebook.get() == "AM Station" else "fm"
         st = station_states[active_key]
         tray_icon.icon = create_tray_image(st["left_db"], st["right_db"], st["connected"])
         tray_icon.menu = build_tray_menu()
-    except Exception:
-        pass
+    except Exception: pass
     if app is not None:
         app.after(1000, update_tray_icon)
 
 
 def build_tray_menu():
-    def show_window(icon, item):
-        app.after(0, show_window_at_tray)
-
-    def quit_app(icon, item):
-        icon.stop()
-        app.after(0, force_close)
+    def show_window(icon, item): app.after(0, show_window_centered)
+    def quit_app(icon, item): icon.stop(); app.after(0, force_close)
 
     def toggle_conn(station_key, icon, item):
         st = station_states[station_key]
-        if st["connected"] or st["transmitting"]:
-            disconnect_server(station_key)
-        else:
-            start_transmitter(station_key)
+        if st["connected"] or st["transmitting"]: disconnect_server(station_key)
+        else: start_transmitter(station_key)
 
-    menu_items = [
-        pystray.MenuItem("Show Caster Hub", show_window, default=True),
-        pystray.Menu.SEPARATOR
-    ]
-
+    menu_items = [pystray.MenuItem("Show Caster Hub", show_window, default=True), pystray.Menu.SEPARATOR]
     for key in ["am", "fm"]:
         st = station_states[key]
-        
         status_text = f"Status: {'ONLINE / ON AIR' if st['transmitting'] else ('ONLINE' if st['connected'] else 'OFFLINE')}"
         menu_items.append(pystray.MenuItem(f"[{key.upper()}] {status_text}", lambda icon, item: None, enabled=False))
-
-        vu_text = f"  L: {st['left_db']:.1f}dB | R: {st['right_db']:.1f}dB"
-        menu_items.append(pystray.MenuItem(f"  {vu_text}", lambda icon, item: None, enabled=False))
-
         action_label = f"Disconnect {key.upper()}" if (st["connected"] or st["transmitting"]) else f"Connect {key.upper()}"
         menu_items.append(pystray.MenuItem(action_label, partial(toggle_conn, key)))
         menu_items.append(pystray.Menu.SEPARATOR)
@@ -1122,110 +1093,43 @@ def build_tray_menu():
 
 def setup_tray():
     global tray_icon
-    if not HAS_TRAY:
-        return
-
-    image = create_tray_image()
-    tray_icon = pystray.Icon("GMADavaoCaster", image, APP_NAME, build_tray_menu())
+    if not HAS_TRAY: return
+    tray_icon = pystray.Icon("GMADavaoCaster", create_tray_image(), APP_NAME, build_tray_menu())
     threading.Thread(target=tray_icon.run, daemon=True).start()
     app.after(1000, update_tray_icon)
 
 
-# --- Window Positioning Logic ---
-
 def show_window_centered():
-    """
-    Restore the saved window size and position.
-
-    On the first launch, when no position has been saved yet,
-    the window is centered on the screen.
-    """
     app.deiconify()
     app.lift()
     app.focus_force()
 
     window_cfg = cfg.get("window", {})
-
-    try:
-        width = int(window_cfg.get("width", 740))
-        height = int(window_cfg.get("height", 870))
-    except (TypeError, ValueError):
-        width, height = 740, 870
-
-    x = window_cfg.get("x")
-    y = window_cfg.get("y")
-
-    # Restore the exact saved position when available.
-    if x is not None and y is not None:
-        try:
-            x = int(x)
-            y = int(y)
-            app.geometry(f"{width}x{height}+{x}+{y}")
-            return
-        except (TypeError, ValueError):
-            pass
-
-    # No saved position: center the window.
-    screen_width = app.winfo_screenwidth()
-    screen_height = app.winfo_screenheight()
-    x = max(0, (screen_width - width) // 2)
-    y = max(0, (screen_height - height) // 2)
-
-    app.geometry(f"{width}x{height}+{x}+{y}")
-
-
-def show_window_at_tray():
-    """
-    Restore the existing window using its saved size and position.
-    This keeps tray restore consistent with the normal application
-    startup position.
-    """
-    app.deiconify()
-    app.lift()
-    app.focus_force()
-
-    window_cfg = cfg.get("window", {})
-
-    try:
-        width = int(window_cfg.get("width", 740))
-        height = int(window_cfg.get("height", 870))
-    except (TypeError, ValueError):
-        width, height = 740, 870
-
-    x = window_cfg.get("x")
-    y = window_cfg.get("y")
+    width = int(window_cfg.get("width", 800))
+    height = int(window_cfg.get("height", 720))
+    x, y = window_cfg.get("x"), window_cfg.get("y")
 
     if x is not None and y is not None:
         try:
-            x = int(x)
-            y = int(y)
-            app.geometry(f"{width}x{height}+{x}+{y}")
+            app.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
             return
-        except (TypeError, ValueError):
-            pass
+        except Exception: pass
 
-    # First launch / no saved position: center the window.
-    screen_width = app.winfo_screenwidth()
-    screen_height = app.winfo_screenheight()
-    x = max(0, (screen_width - width) // 2)
-    y = max(0, (screen_height - height) // 2)
-    app.geometry(f"{width}x{height}+{x}+{y}")
+    screen_w, screen_h = app.winfo_screenwidth(), app.winfo_screenheight()
+    app.geometry(f"{width}x{height}+{max(0, (screen_w - width) // 2)}+{max(0, (screen_h - height) // 2)}")
 
 
 def on_window_close():
-    # Save the current window size/position before hiding or closing.
     save_config()
-
     if tray_var.get() and HAS_TRAY:
         app.withdraw()
-        log("[SYSTEM] Minimized to tray. Right-click tray icon to restore or quit.")
+        log("[SYSTEM] Minimized to system tray.")
     else:
         force_close()
 
 
 def force_close():
-    for k in station_states.keys():
-        save_config(k)
+    for k in station_states.keys(): save_config(k)
     for k, st in station_states.items():
         st["active"] = False
         if st["in_stream"]:
@@ -1241,362 +1145,267 @@ def force_close():
     app.destroy()
 
 
-# --- Settings / Menu Actions ---
-def on_autostart_toggle():
-    save_config()
-    enabled = autostart_var.get()
-    log(f"[SYSTEM] Auto Start on Boot option set to: {enabled}")
+# ============================================================
+# TOP SETTINGS MENU ACTIONS
+# ============================================================
 
-
-def on_autostart_connect_toggle():
-    save_config()
-    enabled = autostart_connect_var.get()
-    log(f"[SYSTEM] Auto Start & Connect on App Launch set to: {enabled}")
-
-
-def manual_save_action():
-    save_config(show_popup=True)
-
-
-def ping_server_action():
-    try:
-        current_tab = notebook.index(notebook.select()) if 'notebook' in globals() else 0
-        active_key = "am" if current_tab == 0 else "fm"
-        ui = ui_elements[active_key]
-        url = ui["url_entry"].get().strip()
-        
-        if not url:
-            messagebox.showwarning("Ping Server", "Target server URL is empty.")
-            return
-
-        log(f"[{active_key.upper()}] Pinging server endpoint: {url}...")
-        
-        def run_ping():
+def action_ping_servers():
+    log("[SYSTEM] Pinging streaming URLs...")
+    for key, ui in ui_elements.items():
+        url = ui["server_url"]
+        http_url = url.replace("wss://", "https://").replace("ws://", "http://").split("/tx/")[0]
+        def test_ping(k, u):
             try:
-                test_ws = websocket.create_connection(url, timeout=2.5)
-                test_ws.close()
-                app.after(0, lambda: messagebox.showinfo("Ping Success", f"Successfully reached and pinged server:\n{url}"))
-                log(f"[{active_key.upper()}] Ping successful: Server reachable.")
+                start_t = time.time()
+                req = urllib.request.Request(u, headers={'User-Agent': 'GMA-Caster-Ping/2.1'})
+                with urllib.request.urlopen(req, timeout=4) as resp:
+                    latency = int((time.time() - start_t) * 1000)
+                    log(f"[{k.upper()}] Ping OK: {resp.status} ({latency}ms)")
             except Exception as e:
-                app.after(0, lambda: messagebox.showerror("Ping Failed", f"Could not connect to server:\n{e}"))
-                log(f"[{active_key.upper()}] Ping failed: {e}")
-
-        threading.Thread(target=run_ping, daemon=True).start()
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to initiate server ping: {e}")
+                log(f"[{k.upper()}] Ping Failed: {e}")
+        threading.Thread(target=test_ping, args=(key, http_url), daemon=True).start()
+    messagebox.showinfo("Ping Servers", "Ping test initiated. Check system event log for latency responses.")
 
 
-def check_for_updates_action():
-    log("[SYSTEM] Checking for updates...")
-    messagebox.showinfo(
-        "Check for Updates", 
-        f"You are currently running {APP_NAME}\nVersion: {APP_VERSION}\n\nYou are on the latest test build."
-    )
+def action_check_updates():
+    messagebox.showinfo("Check for Updates", f"{APP_NAME}\nCurrent Version: {APP_VERSION}\n\nYou are running the latest version.")
 
 
-def show_about_action():
-    about_text = (
-        f"{APP_NAME}\n"
-        f"Version: {APP_VERSION}\n\n"
-        f"A professional broadcast audio streaming software, Developed for GMA DAVAO AM-FM radio operations.\n\n"
-        f"Main Author: {APP_AUTHOR}"
-    )
-    messagebox.showinfo(f"About {APP_NAME}", about_text)
+def action_about():
+    messagebox.showinfo("About", f"{APP_NAME} v{APP_VERSION}\nDeveloped by {APP_AUTHOR}\n\nBroadcast Stream Transmitter & Audio Processor.")
 
+
+def open_settings_menu(event=None):
+    menu = tk.Menu(app, tearoff=0, bg="#2b2b2b", fg="#ffffff", activebackground="#1f538d", activeforeground="#ffffff")
+    menu.add_command(label="Save Configuration", command=lambda: save_config(show_popup=True))
+    menu.add_separator()
+    menu.add_checkbutton(label="Minimize to Tray", variable=tray_var, command=lambda: save_config())
+    menu.add_checkbutton(label="Auto Start on Boot", variable=autostart_var, command=lambda: [set_auto_start(autostart_var.get()), save_config()])
+    menu.add_checkbutton(label="Auto Start & Connect on Launch", variable=autostart_connect_var, command=lambda: save_config())
+    menu.add_separator()
+    menu.add_command(label="Ping Servers", command=action_ping_servers)
+    menu.add_command(label="Check for Updates...", command=action_check_updates)
+    menu.add_command(label="About", command=action_about)
+    menu.add_separator()
+    menu.add_command(label="Quit", command=force_close)
+
+    try:
+        x = settings_btn.winfo_rootx()
+        y = settings_btn.winfo_rooty() + settings_btn.winfo_height()
+        menu.tk_popup(x, y)
+    finally:
+        menu.grab_release()
+
+
+# ============================================================
+# MAIN APPLICATION SETUP
+# ============================================================
 
 if not _enforce_single_instance():
     sys.exit(0)
 
 cfg = load_config()
 
-# Pre-load station initial device indexes from config before building UI
 for key in ["am", "fm"]:
     st_cfg = cfg.get("stations", {}).get(key, {})
     station_states[key]["input_device_index"] = st_cfg.get("input_device_index", 0)
     station_states[key]["monitor_output_index"] = st_cfg.get("monitor_output_index", 0)
 
-app = tk.Tk()
+app = ctk.CTk()
 app.title(APP_NAME)
 
-# Load saved window size/position.
 window_cfg = cfg.get("window", {})
-try:
-    saved_width = int(window_cfg.get("width", 539))
-    saved_height = int(window_cfg.get("height", 870))
-except (TypeError, ValueError):
-    saved_width, saved_height = 539, 870
-
-saved_x = window_cfg.get("x")
-saved_y = window_cfg.get("y")
-
-if saved_x is not None and saved_y is not None:
-    try:
-        saved_x = int(saved_x)
-        saved_y = int(saved_y)
-        app.geometry(f"{saved_width}x{saved_height}+{saved_x}+{saved_y}")
-    except (TypeError, ValueError):
-        app.geometry(f"{saved_width}x{saved_height}")
-else:
-    app.geometry(f"{saved_width}x{saved_height}")
-
+app.geometry(f"{window_cfg.get('width', 800)}x{window_cfg.get('height', 720)}")
 app.protocol("WM_DELETE_WINDOW", on_window_close)
 
-style = ttk.Style()
-style.theme_use("clam")
-style.configure("Danger.TButton", foreground="white", background="#cc0000", font=("Segoe UI", 9, "bold"))
-style.configure("GMA.TButton", foreground="white", background="#003366", font=("Segoe UI", 9, "bold"))
-
-header_frame = tk.Frame(app, bg="#003366", padx=10, pady=8)
+# --- Top Header Bar ---
+header_frame = ctk.CTkFrame(app, corner_radius=0, fg_color="#1f538d")
 header_frame.pack(fill="x")
 
-title_lbl = tk.Label(header_frame, text=APP_NAME.upper(), fg="white", bg="#003366", font=("Segoe UI", 11, "bold"))
-title_lbl.pack(side="left")
+title_lbl = ctk.CTkLabel(header_frame, text=APP_NAME.upper(), font=("Segoe UI", 14, "bold"), text_color="#ffffff")
+title_lbl.pack(side="left", padx=16, pady=12)
 
-settings_menu_btn = tk.Menubutton(header_frame, text=" ☰ Settings ", fg="white", bg="#002244", activebackground="#004488", activeforeground="white", relief="flat", font=("Segoe UI", 9, "bold"))
-settings_menu_btn.pack(side="right", padx=4)
+# Settings Menu Dropdown Button
+settings_btn = ctk.CTkButton(header_frame, text="≡ Settings", width=90, fg_color="#14375e", hover_color="#0f2947", command=open_settings_menu)
+settings_btn.pack(side="right", padx=12, pady=8)
 
-settings_dropdown = tk.Menu(settings_menu_btn, tearoff=0)
-settings_menu_btn.config(menu=settings_dropdown)
+# --- Global Settings Options ---
+tray_var = ctk.BooleanVar(value=cfg.get("minimize_to_tray", True))
+autostart_var = ctk.BooleanVar(value=cfg.get("auto_start_boot", False))
+autostart_connect_var = ctk.BooleanVar(value=cfg.get("auto_start_connect", False))
 
-tray_var = tk.BooleanVar(value=cfg.get("minimize_to_tray", True))
-autostart_var = tk.BooleanVar(value=cfg.get("auto_start_boot", False))
-autostart_connect_var = tk.BooleanVar(value=cfg.get("auto_start_connect", False))
-
-settings_dropdown.add_command(label="Save Configuration", command=manual_save_action)
-settings_dropdown.add_separator()
-settings_dropdown.add_checkbutton(label="Minimize to Tray", variable=tray_var, command=lambda: save_config())
-settings_dropdown.add_checkbutton(label="Auto Start on Boot Start Up", variable=autostart_var, command=on_autostart_toggle)
-settings_dropdown.add_checkbutton(label="Auto Start & Connect on App Launch", variable=autostart_connect_var, command=on_autostart_connect_toggle)
-settings_dropdown.add_separator()
-settings_dropdown.add_command(label="Ping Server", command=ping_server_action)
-settings_dropdown.add_command(label="Check for Updates...", command=check_for_updates_action)
-settings_dropdown.add_command(label="About", command=show_about_action)
-settings_dropdown.add_separator()
-settings_dropdown.add_command(label="Quit", command=force_close)
-
-# Initial query of all audio devices
+# Load device caches
 try:
     all_devices_cache = sd.query_devices()
     all_host_apis_cache = sd.query_hostapis()
-    try:
-        default_in_idx_cache, default_out_idx_cache = sd.default.device
-    except Exception:
-        default_in_idx_cache, default_out_idx_cache = -1, -1
+    default_in_idx_cache, default_out_idx_cache = sd.default.device
 except Exception:
-    all_devices_cache = []
-    all_host_apis_cache = []
+    all_devices_cache, all_host_apis_cache = [], []
 
-notebook = ttk.Notebook(app)
-notebook.pack(fill="both", expand=True, padx=8, pady=4)
+# --- CustomTkinter TabView ---
+notebook = ctk.CTkTabview(app)
+notebook.pack(fill="both", expand=True, padx=12, pady=8)
+
+tab_am = notebook.add("AM Station")
+tab_fm = notebook.add("FM Station")
 
 stations_config = cfg.get("stations", DEFAULT_CONFIG["stations"])
+tabs_map = {"am": tab_am, "fm": tab_fm}
 
 for key in ["am", "fm"]:
-    tab = ttk.Frame(notebook, padding=6)
-    notebook.add(tab, text=f" {key.upper()} Station ")
+    tab = tabs_map[key]
     st_cfg = stations_config.get(key, {})
 
-    in_frame = ttk.LabelFrame(tab, text="Stream Audio Input & Encoding", padding=4)
-    in_frame.pack(fill="x", pady=2)
+    # Divider Frame 1: Stream Audio Input & Encoding
+    in_frame = ctk.CTkFrame(tab, fg_color="#242424", border_width=1, border_color="#333333")
+    in_frame.pack(fill="x", pady=4, padx=4)
+    ctk.CTkLabel(in_frame, text="Stream Audio Input & Encoding", font=("Segoe UI", 11, "bold"), text_color="#3a86ff").pack(anchor="w", padx=10, pady=(6, 2))
 
-    ttk.Label(in_frame, text="Input:").grid(row=0, column=0, sticky="w", padx=2)
-    in_device_combo = ttk.Combobox(in_frame, values=[], state="readonly")
-    in_device_combo.grid(row=0, column=1, columnspan=3, sticky="ew", padx=2, pady=1)
-    in_device_combo.bind("<<ComboboxSelected>>", lambda e, k=key: activate_station_input(k))
+    in_sub = ctk.CTkFrame(in_frame, fg_color="transparent")
+    in_sub.pack(fill="x", padx=6, pady=4)
 
-    ttk.Label(in_frame, text="Fmt:").grid(row=1, column=0, sticky="w", padx=2)
-    format_combo = ttk.Combobox(in_frame, state="readonly", values=["Raw PCM (s16le)"])
-    format_combo.set("Raw PCM (s16le)")
-    format_combo.grid(row=1, column=1, sticky="ew", padx=2, pady=1)
-    format_combo.bind("<<ComboboxSelected>>", lambda e, k=key: on_format_changed(k))
+    ctk.CTkLabel(in_sub, text="Input Device:").grid(row=0, column=0, sticky="w", padx=6, pady=4)
+    in_device_combo = ctk.CTkOptionMenu(in_sub, values=["Scanning audio devices..."], command=lambda _, k=key: activate_station_input(k))
+    in_device_combo.grid(row=0, column=1, columnspan=3, sticky="ew", padx=6, pady=4)
 
-    ttk.Label(in_frame, text="Bitrate:").grid(row=1, column=2, sticky="w", padx=2)
-    bitrate_combo = ttk.Combobox(in_frame, state="readonly", values=["64 kbps", "96 kbps", "128 kbps", "192 kbps", "256 kbps", "320 kbps"])
+    ctk.CTkLabel(in_sub, text="Format:").grid(row=1, column=0, sticky="w", padx=6, pady=4)
+    format_combo = ctk.CTkOptionMenu(in_sub, values=SUPPORTED_FORMATS, command=lambda _, k=key: on_setting_changed(k))
+    format_combo.set(st_cfg.get("format", "Opus"))
+    format_combo.grid(row=1, column=1, sticky="ew", padx=6, pady=4)
+
+    ctk.CTkLabel(in_sub, text="Bitrate:").grid(row=1, column=2, sticky="w", padx=6, pady=4)
+    bitrate_combo = ctk.CTkOptionMenu(in_sub, values=["64 kbps", "96 kbps", "128 kbps", "192 kbps", "256 kbps", "320 kbps"], command=lambda _, k=key: on_setting_changed(k))
     bitrate_combo.set(st_cfg.get("bitrate", "128 kbps"))
-    bitrate_combo.grid(row=1, column=3, sticky="ew", padx=2, pady=1)
-    bitrate_combo.bind("<<ComboboxSelected>>", lambda e, k=key: on_setting_changed(k))
+    bitrate_combo.grid(row=1, column=3, sticky="ew", padx=6, pady=4)
 
-    ttk.Label(in_frame, text="Rate:").grid(row=2, column=0, sticky="w", padx=2)
-    sr_combo = ttk.Combobox(in_frame, state="readonly", values=["22050", "32000", "44100", "48000", "96000"])
+    ctk.CTkLabel(in_sub, text="Sample Rate:").grid(row=2, column=0, sticky="w", padx=6, pady=4)
+    sr_combo = ctk.CTkOptionMenu(in_sub, values=["22050", "32000", "44100", "48000", "96000"], command=lambda _, k=key: on_setting_changed(k))
     sr_combo.set(str(st_cfg.get("sample_rate", 44100)))
-    sr_combo.grid(row=2, column=1, sticky="ew", padx=2, pady=1)
-    sr_combo.bind("<<ComboboxSelected>>", lambda e, k=key: on_setting_changed(k))
+    sr_combo.grid(row=2, column=1, sticky="ew", padx=6, pady=4)
 
-    in_status = tk.Label(in_frame, text="INACTIVE", foreground="#cc0000", font=("Segoe UI", 8, "bold"))
-    in_status.grid(row=2, column=2, columnspan=2, sticky="e", padx=4)
-    in_frame.columnconfigure(1, weight=1)
-    in_frame.columnconfigure(3, weight=1)
+    in_status = ctk.CTkLabel(in_sub, text="INACTIVE", text_color="#e74c3c", font=("Segoe UI", 11, "bold"))
+    in_status.grid(row=2, column=2, columnspan=2, sticky="e", padx=10)
+    in_sub.columnconfigure(1, weight=1)
+    in_sub.columnconfigure(3, weight=1)
 
-    out_frame = ttk.LabelFrame(tab, text="Secondary Local Monitor (Pass-through)", padding=4)
-    out_frame.pack(fill="x", pady=2)
+    # Divider Frame 2: Secondary Local Monitor (Pass-through)
+    out_frame = ctk.CTkFrame(tab, fg_color="#242424", border_width=1, border_color="#333333")
+    out_frame.pack(fill="x", pady=4, padx=4)
+    ctk.CTkLabel(out_frame, text="Secondary Local Monitor (Pass-through)", font=("Segoe UI", 11, "bold"), text_color="#3a86ff").pack(anchor="w", padx=10, pady=(6, 2))
 
-    out_device_combo = ttk.Combobox(out_frame, values=[], state="readonly")
-    out_device_combo.pack(side="left", fill="x", expand=True, padx=(0, 4))
-    out_device_combo.bind("<<ComboboxSelected>>", lambda e, k=key: toggle_monitoring(k))
+    out_sub = ctk.CTkFrame(out_frame, fg_color="transparent")
+    out_sub.pack(fill="x", padx=6, pady=4)
 
-    monitor_var = tk.BooleanVar(value=st_cfg.get("monitor_enabled", False))
-    monitor_check = ttk.Checkbutton(out_frame, text="Monitor On", variable=monitor_var, command=lambda k=key: toggle_monitoring(k))
-    monitor_check.pack(side="left", padx=2)
+    ctk.CTkLabel(out_sub, text="Monitor Device:").pack(side="left", padx=6, pady=4)
+    out_device_combo = ctk.CTkOptionMenu(out_sub, values=["Scanning..."], command=lambda _, k=key: toggle_monitoring(k))
+    out_device_combo.pack(side="left", fill="x", expand=True, padx=6, pady=4)
 
-    net_frame = ttk.LabelFrame(tab, text="Network Target", padding=4)
-    net_frame.pack(fill="x", pady=2)
+    monitor_var = ctk.BooleanVar(value=st_cfg.get("monitor_enabled", False))
+    monitor_check = ctk.CTkCheckBox(out_sub, text="Monitor On", variable=monitor_var, command=lambda k=key: toggle_monitoring(k))
+    monitor_check.pack(side="left", padx=8, pady=4)
 
-    ttk.Label(net_frame, text="Name:").grid(row=0, column=0, sticky="w", padx=2)
-    name_entry = ttk.Entry(net_frame, width=22)
-    name_entry.insert(0, st_cfg.get("station_name", ""))
-    name_entry.grid(row=0, column=1, sticky="ew", padx=2, pady=1)
-    name_entry.bind("<KeyRelease>", lambda e, k=key: save_config(k))
-
-    ttk.Label(net_frame, text="URL:").grid(row=0, column=2, sticky="w", padx=2)
-    url_entry = ttk.Entry(net_frame, width=28)
-    url_entry.insert(0, st_cfg.get("server_url", ""))
-    url_entry.grid(row=0, column=3, sticky="ew", padx=2, pady=1)
-    url_entry.bind("<KeyRelease>", lambda e, k=key: save_config(k))
-    net_frame.columnconfigure(3, weight=1)
-
-    dsp_frame = ttk.LabelFrame(tab, text="Audio DSP & Studio Processors (Double-click Compressor for Multiband)", padding=4)
-    dsp_frame.pack(fill="x", pady=2)
-
-    def make_slider_row(parent, row_idx, label_text, from_val, to_val, init_val, fmt_str):
-        lbl = ttk.Label(parent, text=label_text)
-        lbl.grid(row=row_idx, column=0, sticky="w", padx=2)
-        
-        scale = ttk.Scale(parent, from_=from_val, to=to_val, value=init_val, orient="horizontal")
-        scale.grid(row=row_idx, column=1, sticky="ew", padx=2)
-        
-        val_lbl = ttk.Label(parent, text=fmt_str.format(init_val), width=14, font=("Consolas", 8))
-        val_lbl.grid(row=row_idx, column=2, sticky="w", padx=2)
-        
-        def on_slide(v):
-            val = float(v)
-            if "Limiter" in label_text:
-                if val >= 0.0:
-                    mode_txt = "None (0 dB)"
-                elif val >= -4.0:
-                    mode_txt = f"Soft ({val:.1f} dB)"
-                elif val >= -10.0:
-                    mode_txt = f"Mid ({val:.1f} dB)"
-                else:
-                    mode_txt = f"High ({val:.1f} dB)"
-                val_lbl.config(text=mode_txt)
-            else:
-                val_lbl.config(text=fmt_str.format(val))
-            
-        def on_slide_release(event):
-            save_config(key)
-
-        scale.config(command=on_slide)
-        scale.bind("<ButtonRelease-1>", on_slide_release)
-        parent.columnconfigure(1, weight=1)
-        return scale, lbl
-
-    gain_scale, _ = make_slider_row(dsp_frame, 0, "Gain (dB):", 0.0, 36.0, st_cfg.get("gain_db", 0.0), "+{:.1f} dB")
-    vol_scale, _ = make_slider_row(dsp_frame, 1, "Volume (dB):", -24.0, 24.0, st_cfg.get("volume_db", 0.0), "{:+.1f} dB")
+    # Divider Frame 3: Network Target
+    net_frame = ctk.CTkFrame(tab, fg_color="#242424", border_width=1, border_color="#333333")
+    net_frame.pack(fill="x", pady=4, padx=4)
     
-    gate_scale, _ = make_slider_row(dsp_frame, 2, "Gate (dB):", -60.0, -10.0, st_cfg.get("noise_gate", -40.0), "{:.1f} dB")
-    gate_var = tk.BooleanVar(value=st_cfg.get("gate_enabled", True))
-    gate_chk = ttk.Checkbutton(dsp_frame, text="On", variable=gate_var, command=lambda: on_setting_changed(key))
-    gate_chk.grid(row=2, column=3, sticky="w", padx=2)
-
-    comp_scale, comp_label = make_slider_row(dsp_frame, 3, "Compressor:", -36.0, 0.0, st_cfg.get("compressor_db", -12.0), "{:.1f} dB")
-    comp_var = tk.BooleanVar(value=st_cfg.get("comp_enabled", True))
-    comp_chk = ttk.Checkbutton(dsp_frame, text="On", variable=comp_var, command=lambda: on_setting_changed(key))
-    comp_chk.grid(row=3, column=3, sticky="w", padx=2)
+    net_header_row = ctk.CTkFrame(net_frame, fg_color="transparent")
+    net_header_row.pack(fill="x", padx=10, pady=(6, 2))
+    ctk.CTkLabel(net_header_row, text="Network Target", font=("Segoe UI", 11, "bold"), text_color="#3a86ff").pack(side="left")
     
-    comp_label.bind("<Double-Button-1>", lambda e, k=key: open_multiband_modal(k))
-    comp_scale.bind("<Double-Button-1>", lambda e, k=key: open_multiband_modal(k))
+    net_config_btn = ctk.CTkButton(net_header_row, text="Configure Network...", width=130, height=24, font=("Segoe UI", 10, "bold"), command=lambda k=key: open_network_config_modal(k))
+    net_config_btn.pack(side="right")
 
-    lim_scale, _ = make_slider_row(dsp_frame, 4, "Limiter Mode:", -18.0, 0.0, st_cfg.get("limiter_db", 0.0), "{:.1f} dB")
-    lim_var = tk.BooleanVar(value=st_cfg.get("lim_enabled", True))
-    lim_chk = ttk.Checkbutton(dsp_frame, text="On", variable=lim_var, command=lambda: on_setting_changed(key))
-    lim_chk.grid(row=4, column=3, sticky="w", padx=2)
+    net_sub = ctk.CTkFrame(net_frame, fg_color="transparent")
+    net_sub.pack(fill="x", padx=6, pady=4)
+    
+    station_name_val = st_cfg.get("station_name", "")
+    server_url_val = st_cfg.get("server_url", "")
+    
+    net_info_lbl = ctk.CTkLabel(net_sub, text=f"Target Name: {station_name_val}   |   URL: {server_url_val}", font=("Segoe UI", 10), text_color="#bbbbbb")
+    net_info_lbl.pack(anchor="w", padx=6, pady=4)
 
-    ttk.Label(dsp_frame, text="Channel:").grid(row=5, column=0, sticky="w", padx=2)
-    mode_combo = ttk.Combobox(dsp_frame, state="readonly", values=[
-        "Stereo", "Mono (Downmix L+R)", "Left Channel Only", "Right Channel Only"
-    ])
-    mode_combo.set(st_cfg.get("channel_mode", "Stereo"))
-    mode_combo.grid(row=5, column=1, sticky="ew", padx=2, pady=1)
-    mode_combo.bind("<<ComboboxSelected>>", lambda e, k=key: on_setting_changed(k))
+    # Divider Frame 4: Audio DSP & Studio Processors Modal Launcher
+    dsp_frame = ctk.CTkFrame(tab, fg_color="#242424", border_width=1, border_color="#333333")
+    dsp_frame.pack(fill="x", pady=4, padx=4)
+    
+    dsp_header_row = ctk.CTkFrame(dsp_frame, fg_color="transparent")
+    dsp_header_row.pack(fill="x", padx=10, pady=(6, 6))
+    ctk.CTkLabel(dsp_header_row, text="Audio DSP & Studio Processors", font=("Segoe UI", 11, "bold"), text_color="#3a86ff").pack(side="left")
+    
+    dsp_config_btn = ctk.CTkButton(dsp_header_row, text="Configure DSP Processors...", width=160, height=24, font=("Segoe UI", 10, "bold"), command=lambda k=key: open_dsp_config_modal(k))
+    dsp_config_btn.pack(side="right")
 
-    hpf_var = tk.BooleanVar(value=st_cfg.get("hpf_enabled", False))
-    hpf_check = ttk.Checkbutton(dsp_frame, text="HPF Rumble Cut", variable=hpf_var, command=lambda: on_setting_changed(key))
-    hpf_check.grid(row=6, column=0, sticky="w", padx=2, pady=1)
+    # Divider Frame 5: Live VU Meters
+    meter_frame = ctk.CTkFrame(tab, fg_color="#242424", border_width=1, border_color="#333333")
+    meter_frame.pack(fill="x", pady=4, padx=4)
+    ctk.CTkLabel(meter_frame, text="Live VU Meters (Safe | Peak | Clip)", font=("Segoe UI", 11, "bold"), text_color="#3a86ff").pack(anchor="w", padx=10, pady=(6, 2))
 
-    agc_var = tk.BooleanVar(value=st_cfg.get("agc_enabled", True))
-    agc_check = ttk.Checkbutton(dsp_frame, text="AGC (Auto Gain)", variable=agc_var, command=lambda: on_setting_changed(key))
-    agc_check.grid(row=6, column=1, sticky="w", padx=2, pady=1)
+    left_meter = ctk.CTkCanvas(meter_frame, height=20, bg="#1a1a1a", highlightthickness=0)
+    left_meter.pack(fill="x", pady=2, padx=10)
+    right_meter = ctk.CTkCanvas(meter_frame, height=20, bg="#1a1a1a", highlightthickness=0)
+    right_meter.pack(fill="x", pady=(2, 6), padx=10)
 
-    meter_frame = ttk.LabelFrame(tab, text="Live VU Meters (Safe | Peak | Clip)", padding=2)
-    meter_frame.pack(fill="x", pady=2)
-    left_meter = tk.Canvas(meter_frame, height=16, background="#121212", highlightthickness=0)
-    left_meter.pack(fill="x", pady=1)
-    right_meter = tk.Canvas(meter_frame, height=16, background="#121212", highlightthickness=0)
-    right_meter.pack(fill="x", pady=1)
+    # Frame 6: Action Footer
+    action_frame = ctk.CTkFrame(tab, fg_color="transparent")
+    action_frame.pack(fill="x", pady=4, padx=4)
 
-    action_frame = ttk.Frame(tab, padding=2)
-    action_frame.pack(fill="x", pady=2)
+    conn_label = ctk.CTkLabel(action_frame, text="OFFLINE", text_color="#e74c3c", font=("Segoe UI", 11, "bold"))
+    conn_label.pack(side="right", padx=8)
 
-    conn_label = tk.Label(action_frame, text="OFFLINE", foreground="#cc0000", font=("Segoe UI", 8, "bold"))
-    conn_label.pack(side="right", padx=4)
+    start_btn = ctk.CTkButton(action_frame, text="START BROADCAST", font=("Segoe UI", 12, "bold"), command=lambda k=key: handle_start_stop_button(k))
+    start_btn.pack(side="left", padx=4)
 
-    start_btn = ttk.Button(action_frame, text="START BROADCAST", style="GMA.TButton", command=lambda k=key: handle_start_stop_button(k))
-    start_btn.pack(side="left", padx=1)
-
-    status_label = tk.Label(action_frame, text="STANDBY", font=("Segoe UI", 8, "bold"))
-    status_label.pack(side="left", padx=6)
+    status_label = ctk.CTkLabel(action_frame, text="STANDBY", font=("Segoe UI", 11, "bold"))
+    status_label.pack(side="left", padx=12)
 
     ui_elements[key] = {
-        "in_device_combo": in_device_combo,
-        "format_combo": format_combo,
-        "bitrate_combo": bitrate_combo,
-        "sr_combo": sr_combo,
-        "in_status": in_status,
-        "out_device_combo": out_device_combo,
+        "station_name": station_name_val, "server_url": server_url_val,
+        "net_info_lbl": net_info_lbl,
+        "in_device_combo": in_device_combo, "format_combo": format_combo,
+        "bitrate_combo": bitrate_combo, "sr_combo": sr_combo,
+        "in_status": in_status, "out_device_combo": out_device_combo,
         "monitor_var": monitor_var,
-        "name_entry": name_entry,
-        "url_entry": url_entry,
-        "gain_scale": gain_scale,
-        "vol_scale": vol_scale,
-        "gate_scale": gate_scale,
-        "gate_var": gate_var,
-        "comp_scale": comp_scale,
-        "comp_var": comp_var,
-        "lim_scale": lim_scale,
-        "lim_var": lim_var,
-        "hpf_var": hpf_var,
-        "mode_combo": mode_combo,
-        "agc_var": agc_var,
+        "dsp_data": {
+            "gain_db": st_cfg.get("gain_db", 0.0),
+            "volume_db": st_cfg.get("volume_db", 0.0),
+            "noise_gate": st_cfg.get("noise_gate", -40.0),
+            "gate_enabled": st_cfg.get("gate_enabled", True),
+            "compressor_db": st_cfg.get("compressor_db", -12.0),
+            "comp_enabled": st_cfg.get("comp_enabled", True),
+            "limiter_db": st_cfg.get("limiter_db", 0.0),
+            "lim_enabled": st_cfg.get("lim_enabled", True),
+            "hpf_enabled": st_cfg.get("hpf_enabled", False),
+            "channel_mode": st_cfg.get("channel_mode", "Stereo"),
+            "agc_enabled": st_cfg.get("agc_enabled", True)
+        },
         "multiband_data": st_cfg.get("multiband", DEFAULT_CONFIG["stations"]["am"]["multiband"]),
-        "left_meter": left_meter,
-        "right_meter": right_meter,
-        "conn_label": conn_label,
-        "start_btn": start_btn,
+        "left_meter": left_meter, "right_meter": right_meter,
+        "conn_label": conn_label, "start_btn": start_btn,
         "status_label": status_label
     }
 
-# Populate initial device lists across both tabs
+# Populate initial audio devices
 refresh_all_device_dropdowns()
-
 for key in ["am", "fm"]:
     if all_devices_cache:
         app.after(200, lambda k=key: activate_station_input(k))
 
-log_frame = ttk.LabelFrame(app, text="SYSTEM EVENT LOG", padding=4)
-log_frame.pack(fill="both", expand=True, padx=8, pady=(2, 2))
-log_box = tk.Text(log_frame, height=3, font=("Consolas", 8))
-log_box.pack(fill="both", expand=True)
+# --- Console Log Frame ---
+log_frame = ctk.CTkFrame(app)
+log_frame.pack(fill="both", expand=True, padx=12, pady=(4, 6))
+ctk.CTkLabel(log_frame, text="SYSTEM EVENT LOG", font=("Segoe UI", 10, "bold")).pack(anchor="w", padx=8, pady=2)
 
-footer_frame = tk.Frame(app, bg="#eef2f5", padx=6, pady=4)
+log_box = ctk.CTkTextbox(log_frame, font=("Consolas", 10), state="disabled")
+log_box.pack(fill="both", expand=True, padx=6, pady=4)
+
+# --- Bottom Bar ---
+footer_frame = ctk.CTkFrame(app, corner_radius=0, fg_color="#1a1a1a")
 footer_frame.pack(fill="x", side="bottom")
-footer_lbl = tk.Label(footer_frame, text=f"Main Author: {APP_AUTHOR}", fg="#444444", bg="#eef2f5", font=("Segoe UI", 8, "italic"))
-footer_lbl.pack(side="right")
+ctk.CTkLabel(footer_frame, text=f"Main Author: {APP_AUTHOR} | Version: {APP_VERSION}", text_color="#888888", font=("Segoe UI", 9, "italic")).pack(side="right", padx=12, pady=4)
 
 update_vu_meters()
-if HAS_TRAY:
-    setup_tray()
+if HAS_TRAY: setup_tray()
 
-# Initialize main window using saved geometry (or center on first launch).
 app.after(100, show_window_centered)
 
 if cfg.get("auto_start_connect", False):
