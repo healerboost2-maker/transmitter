@@ -1,0 +1,3887 @@
+(['C:\\Users\\NEIL 4TH\\Documents\\code '
+  'base\\py\\trx\\transmitter\\amfmCaster.py'],
+ ['C:\\Users\\NEIL 4TH\\Documents\\code base\\py\\trx\\transmitter'],
+ [],
+ [('C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_pyinstaller',
+   0),
+  ('c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks',
+   -1000),
+  ('c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib',
+   -1000)],
+ {},
+ [],
+ [],
+ False,
+ {},
+ 0,
+ [],
+ [('am-fm_app.ico',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\am-fm_app.ico',
+   'DATA')],
+ '3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit '
+ '(AMD64)]',
+ [('pyi_rth_inspect',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgutil',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'PYSOURCE'),
+  ('pyi_rth_multiprocessing',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'PYSOURCE'),
+  ('pyi_rth__tkinter',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
+   'PYSOURCE'),
+  ('amfmCaster',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\amfmCaster.py',
+   'PYSOURCE')],
+ [('subprocess',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\subprocess.py',
+   'PYMODULE'),
+  ('selectors',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\selectors.py',
+   'PYMODULE'),
+  ('contextlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\contextlib.py',
+   'PYMODULE'),
+  ('signal',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\signal.py',
+   'PYMODULE'),
+  ('multiprocessing.spawn',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\spawn.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_tracker',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\resource_tracker.py',
+   'PYMODULE'),
+  ('base64',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\base64.py',
+   'PYMODULE'),
+  ('getopt',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\getopt.py',
+   'PYMODULE'),
+  ('gettext',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\gettext.py',
+   'PYMODULE'),
+  ('copy',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\copy.py',
+   'PYMODULE'),
+  ('multiprocessing.util',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\util.py',
+   'PYMODULE'),
+  ('multiprocessing.forkserver',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.connection',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\connection.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_sharer',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\resource_sharer.py',
+   'PYMODULE'),
+  ('xmlrpc.client',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xmlrpc\\client.py',
+   'PYMODULE'),
+  ('xmlrpc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xmlrpc\\__init__.py',
+   'PYMODULE'),
+  ('gzip',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\gzip.py',
+   'PYMODULE'),
+  ('argparse',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\argparse.py',
+   'PYMODULE'),
+  ('difflib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\difflib.py',
+   'PYMODULE'),
+  ('textwrap',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\textwrap.py',
+   'PYMODULE'),
+  ('_colorize',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_colorize.py',
+   'PYMODULE'),
+  ('typing',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\typing.py',
+   'PYMODULE'),
+  ('inspect',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\inspect.py',
+   'PYMODULE'),
+  ('importlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\__init__.py',
+   'PYMODULE'),
+  ('importlib._bootstrap_external',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\_bootstrap_external.py',
+   'PYMODULE'),
+  ('importlib.metadata',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\__init__.py',
+   'PYMODULE'),
+  ('csv',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\csv.py',
+   'PYMODULE'),
+  ('importlib.metadata._adapters',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_adapters.py',
+   'PYMODULE'),
+  ('importlib.metadata._text',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_text.py',
+   'PYMODULE'),
+  ('email.message',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\message.py',
+   'PYMODULE'),
+  ('email.policy',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\policy.py',
+   'PYMODULE'),
+  ('email.contentmanager',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\contentmanager.py',
+   'PYMODULE'),
+  ('email.quoprimime',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\quoprimime.py',
+   'PYMODULE'),
+  ('string',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\string\\__init__.py',
+   'PYMODULE'),
+  ('email.headerregistry',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\headerregistry.py',
+   'PYMODULE'),
+  ('email._header_value_parser',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\_header_value_parser.py',
+   'PYMODULE'),
+  ('urllib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\urllib\\__init__.py',
+   'PYMODULE'),
+  ('email.iterators',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\iterators.py',
+   'PYMODULE'),
+  ('email.generator',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\generator.py',
+   'PYMODULE'),
+  ('random',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\random.py',
+   'PYMODULE'),
+  ('statistics',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\statistics.py',
+   'PYMODULE'),
+  ('fractions',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\fractions.py',
+   'PYMODULE'),
+  ('numbers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\numbers.py',
+   'PYMODULE'),
+  ('hashlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\hashlib.py',
+   'PYMODULE'),
+  ('bisect',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\bisect.py',
+   'PYMODULE'),
+  ('email._encoded_words',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\_encoded_words.py',
+   'PYMODULE'),
+  ('email.charset',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\charset.py',
+   'PYMODULE'),
+  ('email.encoders',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\encoders.py',
+   'PYMODULE'),
+  ('email.base64mime',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\base64mime.py',
+   'PYMODULE'),
+  ('email._policybase',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\_policybase.py',
+   'PYMODULE'),
+  ('email.header',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\header.py',
+   'PYMODULE'),
+  ('email.errors',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\errors.py',
+   'PYMODULE'),
+  ('email.utils',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\utils.py',
+   'PYMODULE'),
+  ('email._parseaddr',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\_parseaddr.py',
+   'PYMODULE'),
+  ('calendar',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\calendar.py',
+   'PYMODULE'),
+  ('quopri',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\quopri.py',
+   'PYMODULE'),
+  ('importlib.abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\abc.py',
+   'PYMODULE'),
+  ('importlib._abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\_abc.py',
+   'PYMODULE'),
+  ('importlib.metadata._itertools',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.metadata._functools',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_functools.py',
+   'PYMODULE'),
+  ('importlib.metadata._collections',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_collections.py',
+   'PYMODULE'),
+  ('importlib.metadata._meta',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\metadata\\_meta.py',
+   'PYMODULE'),
+  ('zipfile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\zipfile\\__init__.py',
+   'PYMODULE'),
+  ('zipfile._path',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\zipfile\\_path\\__init__.py',
+   'PYMODULE'),
+  ('zipfile._path.glob',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\zipfile\\_path\\glob.py',
+   'PYMODULE'),
+  ('py_compile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\py_compile.py',
+   'PYMODULE'),
+  ('compression.zstd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\zstd\\__init__.py',
+   'PYMODULE'),
+  ('compression.zstd._zstdfile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\zstd\\_zstdfile.py',
+   'PYMODULE'),
+  ('compression',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\__init__.py',
+   'PYMODULE'),
+  ('lzma',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\lzma.py',
+   'PYMODULE'),
+  ('bz2',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\bz2.py',
+   'PYMODULE'),
+  ('importlib.util',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\util.py',
+   'PYMODULE'),
+  ('pathlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pathlib\\__init__.py',
+   'PYMODULE'),
+  ('urllib.error',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\urllib\\error.py',
+   'PYMODULE'),
+  ('urllib.response',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\urllib\\response.py',
+   'PYMODULE'),
+  ('pathlib._os',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pathlib\\_os.py',
+   'PYMODULE'),
+  ('glob',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\glob.py',
+   'PYMODULE'),
+  ('fnmatch',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\fnmatch.py',
+   'PYMODULE'),
+  ('email',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\__init__.py',
+   'PYMODULE'),
+  ('email.parser',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\parser.py',
+   'PYMODULE'),
+  ('email.feedparser',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\email\\feedparser.py',
+   'PYMODULE'),
+  ('__future__',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\__future__.py',
+   'PYMODULE'),
+  ('importlib.readers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\readers.py',
+   'PYMODULE'),
+  ('importlib.resources.readers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\readers.py',
+   'PYMODULE'),
+  ('importlib.resources._itertools',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.resources.abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\abc.py',
+   'PYMODULE'),
+  ('importlib.resources',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\__init__.py',
+   'PYMODULE'),
+  ('importlib.resources._functional',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\_functional.py',
+   'PYMODULE'),
+  ('importlib.resources._common',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\_common.py',
+   'PYMODULE'),
+  ('importlib.resources._adapters',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\resources\\_adapters.py',
+   'PYMODULE'),
+  ('importlib._bootstrap',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\_bootstrap.py',
+   'PYMODULE'),
+  ('token',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\token.py',
+   'PYMODULE'),
+  ('tokenize',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tokenize.py',
+   'PYMODULE'),
+  ('importlib.machinery',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\importlib\\machinery.py',
+   'PYMODULE'),
+  ('dis',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\dis.py',
+   'PYMODULE'),
+  ('opcode',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\opcode.py',
+   'PYMODULE'),
+  ('_opcode_metadata',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_opcode_metadata.py',
+   'PYMODULE'),
+  ('ast',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ast.py',
+   'PYMODULE'),
+  ('_ast_unparse',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_ast_unparse.py',
+   'PYMODULE'),
+  ('annotationlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\annotationlib.py',
+   'PYMODULE'),
+  ('dataclasses',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\dataclasses.py',
+   'PYMODULE'),
+  ('compression._common._streams',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\_common\\_streams.py',
+   'PYMODULE'),
+  ('compression._common',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\compression\\_common\\__init__.py',
+   'PYMODULE'),
+  ('xml.parsers.expat',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\parsers\\expat.py',
+   'PYMODULE'),
+  ('xml.parsers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\parsers\\__init__.py',
+   'PYMODULE'),
+  ('xml',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\__init__.py',
+   'PYMODULE'),
+  ('xml.sax.expatreader',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\expatreader.py',
+   'PYMODULE'),
+  ('xml.sax.saxutils',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\saxutils.py',
+   'PYMODULE'),
+  ('xml.sax',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\__init__.py',
+   'PYMODULE'),
+  ('xml.sax.handler',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\handler.py',
+   'PYMODULE'),
+  ('xml.sax._exceptions',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\_exceptions.py',
+   'PYMODULE'),
+  ('xml.sax.xmlreader',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\sax\\xmlreader.py',
+   'PYMODULE'),
+  ('http.client',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\http\\client.py',
+   'PYMODULE'),
+  ('ssl',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ssl.py',
+   'PYMODULE'),
+  ('http',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\http\\__init__.py',
+   'PYMODULE'),
+  ('decimal',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\decimal.py',
+   'PYMODULE'),
+  ('_pydecimal',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pydecimal.py',
+   'PYMODULE'),
+  ('contextvars',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\contextvars.py',
+   'PYMODULE'),
+  ('datetime',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\datetime.py',
+   'PYMODULE'),
+  ('_pydatetime',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pydatetime.py',
+   'PYMODULE'),
+  ('_strptime',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_strptime.py',
+   'PYMODULE'),
+  ('hmac',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\hmac.py',
+   'PYMODULE'),
+  ('socket',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\socket.py',
+   'PYMODULE'),
+  ('shutil',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\shutil.py',
+   'PYMODULE'),
+  ('tarfile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tarfile.py',
+   'PYMODULE'),
+  ('logging',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\logging\\__init__.py',
+   'PYMODULE'),
+  ('pickle',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pickle.py',
+   'PYMODULE'),
+  ('pprint',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pprint.py',
+   'PYMODULE'),
+  ('_compat_pickle',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_compat_pickle.py',
+   'PYMODULE'),
+  ('multiprocessing.context',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\context.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_win32',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\popen_spawn_win32.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_forkserver',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\popen_forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_posix',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\popen_spawn_posix.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_fork',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\popen_fork.py',
+   'PYMODULE'),
+  ('multiprocessing.sharedctypes',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\sharedctypes.py',
+   'PYMODULE'),
+  ('multiprocessing.heap',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\heap.py',
+   'PYMODULE'),
+  ('multiprocessing.pool',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\pool.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\dummy\\__init__.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy.connection',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\dummy\\connection.py',
+   'PYMODULE'),
+  ('multiprocessing.queues',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\queues.py',
+   'PYMODULE'),
+  ('multiprocessing.synchronize',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\synchronize.py',
+   'PYMODULE'),
+  ('multiprocessing.managers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\managers.py',
+   'PYMODULE'),
+  ('multiprocessing.shared_memory',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\shared_memory.py',
+   'PYMODULE'),
+  ('secrets',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\secrets.py',
+   'PYMODULE'),
+  ('multiprocessing.reduction',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\reduction.py',
+   'PYMODULE'),
+  ('multiprocessing.process',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\process.py',
+   'PYMODULE'),
+  ('runpy',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\runpy.py',
+   'PYMODULE'),
+  ('pkgutil',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pkgutil.py',
+   'PYMODULE'),
+  ('zipimport',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\zipimport.py',
+   'PYMODULE'),
+  ('multiprocessing',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\multiprocessing\\__init__.py',
+   'PYMODULE'),
+  ('_py_warnings',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_py_warnings.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tracemalloc.py',
+   'PYMODULE'),
+  ('stringprep',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\stringprep.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_py_abc.py',
+   'PYMODULE'),
+  ('codeop',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\codeop.py',
+   'PYMODULE'),
+  ('PIL.ImageDraw',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageDraw.py',
+   'PYMODULE'),
+  ('PIL._typing',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_typing.py',
+   'PYMODULE'),
+  ('numpy.typing',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\typing\\__init__.py',
+   'PYMODULE'),
+  ('numpy._pytesttester',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_pytesttester.py',
+   'PYMODULE'),
+  ('numpy._typing._add_docstring',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_add_docstring.py',
+   'PYMODULE'),
+  ('numpy._typing._array_like',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_array_like.py',
+   'PYMODULE'),
+  ('numpy._typing._shape',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_shape.py',
+   'PYMODULE'),
+  ('numpy._typing._nested_sequence',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_nested_sequence.py',
+   'PYMODULE'),
+  ('numpy._typing._nbit_base',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_nbit_base.py',
+   'PYMODULE'),
+  ('numpy._utils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_utils\\__init__.py',
+   'PYMODULE'),
+  ('numpy._utils._conversions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_utils\\_conversions.py',
+   'PYMODULE'),
+  ('numpy._core.multiarray',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\multiarray.py',
+   'PYMODULE'),
+  ('numpy._core.overrides',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\overrides.py',
+   'PYMODULE'),
+  ('numpy._utils._inspect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_utils\\_inspect.py',
+   'PYMODULE'),
+  ('numpy._core',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\__init__.py',
+   'PYMODULE'),
+  ('numpy._core._internal',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_internal.py',
+   'PYMODULE'),
+  ('numpy.exceptions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\exceptions.py',
+   'PYMODULE'),
+  ('numpy._core._dtype_ctypes',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_dtype_ctypes.py',
+   'PYMODULE'),
+  ('ctypes._layout',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\_layout.py',
+   'PYMODULE'),
+  ('numpy._core._dtype',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_dtype.py',
+   'PYMODULE'),
+  ('numpy._core._add_newdocs_scalars',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_add_newdocs_scalars.py',
+   'PYMODULE'),
+  ('numpy._core._add_newdocs',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_add_newdocs.py',
+   'PYMODULE'),
+  ('numpy._core.records',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\records.py',
+   'PYMODULE'),
+  ('numpy._core.memmap',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\memmap.py',
+   'PYMODULE'),
+  ('numpy._core.function_base',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\function_base.py',
+   'PYMODULE'),
+  ('numpy._core.einsumfunc',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\einsumfunc.py',
+   'PYMODULE'),
+  ('numpy._core.arrayprint',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\arrayprint.py',
+   'PYMODULE'),
+  ('numpy._core.printoptions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\printoptions.py',
+   'PYMODULE'),
+  ('numpy._core._asarray',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_asarray.py',
+   'PYMODULE'),
+  ('numpy._core.shape_base',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\shape_base.py',
+   'PYMODULE'),
+  ('numpy._core.fromnumeric',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py',
+   'PYMODULE'),
+  ('numpy._core._methods',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_methods.py',
+   'PYMODULE'),
+  ('numpy.lib._stride_tricks_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_stride_tricks_impl.py',
+   'PYMODULE'),
+  ('numpy.lib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\__init__.py',
+   'PYMODULE'),
+  ('numpy.lib.recfunctions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\recfunctions.py',
+   'PYMODULE'),
+  ('numpy.lib._iotools',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_iotools.py',
+   'PYMODULE'),
+  ('numpy.ma.mrecords',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ma\\mrecords.py',
+   'PYMODULE'),
+  ('numpy.ma',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ma\\__init__.py',
+   'PYMODULE'),
+  ('numpy.ma.extras',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ma\\extras.py',
+   'PYMODULE'),
+  ('numpy.ma.core',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ma\\core.py',
+   'PYMODULE'),
+  ('numpy.lib.stride_tricks',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\stride_tricks.py',
+   'PYMODULE'),
+  ('numpy.lib.scimath',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\scimath.py',
+   'PYMODULE'),
+  ('numpy.lib._scimath_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_scimath_impl.py',
+   'PYMODULE'),
+  ('numpy.lib.npyio',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\npyio.py',
+   'PYMODULE'),
+  ('numpy.lib.mixins',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\mixins.py',
+   'PYMODULE'),
+  ('numpy.lib.introspect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\introspect.py',
+   'PYMODULE'),
+  ('numpy.lib.array_utils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\array_utils.py',
+   'PYMODULE'),
+  ('numpy.lib._version',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_version.py',
+   'PYMODULE'),
+  ('numpy.lib._utils_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_utils_impl.py',
+   'PYMODULE'),
+  ('pydoc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pydoc.py',
+   'PYMODULE'),
+  ('http.server',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\http\\server.py',
+   'PYMODULE'),
+  ('socketserver',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\socketserver.py',
+   'PYMODULE'),
+  ('mimetypes',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\mimetypes.py',
+   'PYMODULE'),
+  ('pydoc_data.topics',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pydoc_data\\topics.py',
+   'PYMODULE'),
+  ('pydoc_data.module_docs',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pydoc_data\\module_docs.py',
+   'PYMODULE'),
+  ('pydoc_data',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pydoc_data\\__init__.py',
+   'PYMODULE'),
+  ('_pyrepl.pager',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pyrepl\\pager.py',
+   'PYMODULE'),
+  ('_pyrepl',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pyrepl\\__init__.py',
+   'PYMODULE'),
+  ('tty',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tty.py',
+   'PYMODULE'),
+  ('sysconfig',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\sysconfig\\__init__.py',
+   'PYMODULE'),
+  ('_aix_support',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_aix_support.py',
+   'PYMODULE'),
+  ('numpy.lib._ufunclike_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_ufunclike_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._type_check_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_type_check_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._twodim_base_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_twodim_base_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._shape_base_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_shape_base_impl.py',
+   'PYMODULE'),
+  ('numpy.matrixlib.defmatrix',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\matrixlib\\defmatrix.py',
+   'PYMODULE'),
+  ('numpy.matrixlib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\matrixlib\\__init__.py',
+   'PYMODULE'),
+  ('numpy.linalg',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\linalg\\__init__.py',
+   'PYMODULE'),
+  ('numpy.linalg._linalg',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\linalg\\_linalg.py',
+   'PYMODULE'),
+  ('numpy._typing._ufunc',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_ufunc.py',
+   'PYMODULE'),
+  ('numpy.lib._polynomial_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_polynomial_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._npyio_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_npyio_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._format_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_format_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._datasource',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_datasource.py',
+   'PYMODULE'),
+  ('numpy.lib.format',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\format.py',
+   'PYMODULE'),
+  ('numpy.lib._nanfunctions_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_nanfunctions_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._index_tricks_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_index_tricks_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._histograms_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_histograms_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._function_base_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_function_base_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._arrayterator_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_arrayterator_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._arraysetops_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_arraysetops_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._arraypad_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_arraypad_impl.py',
+   'PYMODULE'),
+  ('numpy.lib._array_utils_impl',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\lib\\_array_utils_impl.py',
+   'PYMODULE'),
+  ('numpy._globals',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_globals.py',
+   'PYMODULE'),
+  ('numpy._core.getlimits',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\getlimits.py',
+   'PYMODULE'),
+  ('numpy._core.numeric',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\numeric.py',
+   'PYMODULE'),
+  ('numpy._core._ufunc_config',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_ufunc_config.py',
+   'PYMODULE'),
+  ('numpy._core.numerictypes',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\numerictypes.py',
+   'PYMODULE'),
+  ('numpy._core._type_aliases',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_type_aliases.py',
+   'PYMODULE'),
+  ('numpy._core._string_helpers',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_string_helpers.py',
+   'PYMODULE'),
+  ('numpy._core.umath',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\umath.py',
+   'PYMODULE'),
+  ('numpy.version',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\version.py',
+   'PYMODULE'),
+  ('numpy.dtypes',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\dtypes.py',
+   'PYMODULE'),
+  ('numpy._typing',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\__init__.py',
+   'PYMODULE'),
+  ('numpy._typing._scalars',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_scalars.py',
+   'PYMODULE'),
+  ('numpy._typing._nbit',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_nbit.py',
+   'PYMODULE'),
+  ('numpy._typing._dtype_like',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_dtype_like.py',
+   'PYMODULE'),
+  ('numpy._typing._char_codes',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_typing\\_char_codes.py',
+   'PYMODULE'),
+  ('PIL.ImageDraw2',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageDraw2.py',
+   'PYMODULE'),
+  ('PIL.ImagePath',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImagePath.py',
+   'PYMODULE'),
+  ('PIL.ImageText',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageText.py',
+   'PYMODULE'),
+  ('PIL.ImageFont',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageFont.py',
+   'PYMODULE'),
+  ('PIL.ImageFile',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageFile.py',
+   'PYMODULE'),
+  ('PIL.TiffImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\TiffImagePlugin.py',
+   'PYMODULE'),
+  ('PIL._binary',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_binary.py',
+   'PYMODULE'),
+  ('PIL.TiffTags',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\TiffTags.py',
+   'PYMODULE'),
+  ('PIL.ImagePalette',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImagePalette.py',
+   'PYMODULE'),
+  ('PIL.PaletteFile',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PaletteFile.py',
+   'PYMODULE'),
+  ('PIL.GimpPaletteFile',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\GimpPaletteFile.py',
+   'PYMODULE'),
+  ('PIL.GimpGradientFile',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\GimpGradientFile.py',
+   'PYMODULE'),
+  ('PIL.ImageOps',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageOps.py',
+   'PYMODULE'),
+  ('PIL.ExifTags',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ExifTags.py',
+   'PYMODULE'),
+  ('PIL._util',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_util.py',
+   'PYMODULE'),
+  ('PIL.ImageColor',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageColor.py',
+   'PYMODULE'),
+  ('colorsys',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\colorsys.py',
+   'PYMODULE'),
+  ('PIL.Image',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\Image.py',
+   'PYMODULE'),
+  ('PIL.XpmImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\XpmImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.XbmImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\XbmImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.XVThumbImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\XVThumbImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.WmfImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\WmfImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.WebPImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\WebPImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.TgaImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\TgaImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.SunImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\SunImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.SpiderImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\SpiderImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImageTk',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageTk.py',
+   'PYMODULE'),
+  ('PIL.SgiImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\SgiImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.QoiImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\QoiImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PsdImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PsdImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PixarImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PixarImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PdfImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PdfImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.features',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\features.py',
+   'PYMODULE'),
+  ('PIL.PdfParser',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PdfParser.py',
+   'PYMODULE'),
+  ('PIL.ImageSequence',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageSequence.py',
+   'PYMODULE'),
+  ('PIL.PcxImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PcxImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PcdImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PcdImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.PalmImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PalmImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.MspImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\MspImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.MpoImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\MpoImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.MpegImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\MpegImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.MicImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\MicImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.McIdasImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\McIdasImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.Jpeg2KImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\Jpeg2KImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.IptcImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\IptcImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImtImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImtImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.IcoImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\IcoImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.IcnsImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\IcnsImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.Hdf5StubImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\Hdf5StubImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.GribStubImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\GribStubImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.GbrImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\GbrImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.FtexImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\FtexImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.FpxImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\FpxImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.FliImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\FliImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.FitsImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\FitsImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.EpsImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\EpsImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.DdsImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\DdsImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.DcxImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\DcxImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.CurImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\CurImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.BufrStubImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\BufrStubImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.BlpImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\BlpImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.AvifImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\AvifImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImageShow',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageShow.py',
+   'PYMODULE'),
+  ('shlex',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\shlex.py',
+   'PYMODULE'),
+  ('PIL.ImageCms',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageCms.py',
+   'PYMODULE'),
+  ('PIL.ImageWin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageWin.py',
+   'PYMODULE'),
+  ('PIL.PngImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PngImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImageChops',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageChops.py',
+   'PYMODULE'),
+  ('PIL.PpmImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\PpmImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.JpegImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\JpegImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.JpegPresets',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\JpegPresets.py',
+   'PYMODULE'),
+  ('PIL.GifImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\GifImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImageMath',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageMath.py',
+   'PYMODULE'),
+  ('PIL.BmpImagePlugin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\BmpImagePlugin.py',
+   'PYMODULE'),
+  ('PIL.ImageQt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageQt.py',
+   'PYMODULE'),
+  ('PIL.ImageFilter',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageFilter.py',
+   'PYMODULE'),
+  ('xml.etree.ElementTree',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\etree\\ElementTree.py',
+   'PYMODULE'),
+  ('xml.etree.cElementTree',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\etree\\cElementTree.py',
+   'PYMODULE'),
+  ('xml.etree.ElementInclude',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\etree\\ElementInclude.py',
+   'PYMODULE'),
+  ('xml.etree.ElementPath',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\etree\\ElementPath.py',
+   'PYMODULE'),
+  ('xml.etree',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\xml\\etree\\__init__.py',
+   'PYMODULE'),
+  ('PIL._deprecate',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_deprecate.py',
+   'PYMODULE'),
+  ('PIL.ImageMode',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\ImageMode.py',
+   'PYMODULE'),
+  ('PIL',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\__init__.py',
+   'PYMODULE'),
+  ('PIL._version',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_version.py',
+   'PYMODULE'),
+  ('pystray',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\__init__.py',
+   'PYMODULE'),
+  ('pystray._util.win32',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_util\\win32.py',
+   'PYMODULE'),
+  ('ctypes.wintypes',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\wintypes.py',
+   'PYMODULE'),
+  ('pystray._util.notify_dbus',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_util\\notify_dbus.py',
+   'PYMODULE'),
+  ('pystray._util.gtk',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_util\\gtk.py',
+   'PYMODULE'),
+  ('pystray._util',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_util\\__init__.py',
+   'PYMODULE'),
+  ('pystray._info',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_info.py',
+   'PYMODULE'),
+  ('pystray._base',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_base.py',
+   'PYMODULE'),
+  ('six',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\six.py',
+   'PYMODULE'),
+  ('pystray._xorg',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_xorg.py',
+   'PYMODULE'),
+  ('pystray._win32',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_win32.py',
+   'PYMODULE'),
+  ('pystray._gtk',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_gtk.py',
+   'PYMODULE'),
+  ('pystray._darwin',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_darwin.py',
+   'PYMODULE'),
+  ('pystray._appindicator',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_appindicator.py',
+   'PYMODULE'),
+  ('pystray._dummy',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pystray\\_dummy.py',
+   'PYMODULE'),
+  ('av',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\__init__.py',
+   'PYMODULE'),
+  ('uuid',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\uuid.py',
+   'PYMODULE'),
+  ('av.video',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\__init__.py',
+   'PYMODULE'),
+  ('av.subtitles',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\subtitles\\__init__.py',
+   'PYMODULE'),
+  ('av.sidedata',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\sidedata\\__init__.py',
+   'PYMODULE'),
+  ('av.filter',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\__init__.py',
+   'PYMODULE'),
+  ('av.datasets',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\datasets.py',
+   'PYMODULE'),
+  ('av.codec',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\codec\\__init__.py',
+   'PYMODULE'),
+  ('av.audio',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\__init__.py',
+   'PYMODULE'),
+  ('av.__main__',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\__main__.py',
+   'PYMODULE'),
+  ('av.container',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\__init__.py',
+   'PYMODULE'),
+  ('av.about',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\about.py',
+   'PYMODULE'),
+  ('customtkinter',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.ctk_tk',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\ctk_tk.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.utility.utility_functions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\utility\\utility_functions.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.utility',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\utility\\__init__.py',
+   'PYMODULE'),
+  ('packaging.version',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\packaging\\version.py',
+   'PYMODULE'),
+  ('packaging',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\packaging\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.image',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\image\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.image.ctk_image',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\image\\ctk_image.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_scrollable_frame',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_scrollable_frame.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_textbox',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_textbox.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_tabview',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_tabview.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_switch',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_switch.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_slider',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_slider.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_segmented_button',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_segmented_button.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_scrollbar',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_scrollbar.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_radiobutton',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_radiobutton.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_progressbar',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_progressbar.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_optionmenu',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_optionmenu.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_label',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_label.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_frame',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_frame.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_entry',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_entry.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_combobox',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_combobox.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_checkbox',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_checkbox.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.ctk_button',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\ctk_button.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_widget_classes',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_widget_classes\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_widget_classes.ctk_base_class',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_widget_classes\\ctk_base_class.py',
+   'PYMODULE'),
+  ('tkinter.ttk',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\ttk.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_widget_classes.dropdown_menu',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_widget_classes\\dropdown_menu.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_rendering',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_rendering\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_rendering.draw_engine',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_rendering\\draw_engine.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.core_rendering.ctk_canvas',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\core_rendering\\ctk_canvas.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.theme',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\theme\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.theme.theme_manager',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\theme\\theme_manager.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.scaling',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\scaling\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.scaling.scaling_tracker',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\scaling\\scaling_tracker.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.scaling.scaling_base_class',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\scaling\\scaling_base_class.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.font',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\font\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.font.font_manager',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\font\\font_manager.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.font.ctk_font',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\font\\ctk_font.py',
+   'PYMODULE'),
+  ('tkinter.font',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\font.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.appearance_mode',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\appearance_mode\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.appearance_mode.appearance_mode_tracker',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\appearance_mode\\appearance_mode_tracker.py',
+   'PYMODULE'),
+  ('darkdetect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\darkdetect\\__init__.py',
+   'PYMODULE'),
+  ('darkdetect._linux_detect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\darkdetect\\_linux_detect.py',
+   'PYMODULE'),
+  ('darkdetect._windows_detect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\darkdetect\\_windows_detect.py',
+   'PYMODULE'),
+  ('darkdetect._dummy',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\darkdetect\\_dummy.py',
+   'PYMODULE'),
+  ('darkdetect._mac_detect',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\darkdetect\\_mac_detect.py',
+   'PYMODULE'),
+  ('ctypes.util',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\util.py',
+   'PYMODULE'),
+  ('ctypes._aix',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\_aix.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dyld',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\macholib\\dyld.py',
+   'PYMODULE'),
+  ('ctypes.macholib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\macholib\\__init__.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dylib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\macholib\\dylib.py',
+   'PYMODULE'),
+  ('ctypes.macholib.framework',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\macholib\\framework.py',
+   'PYMODULE'),
+  ('customtkinter.windows.widgets.appearance_mode.appearance_mode_base_class',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\widgets\\appearance_mode\\appearance_mode_base_class.py',
+   'PYMODULE'),
+  ('customtkinter.windows',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\__init__.py',
+   'PYMODULE'),
+  ('customtkinter.windows.ctk_input_dialog',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\ctk_input_dialog.py',
+   'PYMODULE'),
+  ('customtkinter.windows.ctk_toplevel',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\windows\\ctk_toplevel.py',
+   'PYMODULE'),
+  ('tkinter.constants',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\constants.py',
+   'PYMODULE'),
+  ('websocket',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\__init__.py',
+   'PYMODULE'),
+  ('websocket._socket',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_socket.py',
+   'PYMODULE'),
+  ('websocket._utils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_utils.py',
+   'PYMODULE'),
+  ('websocket._ssl_compat',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_ssl_compat.py',
+   'PYMODULE'),
+  ('websocket._logging',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_logging.py',
+   'PYMODULE'),
+  ('websocket._exceptions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_exceptions.py',
+   'PYMODULE'),
+  ('websocket._core',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_core.py',
+   'PYMODULE'),
+  ('websocket._dispatcher',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_dispatcher.py',
+   'PYMODULE'),
+  ('websocket._http',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_http.py',
+   'PYMODULE'),
+  ('websocket._url',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_url.py',
+   'PYMODULE'),
+  ('ipaddress',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ipaddress.py',
+   'PYMODULE'),
+  ('websocket._handshake',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_handshake.py',
+   'PYMODULE'),
+  ('websocket._cookiejar',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_cookiejar.py',
+   'PYMODULE'),
+  ('http.cookies',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\http\\cookies.py',
+   'PYMODULE'),
+  ('websocket._app',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_app.py',
+   'PYMODULE'),
+  ('websocket._abnf',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\websocket\\_abnf.py',
+   'PYMODULE'),
+  ('sounddevice',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\sounddevice.py',
+   'PYMODULE'),
+  ('_sounddevice_data',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\__init__.py',
+   'PYMODULE'),
+  ('_sounddevice',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice.py',
+   'PYMODULE'),
+  ('numpy',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\__init__.py',
+   'PYMODULE'),
+  ('numpy._core._exceptions',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_exceptions.py',
+   'PYMODULE'),
+  ('numpy.strings',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\strings\\__init__.py',
+   'PYMODULE'),
+  ('numpy._core.strings',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\strings.py',
+   'PYMODULE'),
+  ('numpy.core',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\core\\__init__.py',
+   'PYMODULE'),
+  ('numpy.core._utils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\core\\_utils.py',
+   'PYMODULE'),
+  ('numpy.char',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\char\\__init__.py',
+   'PYMODULE'),
+  ('numpy._core.defchararray',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\defchararray.py',
+   'PYMODULE'),
+  ('numpy.rec',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\rec\\__init__.py',
+   'PYMODULE'),
+  ('numpy.f2py',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\__init__.py',
+   'PYMODULE'),
+  ('numpy.f2py.diagnose',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\diagnose.py',
+   'PYMODULE'),
+  ('numpy.f2py.f2py2e',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\f2py2e.py',
+   'PYMODULE'),
+  ('numpy.f2py.crackfortran',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\crackfortran.py',
+   'PYMODULE'),
+  ('fileinput',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\fileinput.py',
+   'PYMODULE'),
+  ('numpy.f2py._backends',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\_backends\\__init__.py',
+   'PYMODULE'),
+  ('numpy.f2py._backends._meson',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\_backends\\_meson.py',
+   'PYMODULE'),
+  ('numpy.f2py._backends._backend',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\_backends\\_backend.py',
+   'PYMODULE'),
+  ('numpy.f2py.rules',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\rules.py',
+   'PYMODULE'),
+  ('numpy.f2py.use_rules',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\use_rules.py',
+   'PYMODULE'),
+  ('numpy.f2py.f90mod_rules',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\f90mod_rules.py',
+   'PYMODULE'),
+  ('numpy.f2py.common_rules',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\common_rules.py',
+   'PYMODULE'),
+  ('numpy.f2py.func2subr',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\func2subr.py',
+   'PYMODULE'),
+  ('numpy.f2py._isocbind',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\_isocbind.py',
+   'PYMODULE'),
+  ('numpy.f2py.auxfuncs',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\auxfuncs.py',
+   'PYMODULE'),
+  ('numpy.f2py.symbolic',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\symbolic.py',
+   'PYMODULE'),
+  ('numpy.f2py.cb_rules',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\cb_rules.py',
+   'PYMODULE'),
+  ('numpy.f2py.capi_maps',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\capi_maps.py',
+   'PYMODULE'),
+  ('numpy.f2py.cfuncs',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\cfuncs.py',
+   'PYMODULE'),
+  ('numpy.f2py.__version__',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\f2py\\__version__.py',
+   'PYMODULE'),
+  ('numpy.matlib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\matlib.py',
+   'PYMODULE'),
+  ('numpy.testing',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\testing\\__init__.py',
+   'PYMODULE'),
+  ('numpy.testing._private.utils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\testing\\_private\\utils.py',
+   'PYMODULE'),
+  ('doctest',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\doctest.py',
+   'PYMODULE'),
+  ('pdb',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pdb.py',
+   'PYMODULE'),
+  ('rlcompleter',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\rlcompleter.py',
+   'PYMODULE'),
+  ('_pyrepl.utils',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pyrepl\\utils.py',
+   'PYMODULE'),
+  ('_pyrepl.trace',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pyrepl\\trace.py',
+   'PYMODULE'),
+  ('_pyrepl.types',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_pyrepl\\types.py',
+   'PYMODULE'),
+  ('asyncio',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\__init__.py',
+   'PYMODULE'),
+  ('asyncio.unix_events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\unix_events.py',
+   'PYMODULE'),
+  ('asyncio.log',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\log.py',
+   'PYMODULE'),
+  ('asyncio.windows_events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\windows_events.py',
+   'PYMODULE'),
+  ('asyncio.threads',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\threads.py',
+   'PYMODULE'),
+  ('asyncio.taskgroups',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\taskgroups.py',
+   'PYMODULE'),
+  ('asyncio.subprocess',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\subprocess.py',
+   'PYMODULE'),
+  ('asyncio.streams',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\streams.py',
+   'PYMODULE'),
+  ('asyncio.runners',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\runners.py',
+   'PYMODULE'),
+  ('asyncio.graph',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\graph.py',
+   'PYMODULE'),
+  ('asyncio.staggered',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\staggered.py',
+   'PYMODULE'),
+  ('asyncio.windows_utils',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\windows_utils.py',
+   'PYMODULE'),
+  ('asyncio.timeouts',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\timeouts.py',
+   'PYMODULE'),
+  ('asyncio.tasks',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\tasks.py',
+   'PYMODULE'),
+  ('asyncio.queues',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\queues.py',
+   'PYMODULE'),
+  ('asyncio.locks',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\locks.py',
+   'PYMODULE'),
+  ('asyncio.mixins',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\mixins.py',
+   'PYMODULE'),
+  ('asyncio.base_tasks',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\base_tasks.py',
+   'PYMODULE'),
+  ('asyncio.selector_events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\selector_events.py',
+   'PYMODULE'),
+  ('asyncio.proactor_events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\proactor_events.py',
+   'PYMODULE'),
+  ('asyncio.trsock',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\trsock.py',
+   'PYMODULE'),
+  ('asyncio.sslproto',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\sslproto.py',
+   'PYMODULE'),
+  ('asyncio.base_events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\base_events.py',
+   'PYMODULE'),
+  ('asyncio.futures',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\futures.py',
+   'PYMODULE'),
+  ('asyncio.exceptions',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\exceptions.py',
+   'PYMODULE'),
+  ('asyncio.base_futures',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\base_futures.py',
+   'PYMODULE'),
+  ('asyncio.base_subprocess',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\base_subprocess.py',
+   'PYMODULE'),
+  ('asyncio.transports',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\transports.py',
+   'PYMODULE'),
+  ('asyncio.protocols',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\protocols.py',
+   'PYMODULE'),
+  ('asyncio.events',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\events.py',
+   'PYMODULE'),
+  ('asyncio.format_helpers',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\format_helpers.py',
+   'PYMODULE'),
+  ('asyncio.coroutines',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\coroutines.py',
+   'PYMODULE'),
+  ('asyncio.constants',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\asyncio\\constants.py',
+   'PYMODULE'),
+  ('code',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\code.py',
+   'PYMODULE'),
+  ('bdb',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\bdb.py',
+   'PYMODULE'),
+  ('cmd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\cmd.py',
+   'PYMODULE'),
+  ('unittest.case',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\case.py',
+   'PYMODULE'),
+  ('unittest._log',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\_log.py',
+   'PYMODULE'),
+  ('unittest.util',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\util.py',
+   'PYMODULE'),
+  ('unittest.result',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\result.py',
+   'PYMODULE'),
+  ('concurrent.futures',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\futures\\__init__.py',
+   'PYMODULE'),
+  ('concurrent.futures.interpreter',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\futures\\interpreter.py',
+   'PYMODULE'),
+  ('concurrent.interpreters',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\interpreters\\__init__.py',
+   'PYMODULE'),
+  ('concurrent.interpreters._queues',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\interpreters\\_queues.py',
+   'PYMODULE'),
+  ('concurrent.interpreters._crossinterp',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\interpreters\\_crossinterp.py',
+   'PYMODULE'),
+  ('concurrent.futures.thread',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\futures\\thread.py',
+   'PYMODULE'),
+  ('concurrent.futures.process',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\futures\\process.py',
+   'PYMODULE'),
+  ('concurrent.futures._base',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\futures\\_base.py',
+   'PYMODULE'),
+  ('concurrent',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\concurrent\\__init__.py',
+   'PYMODULE'),
+  ('numpy.testing._private.extbuild',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\testing\\_private\\extbuild.py',
+   'PYMODULE'),
+  ('numpy.testing.overrides',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\testing\\overrides.py',
+   'PYMODULE'),
+  ('numpy.testing._private',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\testing\\_private\\__init__.py',
+   'PYMODULE'),
+  ('unittest',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\__init__.py',
+   'PYMODULE'),
+  ('unittest.async_case',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\async_case.py',
+   'PYMODULE'),
+  ('unittest.signals',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\signals.py',
+   'PYMODULE'),
+  ('unittest.main',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\main.py',
+   'PYMODULE'),
+  ('unittest.runner',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\runner.py',
+   'PYMODULE'),
+  ('unittest.loader',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\loader.py',
+   'PYMODULE'),
+  ('unittest.suite',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\suite.py',
+   'PYMODULE'),
+  ('numpy.ctypeslib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ctypeslib\\__init__.py',
+   'PYMODULE'),
+  ('numpy.ctypeslib._ctypeslib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\ctypeslib\\_ctypeslib.py',
+   'PYMODULE'),
+  ('numpy.polynomial',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\__init__.py',
+   'PYMODULE'),
+  ('numpy.polynomial._polybase',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\_polybase.py',
+   'PYMODULE'),
+  ('numpy.polynomial.polynomial',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\polynomial.py',
+   'PYMODULE'),
+  ('numpy.polynomial.legendre',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\legendre.py',
+   'PYMODULE'),
+  ('numpy.polynomial.laguerre',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\laguerre.py',
+   'PYMODULE'),
+  ('numpy.polynomial.hermite_e',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\hermite_e.py',
+   'PYMODULE'),
+  ('numpy.polynomial.hermite',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\hermite.py',
+   'PYMODULE'),
+  ('numpy.polynomial.chebyshev',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\chebyshev.py',
+   'PYMODULE'),
+  ('numpy.polynomial.polyutils',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\polynomial\\polyutils.py',
+   'PYMODULE'),
+  ('numpy.random',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\__init__.py',
+   'PYMODULE'),
+  ('numpy.random._pickle',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_pickle.py',
+   'PYMODULE'),
+  ('numpy.fft',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\fft\\__init__.py',
+   'PYMODULE'),
+  ('numpy.fft._pocketfft',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\fft\\_pocketfft.py',
+   'PYMODULE'),
+  ('numpy.fft._helper',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\fft\\_helper.py',
+   'PYMODULE'),
+  ('numpy._array_api_info',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_array_api_info.py',
+   'PYMODULE'),
+  ('numpy.__config__',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\__config__.py',
+   'PYMODULE'),
+  ('numpy._distributor_init',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_distributor_init.py',
+   'PYMODULE'),
+  ('numpy._expired_attrs_2_0',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_expired_attrs_2_0.py',
+   'PYMODULE'),
+  ('tkinter.filedialog',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\filedialog.py',
+   'PYMODULE'),
+  ('tkinter.simpledialog',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\simpledialog.py',
+   'PYMODULE'),
+  ('tkinter.commondialog',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\commondialog.py',
+   'PYMODULE'),
+  ('tkinter.dialog',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\dialog.py',
+   'PYMODULE'),
+  ('tkinter.messagebox',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\messagebox.py',
+   'PYMODULE'),
+  ('tkinter',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tkinter\\__init__.py',
+   'PYMODULE'),
+  ('platform',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\platform.py',
+   'PYMODULE'),
+  ('tempfile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\tempfile.py',
+   'PYMODULE'),
+  ('html',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\html\\__init__.py',
+   'PYMODULE'),
+  ('html.entities',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\html\\entities.py',
+   'PYMODULE'),
+  ('webbrowser',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\webbrowser.py',
+   'PYMODULE'),
+  ('urllib.parse',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\urllib\\parse.py',
+   'PYMODULE'),
+  ('urllib.request',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\urllib\\request.py',
+   'PYMODULE'),
+  ('ftplib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ftplib.py',
+   'PYMODULE'),
+  ('netrc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\netrc.py',
+   'PYMODULE'),
+  ('http.cookiejar',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\http\\cookiejar.py',
+   'PYMODULE'),
+  ('threading',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\threading.py',
+   'PYMODULE'),
+  ('_threading_local',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_threading_local.py',
+   'PYMODULE'),
+  ('queue',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\queue.py',
+   'PYMODULE'),
+  ('struct',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\struct.py',
+   'PYMODULE'),
+  ('json',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\json\\__init__.py',
+   'PYMODULE'),
+  ('json.encoder',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\json\\encoder.py',
+   'PYMODULE'),
+  ('json.decoder',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\json\\decoder.py',
+   'PYMODULE'),
+  ('json.scanner',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\json\\scanner.py',
+   'PYMODULE'),
+  ('ctypes',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\__init__.py',
+   'PYMODULE'),
+  ('ctypes._endian',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ctypes\\_endian.py',
+   'PYMODULE')],
+ [('av.libs\\libwebp-27d1b6d135c4a2b7fde3f159821f22b9.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libwebp-27d1b6d135c4a2b7fde3f159821f22b9.dll',
+   'BINARY'),
+  ('av.libs\\libdav1d-c29690edca1bdb0e1d022adb22996c5d.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libdav1d-c29690edca1bdb0e1d022adb22996c5d.dll',
+   'BINARY'),
+  ('av.libs\\libvpx-1-3252c4a30dd46b8e509d62c42d0cf465.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libvpx-1-3252c4a30dd46b8e509d62c42d0cf465.dll',
+   'BINARY'),
+  ('av.libs\\libogg-0-3832326022ab0e341753d6ef287be376.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libogg-0-3832326022ab0e341753d6ef287be376.dll',
+   'BINARY'),
+  ('av.libs\\libiconv-2-9a38c137db7d511786ddc4dad5e280af.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libiconv-2-9a38c137db7d511786ddc4dad5e280af.dll',
+   'BINARY'),
+  ('av.libs\\libwebpmux-79f3167634c447d3d559e3873e9d34ce.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libwebpmux-79f3167634c447d3d559e3873e9d34ce.dll',
+   'BINARY'),
+  ('av.libs\\avcodec-62-0796e49249259295c31f1add9f446a07.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\avcodec-62-0796e49249259295c31f1add9f446a07.dll',
+   'BINARY'),
+  ('av.libs\\avutil-60-a23272e4a2631ae7398afbababd42d44.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\avutil-60-a23272e4a2631ae7398afbababd42d44.dll',
+   'BINARY'),
+  ('av.libs\\libsharpyuv-6577eb51d2ecd23a1eead351264b35bd.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libsharpyuv-6577eb51d2ecd23a1eead351264b35bd.dll',
+   'BINARY'),
+  ('av.libs\\libvorbisenc-2-f076026788ced5ba66758b692fca8d90.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libvorbisenc-2-f076026788ced5ba66758b692fca8d90.dll',
+   'BINARY'),
+  ('av.libs\\libopus-0-2ceb9cd024b0d48ea5681bed0eb39017.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libopus-0-2ceb9cd024b0d48ea5681bed0eb39017.dll',
+   'BINARY'),
+  ('av.libs\\avfilter-11-93baa45a48cc2509c5477e198916b1d0.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\avfilter-11-93baa45a48cc2509c5477e198916b1d0.dll',
+   'BINARY'),
+  ('av.libs\\libvpl-282ce0beb2fba1b32a5229f29c4dfc09.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libvpl-282ce0beb2fba1b32a5229f29c4dfc09.dll',
+   'BINARY'),
+  ('av.libs\\zlib1-c137237e5a3cad18ac4a2bc260e714bd.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\zlib1-c137237e5a3cad18ac4a2bc260e714bd.dll',
+   'BINARY'),
+  ('av.libs\\libopencore-amrnb-0-19c543506f45e59e9cc363b967322e5e.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libopencore-amrnb-0-19c543506f45e59e9cc363b967322e5e.dll',
+   'BINARY'),
+  ('av.libs\\libspeex-1-f1e952098ece431940a659e1ea7b2f99.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libspeex-1-f1e952098ece431940a659e1ea7b2f99.dll',
+   'BINARY'),
+  ('av.libs\\avdevice-62-1783eb692ac1c2c30193d14d74e19559.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\avdevice-62-1783eb692ac1c2c30193d14d74e19559.dll',
+   'BINARY'),
+  ('av.libs\\libopenh264-7-6e1702dbec21f21c44c3aad4a6f12e23.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libopenh264-7-6e1702dbec21f21c44c3aad4a6f12e23.dll',
+   'BINARY'),
+  ('av.libs\\libstdc++-6-16c77f4dc68fd299562bd0861d552d59.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libstdc++-6-16c77f4dc68fd299562bd0861d552d59.dll',
+   'BINARY'),
+  ('av.libs\\libvorbis-0-cf247ff0d53bfac2f308ff6323c4bb1c.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libvorbis-0-cf247ff0d53bfac2f308ff6323c4bb1c.dll',
+   'BINARY'),
+  ('av.libs\\libmp3lame-0-4dbb8ead5c09389b4dbbba00f948328b.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libmp3lame-0-4dbb8ead5c09389b4dbbba00f948328b.dll',
+   'BINARY'),
+  ('av.libs\\avformat-62-53e4b42e12af6471a31ebc557d4cd83d.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\avformat-62-53e4b42e12af6471a31ebc557d4cd83d.dll',
+   'BINARY'),
+  ('av.libs\\libgcc_s_seh-1-7bd55af4be730539b56665bbc3747a95.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libgcc_s_seh-1-7bd55af4be730539b56665bbc3747a95.dll',
+   'BINARY'),
+  ('av.libs\\swscale-9-a7f9df47906f33e23afc9b9dd82cdd55.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\swscale-9-a7f9df47906f33e23afc9b9dd82cdd55.dll',
+   'BINARY'),
+  ('av.libs\\libaom-2eddc703206f7b85b6467803d2d91454.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libaom-2eddc703206f7b85b6467803d2d91454.dll',
+   'BINARY'),
+  ('av.libs\\libx264-165-11f58e196647ac55063ea2b47126f2a6.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libx264-165-11f58e196647ac55063ea2b47126f2a6.dll',
+   'BINARY'),
+  ('av.libs\\libopencore-amrwb-0-4659464e2ab7dc7143e12ce83bd79194.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libopencore-amrwb-0-4659464e2ab7dc7143e12ce83bd79194.dll',
+   'BINARY'),
+  ('av.libs\\libx265-e5556c00d79789a6a7fababf3f4bc6c0.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libx265-e5556c00d79789a6a7fababf3f4bc6c0.dll',
+   'BINARY'),
+  ('av.libs\\swresample-6-4dfaff56ea39ed6b5f84fcde51061430.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\swresample-6-4dfaff56ea39ed6b5f84fcde51061430.dll',
+   'BINARY'),
+  ('av.libs\\libSvtAv1Enc-916b43c5a3fb4add3b647ecd3eb406c7.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libSvtAv1Enc-916b43c5a3fb4add3b647ecd3eb406c7.dll',
+   'BINARY'),
+  ('av.libs\\libwinpthread-1-0e8ae7e2ad74ac99e66aa6840958d6fe.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av.libs\\libwinpthread-1-0e8ae7e2ad74ac99e66aa6840958d6fe.dll',
+   'BINARY'),
+  ('python314.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\python314.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudioarm64.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudioarm64.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudio32bit.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudio32bit.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudioarm64-asio.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudioarm64-asio.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudio64bit.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudio64bit.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudio64bit-asio.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudio64bit-asio.dll',
+   'BINARY'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudio32bit-asio.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudio32bit-asio.dll',
+   'BINARY'),
+  ('numpy.libs\\libscipy_openblas64_-ed4f167a5330424524f45258e7ca2c8d.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy.libs\\libscipy_openblas64_-ed4f167a5330424524f45258e7ca2c8d.dll',
+   'BINARY'),
+  ('numpy.libs\\msvcp140-a4c2229bdc2a2a630acdc095b4d86008.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy.libs\\msvcp140-a4c2229bdc2a2a630acdc095b4d86008.dll',
+   'BINARY'),
+  ('select.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\select.pyd',
+   'EXTENSION'),
+  ('_multiprocessing.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_multiprocessing.pyd',
+   'EXTENSION'),
+  ('_hashlib.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_hashlib.pyd',
+   'EXTENSION'),
+  ('_zstd.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_zstd.pyd',
+   'EXTENSION'),
+  ('_lzma.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_lzma.pyd',
+   'EXTENSION'),
+  ('_bz2.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_bz2.pyd',
+   'EXTENSION'),
+  ('pyexpat.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\pyexpat.pyd',
+   'EXTENSION'),
+  ('_ssl.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_ssl.pyd',
+   'EXTENSION'),
+  ('_decimal.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_decimal.pyd',
+   'EXTENSION'),
+  ('_socket.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_socket.pyd',
+   'EXTENSION'),
+  ('unicodedata.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\unicodedata.pyd',
+   'EXTENSION'),
+  ('win32\\win32gui.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\win32\\win32gui.pyd',
+   'EXTENSION'),
+  ('numpy\\_core\\_multiarray_umath.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_multiarray_umath.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('_ctypes.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_ctypes.pyd',
+   'EXTENSION'),
+  ('numpy\\linalg\\_umath_linalg.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\linalg\\_umath_linalg.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingft.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_imagingft.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imaging.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_imaging.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_webp.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_webp.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingtk.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_imagingtk.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_avif.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_avif.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingcms.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_imagingcms.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingmath.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\PIL\\_imagingmath.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('_elementtree.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_elementtree.pyd',
+   'EXTENSION'),
+  ('_uuid.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_uuid.pyd',
+   'EXTENSION'),
+  ('av\\video\\reformatter.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\reformatter.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\video\\plane.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\plane.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\utils.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\utils.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\subtitles\\subtitle.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\subtitles\\subtitle.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\subtitles\\stream.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\subtitles\\stream.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\subtitles\\codeccontext.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\subtitles\\codeccontext.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\stream.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\stream.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\sidedata\\sidedata.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\sidedata\\sidedata.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\sidedata\\motionvectors.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\sidedata\\motionvectors.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\sidedata\\encparams.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\sidedata\\encparams.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\plane.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\plane.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\option.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\option.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\opaque.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\opaque.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\frame.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\frame.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\filter\\loudnorm.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\loudnorm.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\filter\\link.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\link.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\filter\\graph.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\graph.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\filter\\filter.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\filter.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\filter\\context.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\filter\\context.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\dictionary.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\dictionary.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\descriptor.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\descriptor.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\container\\streams.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\streams.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\container\\pyio.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\pyio.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\container\\output.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\output.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\container\\input.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\input.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\container\\core.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\container\\core.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\bytesource.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\bytesource.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\buffer.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\buffer.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\plane.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\plane.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\video\\stream.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\stream.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\video\\frame.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\frame.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\video\\format.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\format.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\video\\codeccontext.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\video\\codeccontext.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\error.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\error.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\packet.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\packet.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\format.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\format.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\codec\\hwaccel.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\codec\\hwaccel.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\codec\\context.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\codec\\context.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\codec\\codec.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\codec\\codec.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\bitstream.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\bitstream.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\stream.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\stream.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\resampler.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\resampler.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\layout.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\layout.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\frame.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\frame.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\format.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\format.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\fifo.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\fifo.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\audio\\codeccontext.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\audio\\codeccontext.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\logging.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\logging.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('av\\_core.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\av\\_core.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('_cffi_backend.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_cffi_backend.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\_core\\_multiarray_tests.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\_core\\_multiarray_tests.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('_overlapped.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_overlapped.pyd',
+   'EXTENSION'),
+  ('_asyncio.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_asyncio.pyd',
+   'EXTENSION'),
+  ('win32\\win32pdh.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\win32\\win32pdh.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\mtrand.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\mtrand.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\bit_generator.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\bit_generator.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_sfc64.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_sfc64.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_philox.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_philox.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_pcg64.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_pcg64.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_mt19937.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_mt19937.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_generator.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_generator.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_common.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_common.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\random\\_bounded_integers.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\random\\_bounded_integers.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('numpy\\fft\\_pocketfft_umath.cp314-win_amd64.pyd',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy\\fft\\_pocketfft_umath.cp314-win_amd64.pyd',
+   'EXTENSION'),
+  ('_tkinter.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_tkinter.pyd',
+   'EXTENSION'),
+  ('_wmi.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_wmi.pyd',
+   'EXTENSION'),
+  ('_queue.pyd',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\_queue.pyd',
+   'EXTENSION'),
+  ('api-ms-win-crt-conio-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-conio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-string-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-environment-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-environment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-time-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-heap-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-filesystem-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-runtime-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-process-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-process-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-stdio-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-locale-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-locale-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('api-ms-win-crt-math-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-convert-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-private-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-private-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-utility-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('libcrypto-3.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\libcrypto-3.dll',
+   'BINARY'),
+  ('libssl-3.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\libssl-3.dll',
+   'BINARY'),
+  ('pywin32_system32\\pywintypes314.dll',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\pywin32_system32\\pywintypes314.dll',
+   'BINARY'),
+  ('libffi-8.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\libffi-8.dll',
+   'BINARY'),
+  ('libtommath.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\libtommath.dll',
+   'BINARY'),
+  ('tcl90.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\tcl90.dll',
+   'BINARY'),
+  ('tcl9tk90.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\tcl9tk90.dll',
+   'BINARY'),
+  ('ucrtbase.dll',
+   'C:\\Program Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\ucrtbase.dll',
+   'BINARY'),
+  ('zlib1.dll',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs\\zlib1.dll',
+   'BINARY'),
+  ('api-ms-win-core-processenvironment-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-handle-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-handle-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-libraryloader-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-string-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-heap-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-datetime-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-sysinfo-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-errorhandling-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-interlocked-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-file-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-debug-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-util-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-util-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l2-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-file-l2-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-1.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-console-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-console-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-profile-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-timezone-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-timezone-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-memory-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-memory-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-namedpipe-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-localization-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Microsoft\\jdk-11.0.16.101-hotspot\\bin\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY')],
+ [],
+ [],
+ [('am-fm_app.ico',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\am-fm_app.ico',
+   'DATA'),
+  ('customtkinter\\assets\\themes\\dark-blue.json',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\themes\\dark-blue.json',
+   'DATA'),
+  ('customtkinter\\assets\\themes\\blue.json',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\themes\\blue.json',
+   'DATA'),
+  ('customtkinter\\assets\\fonts\\Roboto\\Roboto-Medium.ttf',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\fonts\\Roboto\\Roboto-Medium.ttf',
+   'DATA'),
+  ('customtkinter\\assets\\fonts\\Roboto\\Roboto-Regular.ttf',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\fonts\\Roboto\\Roboto-Regular.ttf',
+   'DATA'),
+  ('customtkinter\\assets\\icons\\CustomTkinter_icon_Windows.ico',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\icons\\CustomTkinter_icon_Windows.ico',
+   'DATA'),
+  ('customtkinter\\assets\\.DS_Store',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\.DS_Store',
+   'DATA'),
+  ('customtkinter\\assets\\fonts\\CustomTkinter_shapes_font.otf',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\fonts\\CustomTkinter_shapes_font.otf',
+   'DATA'),
+  ('customtkinter\\assets\\themes\\green.json',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\themes\\green.json',
+   'DATA'),
+  ('customtkinter\\assets\\icons\\.DS_Store',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\customtkinter\\assets\\icons\\.DS_Store',
+   'DATA'),
+  ('_sounddevice_data\\portaudio-binaries\\README.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\README.md',
+   'DATA'),
+  ('_sounddevice_data\\portaudio-binaries\\libportaudio.dylib',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\_sounddevice_data\\portaudio-binaries\\libportaudio.dylib',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\WHEEL',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\WHEEL',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\ma\\LICENSE',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\ma\\LICENSE',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\common\\pythoncapi-compat\\COPYING',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\common\\pythoncapi-compat\\COPYING',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\pcg64\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\pcg64\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\sfc64\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\sfc64\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\highway\\LICENSE',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\highway\\LICENSE',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\RECORD',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\RECORD',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\philox\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\philox\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\LICENSE.txt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\LICENSE.txt',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\fft\\pocketfft\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\fft\\pocketfft\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\entry_points.txt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\entry_points.txt',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\include\\numpy\\libdivide\\LICENSE.txt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\include\\numpy\\libdivide\\LICENSE.txt',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\linalg\\lapack_lite\\LICENSE.txt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\linalg\\lapack_lite\\LICENSE.txt',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\METADATA',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\METADATA',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\mt19937\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\mt19937\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\distributions\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\distributions\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\npysort\\x86-simd-sort\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\npysort\\x86-simd-sort\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\DELVEWHEEL',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\DELVEWHEEL',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\INSTALLER',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\INSTALLER',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\multiarray\\dragon4_LICENSE.txt',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\multiarray\\dragon4_LICENSE.txt',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\REQUESTED',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\REQUESTED',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\LICENSE.md',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\umath\\svml\\LICENSE',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\_core\\src\\umath\\svml\\LICENSE',
+   'DATA'),
+  ('numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\splitmix64\\LICENSE.md',
+   'c:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\.venv\\Lib\\site-packages\\numpy-2.5.3.dist-info\\licenses\\numpy\\random\\src\\splitmix64\\LICENSE.md',
+   'DATA'),
+  ('base_library.zip',
+   'C:\\Users\\NEIL 4TH\\Documents\\code '
+   'base\\py\\trx\\transmitter\\build\\amfmCaster\\base_library.zip',
+   'DATA')],
+ [('_weakrefset',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_weakrefset.py',
+   'PYMODULE'),
+  ('genericpath',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\genericpath.py',
+   'PYMODULE'),
+  ('posixpath',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\posixpath.py',
+   'PYMODULE'),
+  ('collections',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\collections\\__init__.py',
+   'PYMODULE'),
+  ('stat',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\stat.py',
+   'PYMODULE'),
+  ('enum',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\enum.py',
+   'PYMODULE'),
+  ('_collections_abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\_collections_abc.py',
+   'PYMODULE'),
+  ('sre_parse',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\sre_parse.py',
+   'PYMODULE'),
+  ('locale',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\locale.py',
+   'PYMODULE'),
+  ('keyword',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\keyword.py',
+   'PYMODULE'),
+  ('ntpath',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\ntpath.py',
+   'PYMODULE'),
+  ('copyreg',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\copyreg.py',
+   'PYMODULE'),
+  ('reprlib',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\reprlib.py',
+   'PYMODULE'),
+  ('warnings',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\warnings.py',
+   'PYMODULE'),
+  ('re._parser',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\re\\_parser.py',
+   'PYMODULE'),
+  ('re._constants',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\re\\_constants.py',
+   'PYMODULE'),
+  ('re._compiler',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\re\\_compiler.py',
+   'PYMODULE'),
+  ('re._casefix',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\re\\_casefix.py',
+   'PYMODULE'),
+  ('sre_constants',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\sre_constants.py',
+   'PYMODULE'),
+  ('encodings.zlib_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\zlib_codec.py',
+   'PYMODULE'),
+  ('encodings.uu_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\uu_codec.py',
+   'PYMODULE'),
+  ('encodings.utf_8_sig',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_8_sig.py',
+   'PYMODULE'),
+  ('encodings.utf_8',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_8.py',
+   'PYMODULE'),
+  ('encodings.utf_7',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_7.py',
+   'PYMODULE'),
+  ('encodings.utf_32_le',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_32_le.py',
+   'PYMODULE'),
+  ('encodings.utf_32_be',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_32_be.py',
+   'PYMODULE'),
+  ('encodings.utf_32',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_32.py',
+   'PYMODULE'),
+  ('encodings.utf_16_le',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_16_le.py',
+   'PYMODULE'),
+  ('encodings.utf_16_be',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_16_be.py',
+   'PYMODULE'),
+  ('encodings.utf_16',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\utf_16.py',
+   'PYMODULE'),
+  ('encodings.unicode_escape',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\unicode_escape.py',
+   'PYMODULE'),
+  ('encodings.undefined',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\undefined.py',
+   'PYMODULE'),
+  ('encodings.tis_620',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\tis_620.py',
+   'PYMODULE'),
+  ('encodings.shift_jisx0213',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\shift_jisx0213.py',
+   'PYMODULE'),
+  ('encodings.shift_jis_2004',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\shift_jis_2004.py',
+   'PYMODULE'),
+  ('encodings.shift_jis',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\shift_jis.py',
+   'PYMODULE'),
+  ('encodings.rot_13',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\rot_13.py',
+   'PYMODULE'),
+  ('encodings.raw_unicode_escape',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\raw_unicode_escape.py',
+   'PYMODULE'),
+  ('encodings.quopri_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\quopri_codec.py',
+   'PYMODULE'),
+  ('encodings.punycode',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\punycode.py',
+   'PYMODULE'),
+  ('encodings.ptcp154',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\ptcp154.py',
+   'PYMODULE'),
+  ('encodings.palmos',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\palmos.py',
+   'PYMODULE'),
+  ('encodings.oem',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\oem.py',
+   'PYMODULE'),
+  ('encodings.mbcs',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mbcs.py',
+   'PYMODULE'),
+  ('encodings.mac_turkish',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_turkish.py',
+   'PYMODULE'),
+  ('encodings.mac_romanian',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_romanian.py',
+   'PYMODULE'),
+  ('encodings.mac_roman',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_roman.py',
+   'PYMODULE'),
+  ('encodings.mac_latin2',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_latin2.py',
+   'PYMODULE'),
+  ('encodings.mac_iceland',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_iceland.py',
+   'PYMODULE'),
+  ('encodings.mac_greek',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_greek.py',
+   'PYMODULE'),
+  ('encodings.mac_farsi',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_farsi.py',
+   'PYMODULE'),
+  ('encodings.mac_cyrillic',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_cyrillic.py',
+   'PYMODULE'),
+  ('encodings.mac_croatian',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_croatian.py',
+   'PYMODULE'),
+  ('encodings.mac_arabic',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\mac_arabic.py',
+   'PYMODULE'),
+  ('encodings.latin_1',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\latin_1.py',
+   'PYMODULE'),
+  ('encodings.kz1048',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\kz1048.py',
+   'PYMODULE'),
+  ('encodings.koi8_u',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\koi8_u.py',
+   'PYMODULE'),
+  ('encodings.koi8_t',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\koi8_t.py',
+   'PYMODULE'),
+  ('encodings.koi8_r',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\koi8_r.py',
+   'PYMODULE'),
+  ('encodings.johab',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\johab.py',
+   'PYMODULE'),
+  ('encodings.iso8859_9',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_9.py',
+   'PYMODULE'),
+  ('encodings.iso8859_8',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_8.py',
+   'PYMODULE'),
+  ('encodings.iso8859_7',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_7.py',
+   'PYMODULE'),
+  ('encodings.iso8859_6',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_6.py',
+   'PYMODULE'),
+  ('encodings.iso8859_5',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_5.py',
+   'PYMODULE'),
+  ('encodings.iso8859_4',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_4.py',
+   'PYMODULE'),
+  ('encodings.iso8859_3',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_3.py',
+   'PYMODULE'),
+  ('encodings.iso8859_2',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_2.py',
+   'PYMODULE'),
+  ('encodings.iso8859_16',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_16.py',
+   'PYMODULE'),
+  ('encodings.iso8859_15',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_15.py',
+   'PYMODULE'),
+  ('encodings.iso8859_14',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_14.py',
+   'PYMODULE'),
+  ('encodings.iso8859_13',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_13.py',
+   'PYMODULE'),
+  ('encodings.iso8859_11',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_11.py',
+   'PYMODULE'),
+  ('encodings.iso8859_10',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_10.py',
+   'PYMODULE'),
+  ('encodings.iso8859_1',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso8859_1.py',
+   'PYMODULE'),
+  ('encodings.iso2022_kr',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_kr.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_ext',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp_ext.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_3',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp_3.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_2004',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp_2004.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_2',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp_2.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp_1',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp_1.py',
+   'PYMODULE'),
+  ('encodings.iso2022_jp',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\iso2022_jp.py',
+   'PYMODULE'),
+  ('encodings.idna',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\idna.py',
+   'PYMODULE'),
+  ('encodings.hz',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\hz.py',
+   'PYMODULE'),
+  ('encodings.hp_roman8',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\hp_roman8.py',
+   'PYMODULE'),
+  ('encodings.hex_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\hex_codec.py',
+   'PYMODULE'),
+  ('encodings.gbk',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\gbk.py',
+   'PYMODULE'),
+  ('encodings.gb2312',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\gb2312.py',
+   'PYMODULE'),
+  ('encodings.gb18030',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\gb18030.py',
+   'PYMODULE'),
+  ('encodings.euc_kr',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\euc_kr.py',
+   'PYMODULE'),
+  ('encodings.euc_jp',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\euc_jp.py',
+   'PYMODULE'),
+  ('encodings.euc_jisx0213',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\euc_jisx0213.py',
+   'PYMODULE'),
+  ('encodings.euc_jis_2004',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\euc_jis_2004.py',
+   'PYMODULE'),
+  ('encodings.cp950',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp950.py',
+   'PYMODULE'),
+  ('encodings.cp949',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp949.py',
+   'PYMODULE'),
+  ('encodings.cp932',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp932.py',
+   'PYMODULE'),
+  ('encodings.cp875',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp875.py',
+   'PYMODULE'),
+  ('encodings.cp874',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp874.py',
+   'PYMODULE'),
+  ('encodings.cp869',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp869.py',
+   'PYMODULE'),
+  ('encodings.cp866',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp866.py',
+   'PYMODULE'),
+  ('encodings.cp865',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp865.py',
+   'PYMODULE'),
+  ('encodings.cp864',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp864.py',
+   'PYMODULE'),
+  ('encodings.cp863',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp863.py',
+   'PYMODULE'),
+  ('encodings.cp862',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp862.py',
+   'PYMODULE'),
+  ('encodings.cp861',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp861.py',
+   'PYMODULE'),
+  ('encodings.cp860',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp860.py',
+   'PYMODULE'),
+  ('encodings.cp858',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp858.py',
+   'PYMODULE'),
+  ('encodings.cp857',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp857.py',
+   'PYMODULE'),
+  ('encodings.cp856',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp856.py',
+   'PYMODULE'),
+  ('encodings.cp855',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp855.py',
+   'PYMODULE'),
+  ('encodings.cp852',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp852.py',
+   'PYMODULE'),
+  ('encodings.cp850',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp850.py',
+   'PYMODULE'),
+  ('encodings.cp775',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp775.py',
+   'PYMODULE'),
+  ('encodings.cp737',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp737.py',
+   'PYMODULE'),
+  ('encodings.cp720',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp720.py',
+   'PYMODULE'),
+  ('encodings.cp500',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp500.py',
+   'PYMODULE'),
+  ('encodings.cp437',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp437.py',
+   'PYMODULE'),
+  ('encodings.cp424',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp424.py',
+   'PYMODULE'),
+  ('encodings.cp273',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp273.py',
+   'PYMODULE'),
+  ('encodings.cp1258',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1258.py',
+   'PYMODULE'),
+  ('encodings.cp1257',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1257.py',
+   'PYMODULE'),
+  ('encodings.cp1256',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1256.py',
+   'PYMODULE'),
+  ('encodings.cp1255',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1255.py',
+   'PYMODULE'),
+  ('encodings.cp1254',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1254.py',
+   'PYMODULE'),
+  ('encodings.cp1253',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1253.py',
+   'PYMODULE'),
+  ('encodings.cp1252',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1252.py',
+   'PYMODULE'),
+  ('encodings.cp1251',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1251.py',
+   'PYMODULE'),
+  ('encodings.cp1250',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1250.py',
+   'PYMODULE'),
+  ('encodings.cp1140',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1140.py',
+   'PYMODULE'),
+  ('encodings.cp1125',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1125.py',
+   'PYMODULE'),
+  ('encodings.cp1026',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1026.py',
+   'PYMODULE'),
+  ('encodings.cp1006',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp1006.py',
+   'PYMODULE'),
+  ('encodings.cp037',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\cp037.py',
+   'PYMODULE'),
+  ('encodings.charmap',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\charmap.py',
+   'PYMODULE'),
+  ('encodings.bz2_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\bz2_codec.py',
+   'PYMODULE'),
+  ('encodings.big5hkscs',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\big5hkscs.py',
+   'PYMODULE'),
+  ('encodings.big5',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\big5.py',
+   'PYMODULE'),
+  ('encodings.base64_codec',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\base64_codec.py',
+   'PYMODULE'),
+  ('encodings.ascii',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\ascii.py',
+   'PYMODULE'),
+  ('encodings.aliases',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\aliases.py',
+   'PYMODULE'),
+  ('encodings._win_cp_codecs',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\_win_cp_codecs.py',
+   'PYMODULE'),
+  ('encodings',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\encodings\\__init__.py',
+   'PYMODULE'),
+  ('io',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\io.py',
+   'PYMODULE'),
+  ('operator',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\operator.py',
+   'PYMODULE'),
+  ('abc',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\abc.py',
+   'PYMODULE'),
+  ('codecs',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\codecs.py',
+   'PYMODULE'),
+  ('weakref',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\weakref.py',
+   'PYMODULE'),
+  ('sre_compile',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\sre_compile.py',
+   'PYMODULE'),
+  ('heapq',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\heapq.py',
+   'PYMODULE'),
+  ('traceback',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\traceback.py',
+   'PYMODULE'),
+  ('linecache',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\linecache.py',
+   'PYMODULE'),
+  ('types',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\types.py',
+   'PYMODULE'),
+  ('functools',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\functools.py',
+   'PYMODULE'),
+  ('re',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\re\\__init__.py',
+   'PYMODULE'),
+  ('os',
+   'C:\\Users\\NEIL '
+   '4TH\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\os.py',
+   'PYMODULE')])

@@ -1,0 +1,12 @@
+# Runtime dependencies
+numpy>=2.0,<3
+sounddevice>=0.5,<1
+websocket-client>=1.8,<2
+customtkinter>=5.2,<6
+av>=14,<17
+pystray>=0.19,<1
+Pillow>=10,<13
+pywin32>=308,<400
+
+# Build dependency
+pyinstaller>=6.0,<7
